@@ -1,0 +1,46 @@
+ok so heres some notes.
+
+these are rough and might be wrong lolz, but 99% not
+
+shell breaks its input into tokens. as far as i know, theres two types of tokens it breaks into
+words and operators.
+heres a link to understand token recognition [1]
+
+when people were talking about tree, they meant "abstract syntax tree", the reason we require this is
+when we write code, we can read it right, compiler cant cuz its too complex, so to make it simpler, we have the tree
+
+so first we do tokenization.
+so it splits up for example " echo hello world" into "echo" "hello" "world". thats tokenization.
+also known as lexical analysis, which is conducted by the lexer
+so basically lexer is like split? i guess? it just delimits using space and tab?
+
+after that, tokens are passed into a "tree" called the syntax tree, its passed into it by the parser
+after making sure its grammatically correct, like what if i put a redirect but no file to redirect into
+it has to be a valid command, so "gramatically correct".
+
+also, since lexical analysis breaks down the source into tokens, thats also considered tokenization.
+
+
+now since we just have a bunch of tokens, we need to process them, so we need a parser to process these tokens and parse
+them into a tree called Abstract syntax tree.
+this u figure out tarek not me
+
+
+also to split pipes, just do a thing where you search for | or & or && etc in the string and if theres a command after that
+fahad told me that, no matter what, the first word will always be a command, cuz think about it, if you write hi, it says command not found
+so first thing is a command, second thing, for example if its echo, check if the next thing with strcmp is -n, if it is, then the -n is an option
+and then after that is the arguments expected.
+
+
+
+                                       
+
+
+
+
+
+
+sources : 
+
+[1]
+https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03
