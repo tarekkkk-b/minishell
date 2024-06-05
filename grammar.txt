@@ -1,0 +1,40 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    grammar.txt                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/05 16:16:00 by tabadawi          #+#    #+#              #
+#    Updated: 2024/06/05 18:19:36 by tabadawi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+pipeline>          ::=     <simple_command>    '|' <pipeline>
+                      |     <simple_command>    'ε'
+
+<simple_command>    ::=     <io_list>           <word><cmd_suffix>
+                      |     <io_list>           <word>
+                      |     <io_list>
+                      |     <word>              <cmd_suffix>
+                      |     <word>
+
+<io_list>           ::=     <io_redirect>       <io_list>
+                      |     <io_redirect>
+
+<cmd_suffix>        ::=     <io_list>           <cmd_suffix>
+                      |     <io_list>
+                      |     <word>              <cmd_suffix>
+                      |     <word>
+
+<io_redirect>       ::=     '<'             <word>
+                      |     '>'             <word>
+                      |     '>>'            <word>
+                      |     '<<'            <word>
+
+
+
+
+so basically for the recursion method it uses this method, its a little too complicated to
+debug but we  will use this to have a sense of the "grammar" or syntax of the actuall shell,
+just to have a sense of what to actually work on and how the parsing should go.
