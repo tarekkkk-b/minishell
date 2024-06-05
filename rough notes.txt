@@ -14,6 +14,7 @@ so it splits up for example " echo hello world" into "echo" "hello" "world". tha
 also known as lexical analysis, which is conducted by the lexer
 so basically lexer is like split? i guess? it just delimits using space and tab?
 
+
 after that, tokens are passed into a "tree" called the syntax tree, its passed into it by the parser
 after making sure its grammatically correct, like what if i put a redirect but no file to redirect into
 it has to be a valid command, so "gramatically correct".
@@ -32,6 +33,18 @@ so first thing is a command, second thing, for example if its echo, check if the
 and then after that is the arguments expected.
 
 
+environment variables :
+
+this is quite simple now, so when you do env, you see all that stuff right? so if you do $ and then specify a title, thats what an environment variable is
+so when you do env the first thing is PATH= blah blah, so you can do   echo $PATH         and what it does is, it'll write out that line, so 
+when you did    echo $SHLVL   , it just read from env and found the line that says SHLVL, and just wrote that out.
+
+so environment variables are exported to all process created by the shell, so like it goes to all the child processes too. thats why you have different levels of SHLVL
+
+
+to display current location, like pwd you can just call on the env variable $PWD, i think cuz in env theres PWD, and OLDPWD, so yeah.
+oldpwd shows the cd .. essentially. if you started terminal in a specific folder and didnt go into anything, then oldpwd and pwd will be the same unless you enter
+a new file after that.
 
                                        
 
