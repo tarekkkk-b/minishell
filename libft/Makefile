@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+         #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/07 14:56:02 by tabadawi          #+#    #+#              #
-#    Updated: 2024/03/16 12:53:09 by tarekkkk         ###   ########.fr        #
+#    Updated: 2024/06/10 17:24:21 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,19 +33,19 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar -rcs $@ $^
+	@ar -rcs $@ $^
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ) $(BONOBJ)
+	@rm -f $(OBJ) $(BONOBJ)
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
 bonus: $(NAME) $(BONOBJ)
-	ar -rcs $(NAME) $(BONOBJ)
+	@ar -rcs $(NAME) $(BONOBJ)
 
 .PHONY: all clean fclean re bonus

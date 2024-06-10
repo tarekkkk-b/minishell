@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/10 17:15:59 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/10 19:58:35 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,28 +17,26 @@ RLFLAGS		=	-lreadline -lhistory
 RLDIR		=	-L/opt/vagrant/embedded/lib
 RLINC		=	-I/opt/vagrant/embedded/include/readline
 LIBFT		=	libft/libft.a
-INC			=	minishell/includes
-SRCSPATH	=	minishell/srcs
+INC			=	mini_shell/includes
+SRCSPATH	=	mini_shell/srcs
 BUILT		=	$(SRCSPATH)/builtins
 EXEC		=	$(SRCSPATH)/execution
 LEX			=	$(SRCSPATH)/lex
 SIG			=	$(SRCSPATH)/signals
 UTILS		=	$(SRCSPATH)/utils
-
 SRCS		=	$(SRCSPATH)/minishell.c
-
 OBJS		=	$(SRCS:.c=.o)
-
-$(LIBFT):
-	@$(MAKE)	-C libft
-
-%.o: %.c
-	@$(CC) -I(INC) $(CFLAGS) -c $< -o $@
 
 all		:	$(NAME)
 
-$(NAME)	:	$(OBJS)	$(LIBFT)
-	@$(CC) $(CFLAGS) $(RLDIR) $(RLINC) $(OBJS) -o $@ $(RLFLAGS)
+$(LIBFT):
+	@$(MAKE)	-C libft
+	
+$(NAME)	:	$(LIBFT) $(OBJS)
+	@$(CC) $(CFLAGS) $(RLDIR) $(RLINC)  $(LIBFT) $(OBJS) -o $@ $(RLFLAGS)
+
+%.o: %.c
+	@$(CC) -I$(INC) $(CFLAGS) -c $< -o $@
 
 clean	:
 	@$(MAKE)	-C libft clean
