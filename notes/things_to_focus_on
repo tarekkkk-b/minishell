@@ -1,0 +1,23 @@
+Things to focus on
+
+Focus on understanding how shell divides its input.
+-tokenization
+
+-”tree”??
+
+-splitting pipes
+
+-quotations
+
+-expansion of variables, setting and unsetting them
+
+Focus on how redirection and piping works.
+Focus on signals
+Focus on understanding Bash levels
+Focus on duping
+Understand how shell receives input
+Understand environment variable management
+
+
+
+(had to delete the doc cuz i couldnt edit)
