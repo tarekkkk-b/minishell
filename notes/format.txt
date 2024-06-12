@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/12 15:15:56 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/12 19:54:49 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ work.
 
 			//NODING*
 				//loop thru characters
-					//function to check if its start of word/opt
+					//function to check if its start of word/operator
 						//collect until meta char found
 							//identify TYPE*
 								//if invalid
@@ -138,9 +138,13 @@ work.
 			//COMMAND*
 				//find the type of command in q
 					//if builtin
-						//send directly to builtins exec
+						//if !piped
+							//send directly to builtins exec
+						//if piped
+							//fork for builtin
+								//exec builtin in child
 					//if env related 
 						//check list of env commands
-							//set, unset, export, variable, etc
+							//unset, export, variable, etc
 					//if reg command
 						//return to exec
