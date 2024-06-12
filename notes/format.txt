@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/12 14:12:22 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/12 15:15:56 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -119,7 +119,10 @@ work.
 					//fork process
 						//determining input dir (file/pipe/heredoc)
 							//dup data
+								//if heredoc present
+									//get all heredoc
 								//COMMAND*
+									//if any, expand variables
 								//attempt to exec command as is (incase of path)
 								//else
 								//join to path dir and exec
