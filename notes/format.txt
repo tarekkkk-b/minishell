@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/12 11:55:36 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/12 14:12:22 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,9 @@ work.
 					//send string to PARSING* and recieve array of structs
 						//if parsing passes
 							//send structs for EXEC*
-								//exit && free execution if error encountered 
+								//free execution if error encountered
+									//save exit status
+					//add status to struct
 					//free alloc
 				//loop again
 
@@ -59,12 +61,15 @@ work.
 
 
 
-			//NODING**
+			//NODING*
 				//loop thru characters
 					//function to check if its start of word/opt
 						//collect until meta char found
-							//identify type
-								check if its invalid
+							//identify TYPE*
+								//if invalid
+									//error
+								//else
+									//store node
 				//loop again from new pos
 
 
@@ -75,11 +80,64 @@ work.
 				//store nodes into structs
 					//store redirections
 					//store commands and options
+					//etc
 					//get pointer to next struct
+				//check SYNTAX*
+					//prevent exec if false
 				//return structs
+
+
+
+			//SYNTAX*
+				//referred to from file /notes/grammar.txt
+				//if syntax error
+					//save loc of error
+					//save stat
+					//return false
+				//return true
+
+
+
+			//TYPE*
+				//if opt
+					//check if prev node == opt
+						//set invalid
+				//if word
+					//gather full
+					//set word
+				//if space
+					//check if prev was space
+						//if yes -> ignore
+							//else store space (once only)
 
 
 	//EXECUTION SECTION
 
 
 			//EXEC*
+				//looping in number of structs
+					//fork process
+						//determining input dir (file/pipe/heredoc)
+							//dup data
+								//COMMAND*
+								//attempt to exec command as is (incase of path)
+								//else
+								//join to path dir and exec
+									//set status
+									//free and return if error
+						//determine output dir
+							//create redirections files
+								// dup to last dest of output
+				//loop again
+
+
+
+			//COMMAND*
+				//find the type of command in q
+					//if builtin
+						//send directly to builtins exec
+					//if env related 
+						//check list of env commands
+							//set, unset, export, variable, etc
+					//if reg command
+						//return to exec
