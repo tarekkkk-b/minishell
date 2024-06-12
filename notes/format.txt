@@ -1,0 +1,85 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    format.txt                                         :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
+#    Updated: 2024/06/12 11:55:36 by tabadawi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+im just gonna try to break it down to see how things should go and flow using pseudo
+code, there wil be sections that will be expanded on, ill refer to them with * and youll
+see them expanded on down below
+
+this will be like our rough sketch and we will keep expanding on it later, add
+pieces wherever we need just so we can map things out and actually be able to
+work.
+
+
+	//MINISHELL SECTION
+
+
+			//main
+				//check args == 1
+				//initiate loop
+					//call READ* and return string from user inp
+					//send string to PARSING* and recieve array of structs
+						//if parsing passes
+							//send structs for EXEC*
+								//exit && free execution if error encountered 
+					//free alloc
+				//loop again
+
+
+	//DATA GATHERING SECTION
+
+
+			//READ*
+				//getcwd
+					//save oldwd
+				//strjoin w "> "
+				//readline w path
+					//check string
+						//if passes, add to history
+				//return string
+
+
+	//PARSING SECTION
+
+
+			//PARSING*
+				//NODING*
+					//if presence of "invalid"
+						//return error
+				//STRUCTING*
+					//return true/false
+
+
+
+			//NODING**
+				//loop thru characters
+					//function to check if its start of word/opt
+						//collect until meta char found
+							//identify type
+								check if its invalid
+				//loop again from new pos
+
+
+
+			//STRUCTING*
+				//iterate thru nodes to count pipes
+					//alloc for n_pipes + 1 structs
+				//store nodes into structs
+					//store redirections
+					//store commands and options
+					//get pointer to next struct
+				//return structs
+
+
+	//EXECUTION SECTION
+
+
+			//EXEC*
