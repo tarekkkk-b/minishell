@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/12 19:54:49 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/13 09:51:20 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ work.
 
 			//main
 				//check args == 1
+				//set ENV*
 				//initiate loop
 					//call READ* and return string from user inp
 					//send string to PARSING* and recieve array of structs
@@ -47,6 +48,10 @@ work.
 					//check string
 						//if passes, add to history
 				//return string
+
+
+
+			//ENV*
 
 
 	//PARSING SECTION
