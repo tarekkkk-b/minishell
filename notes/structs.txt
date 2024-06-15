@@ -1,0 +1,96 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    structs.txt                                        :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/06/15 10:17:17 by tabadawi          #+#    #+#              #
+#    Updated: 2024/06/15 11:10:05 by tabadawi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+okay i keep debating w myself over the structs, there are several things that
+we need and we also need them in the most flexible way possible, i do have an
+idea in my head so ill kinda lst it down here !!SPOILERS!! we unfortunately need
+linked lists, ALOT, but its for our benefit.
+
+
+	//main struct
+		typedef	struct	s_shell
+		{
+			pid_t		child;
+			pid_t		lastpid;
+			t_env		*environ;
+			t_parsing	*parser;
+			t_exec		**exec;
+		}	t_shell;
+
+
+	//env struct
+		typedef struct	s_environ
+		{
+			int			exit;
+			int			shlvl;
+			char		*cwd;
+			char		*owd;
+			char		**path;
+			t_values	**env;
+			t_shell		*shell;
+		}	t_environ;
+
+		
+		typedef	struct	s_values
+		{
+			char			*name;
+			char			*value;
+			char			*string;
+			t_shell			*shell;
+			struct s_values	*next
+		}	t_values;
+
+
+	//parsing struct
+		typedef struct	s_parser
+		{
+			t_nodes	**noding;
+			t_shell	*shell;
+		}	t_parser;
+
+		typedef struct	s_noding
+		{
+			char		*value;
+			t_token		type;
+			t_noding	*next;
+			t_shell		*shell;
+		}	t_noding;
+
+		typedef enum	s_tokens
+		{
+			command,
+			option,
+			pipe,
+			inp_redir,
+			inp_file,
+			opt_redir,
+			opt_file,
+			here_doc,
+			delimiter,
+			append,
+			space,
+			invalid
+		}	t_tokens;
+
+	//exec struct
+		typedef	struct	s_exec
+		{
+			int				*fd;
+			int				redirections;
+			char			**cmd;
+			char			**files;
+			char			*cmdpath;
+			char			*src;
+			char			*final_destination;
+			t_shell			*shell;
+			struct s_exec	*next;
+		}
