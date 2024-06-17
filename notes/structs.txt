@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/15 10:17:17 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/15 11:10:05 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/15 13:13:59 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ linked lists, ALOT, but its for our benefit.
 			t_shell		*shell;
 		}	t_environ;
 
-		
+
 		typedef	struct	s_values
 		{
 			char			*name;
@@ -48,7 +48,6 @@ linked lists, ALOT, but its for our benefit.
 			t_shell			*shell;
 			struct s_values	*next
 		}	t_values;
-
 
 	//parsing struct
 		typedef struct	s_parser
@@ -78,6 +77,7 @@ linked lists, ALOT, but its for our benefit.
 			delimiter,
 			append,
 			space,
+			variable,
 			invalid
 		}	t_tokens;
 

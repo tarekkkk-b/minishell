@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/13 09:51:20 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/17 16:48:25 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,19 @@ work.
 
 
 			//ENV*
+				//recieve env from main
+				//if !env
+					//set my env to NULL
+				//loop thru env
+					//identify each key
+						//create node
+							//save key, value
+								//add string that joins
+						//point to next node
+				//loop again
+					//for ensuring
+						//set cwd, oldwd
+							//set exit status
 
 
 	//PARSING SECTION
