@@ -3,18 +3,18 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+         #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/10 21:46:58 by tarekkkk         ###   ########.fr        #
+#    Updated: 2024/06/17 17:09:44 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
-RLFLAGS		=	-lreadline #-lhistory
-# RLDIR		=	-L/opt/vagrant/embedded/lib
+RLFLAGS		=	-lreadline -lhistory
+RLDIR		=	-L/opt/vagrant/embedded/lib
 RLINC		=	-I/opt/vagrant/embedded/include/readline
 LIBFT		=	libft/libft.a
 INC			=	mini_shell/includes
