@@ -6,12 +6,14 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/17 17:35:19 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:28:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+//		libraries		//
 
 # include <stdlib.h>
 # include <unistd.h>
@@ -20,11 +22,13 @@
 # include <readline/readline.h>
 # include "../../libft/libft.h"
 
-//		shell struct		//
+//		definitions		//
 
 typedef struct	s_environ	t_environ;
 typedef	struct	s_exec		t_exec;
 typedef struct	s_parser	t_parser;
+
+//		shell struct		//
 
 typedef	struct	s_shell
 {
