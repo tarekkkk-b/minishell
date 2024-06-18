@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 21:30:32 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 21:39:51 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ typedef	struct	s_shell
 
 typedef	struct	s_values
 {
-	char			*name;
+	char			*key;
 	char			*value;
 	char			*string;
 	t_shell			*shell;

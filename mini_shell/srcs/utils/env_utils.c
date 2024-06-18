@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 21:27:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 21:42:38 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 void	assign_nodes(char **env, t_shell *shell, t_values *node, int i)
 {
-	node->name = get_key(env[i]);
-	node->value = getenv(node->name);
-	node->string = ft_strjoin2(node->name, "=", node->value);
+	node->key = get_key(env[i]);
+	node->value = getenv(node->key);
+	node->string = ft_strjoin2(node->key, "=", node->value);
 	node->shell = shell;
 	node->next = NULL;
 }
@@ -121,3 +121,4 @@ char	**arr(t_values *environ)
 	env[++i] = NULL;
 	return(env);
 }
+
