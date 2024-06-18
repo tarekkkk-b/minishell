@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 11:28:21 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:38:52 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ typedef struct	s_environ
 	char		*cwd;
 	char		*owd;
 	char		**path;
-	t_values	**env;
+	t_values	*env;
 	t_shell		*shell;
 }	t_environ;
 

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 12:12:48 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 16:49:26 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,30 @@ char	*get_key(char *env_var)
 	return (key);
 }
 
+t_values	*lstlast(t_values *lst)
+{
+	while (lst)
+	{
+		if (!lst->next)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
+}
+
+void	addnode(t_environ *environ, t_values *node)
+{
+	t_values	*temp;
+
+	if (environ->env)
+	{
+		temp = lstlast(environ->env);
+		temp->next = node;
+	}
+	else
+		environ->env = node;
+}
+
 void	create_env(char **env, t_shell *shell)
 {
 	int i = -1;
@@ -55,6 +79,7 @@ void	create_env(char **env, t_shell *shell)
 		node->string = ft_strjoin(ft_strjoin(node->name, "="), node->value);
 		node->shell = shell;
 		node->next = NULL;
+		addnode(shell->environ, node);
 	}
 }
 
