@@ -6,11 +6,21 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 11:48:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:12:48 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+int	get_arrlen(char **arr)
+{
+	int i = 0;
+	if (!arr)
+		return (0);
+	while (arr[i])
+		i++;
+	return (i);
+}
 
 char	*get_key(char *env_var)
 {
@@ -31,19 +41,20 @@ char	*get_key(char *env_var)
 void	create_env(char **env, t_shell *shell)
 {
 	int i = -1;
-	char *str;
-	(void)shell;
+	t_values	*node;
+	int	len = get_arrlen(env);
 	shell->environ = malloc(sizeof(t_environ));
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = getcwd(NULL, 0);
-	while (env[++i])
+	while (++i < len)
 	{
-		str = get_key(env[i]);
-		printf("%s=", str);
-		printf("%s\n", getenv(str));
-		// env_node(shell->environ->env);
-		// get_key(env[i]);
+		node = malloc(sizeof(t_values));
+		node->name = get_key(env[i]);
+		node->value = getenv(node->name);
+		node->string = ft_strjoin(ft_strjoin(node->name, "="), node->value);
+		node->shell = shell;
+		node->next = NULL;
 	}
 }
 
