@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 17:22:11 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:34:35 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,36 @@ void	create_env(char **env, t_shell *shell)
 	}
 }
 
+char	**arr(t_values *environ)
+{
+	char		**env;
+	t_values	*temp;
+	int i = 0;
+	if (!environ)
+		return (NULL);
+	temp = environ;
+	while (temp)
+	{
+		if (!temp->next)
+			break ;
+		temp = temp->next;
+		i++;
+	}
+	env = malloc(sizeof(char *) * (i + 1));
+	temp = environ;
+	i = 0;
+	while (temp)
+	{
+		env[i] = ft_strdup(temp->string);
+		if (!temp->next)
+			break ;
+		temp = temp->next;
+		i++;
+	}
+	env[++i] = NULL;
+	return(env);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char 		*path;
@@ -94,6 +124,13 @@ int	main(int ac, char **av, char **env)
 		return (-1);
 	printf("\e[1;1H\e[2J");
 	create_env(env, &shell);
+	char **envv = arr(shell.environ->env);
+	int i = 0;
+	while (envv[i])
+	{
+		printf("%s\n", envv[i]);
+		i++;
+	}
 	while (1)
 	{
 		path = ft_strjoin(shell.environ->cwd, "> ");
