@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 16:49:26 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:22:11 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	create_env(char **env, t_shell *shell)
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = getcwd(NULL, 0);
+	shell->environ->exit = 0;
 	while (++i < len)
 	{
 		node = malloc(sizeof(t_values));

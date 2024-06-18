@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 16:38:52 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:10:02 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef	struct	s_shell
 	pid_t		lastpid;
 	t_environ	*environ;
 	t_parser	*parser;
-	t_exec		**exec;
+	t_exec		*exec;
 }	t_shell;
 
 //		env structs		//
@@ -90,7 +90,7 @@ typedef struct	s_noding
 
 typedef struct	s_parser
 {
-	t_noding	**noding;
+	t_noding	*noding;
 	t_shell		*shell;
 }	t_parser;
 
