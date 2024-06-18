@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 17:34:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/18 17:47:09 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,14 @@ void	addnode(t_environ *environ, t_values *node)
 		environ->env = node;
 }
 
+// while running make it tells me i gotta initialize t_values *node as null, didnt do it, just lettin you know
+// cuz its uninitialized when i pass it to assign_nodes;
+
 void	create_env(char **env, t_shell *shell)
 {
 	int i = -1;
 	t_values	*node;
+	// right here ^^^^^^^^^^^ = NULL;
 	int	len = get_arrlen(env);
 	shell->environ = malloc(sizeof(t_environ));
 	shell->environ->env = NULL;
@@ -74,12 +78,7 @@ void	create_env(char **env, t_shell *shell)
 	shell->environ->exit = 0;
 	while (++i < len)
 	{
-		node = malloc(sizeof(t_values));
-		node->name = get_key(env[i]);
-		node->value = getenv(node->name);
-		node->string = ft_strjoin(ft_strjoin(node->name, "="), node->value);
-		node->shell = shell;
-		node->next = NULL;
+		assign_nodes(env, shell, node, i);
 		addnode(shell->environ, node);
 	}
 }
