@@ -6,13 +6,14 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/17 17:09:44 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/18 21:28:30 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
+CFLAGS		+=	-fsanitize=address -g3
 RLFLAGS		=	-lreadline -lhistory
 RLDIR		=	-L/opt/vagrant/embedded/lib
 RLINC		=	-I/opt/vagrant/embedded/include/readline
@@ -24,7 +25,11 @@ EXEC		=	$(SRCSPATH)/execution
 LEX			=	$(SRCSPATH)/lex
 SIG			=	$(SRCSPATH)/signals
 UTILS		=	$(SRCSPATH)/utils
-SRCS		=	$(SRCSPATH)/minishell.c
+
+
+SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(UTILS)/env_utils.c
+
+
 OBJS		=	$(SRCS:.c=.o)
 
 all		:	$(NAME)

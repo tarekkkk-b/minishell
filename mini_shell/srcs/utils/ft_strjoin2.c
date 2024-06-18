@@ -1,52 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   strjoin.c                                          :+:      :+:    :+:   */
+/*   new_strjoin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 17:00:14 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/06/18 17:40:19 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/18 21:24:42 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../includes/minishell.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "../../includes/minishell.h"
 
-
-
-
-
-
-//  i left this file like this, if you want you can test it to see if its how you wanted it, if not lmk
-// if its how you wanted it, remove the strlen int main and the extra headers and uncomment the main header file :)
-
-
-
-
-
-
-
-
-
-
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i] != '\0')
-		i++;
-	return (i);
-}
-
-// this name is a placeholder for now, cuz ft_strjoin exists so just name it whatever you want
-
-char    *strjoin_aarij(char *str1, char *str2, char *str3)
+char    *ft_strjoin2(char *str1, char *str2, char *str3)
 {
 	char	*new;
 	int		i;
@@ -72,11 +38,3 @@ char    *strjoin_aarij(char *str1, char *str2, char *str3)
 	new[i] = '\0';
 	return (new);
 }
-
-// int main()
-// {
-// 	char *a = "hello";
-// 	// char *b = "there";
-// 	char *c = "aarij";
-// 	printf("%s", strjoin_aarij(a, NULL, c));
-// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 17:47:28 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/18 21:30:32 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,13 @@ typedef	struct	s_exec
 	struct s_exec	*next;
 }	t_exec;
 
-
-
-// this functions area isnt arranged yet will do dat later
-
-void	assign_nodes(char **env, t_shell *shell, t_values *node, int i);
+void		assign_nodes(char **env, t_shell *shell, t_values *node, int i);
+char    	*ft_strjoin2(char *str1, char *str2, char *str3);
+char		*get_key(char *env_var);
+char		**arr(t_values *environ);
+void		create_env(char **env, t_shell *shell);
+void		addnode(t_environ *environ, t_values *node);
+t_values	*lstlast(t_values *lst);
+int			get_arrlen(char **arr);
 
 #endif
