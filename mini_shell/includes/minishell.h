@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 21:39:51 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/19 21:36:01 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ void		create_env(char **env, t_shell *shell);
 void		addnode(t_environ *environ, t_values *node);
 t_values	*lstlast(t_values *lst);
 int			get_arrlen(char **arr);
+void	custom_node(t_shell *shell, char *key, char *value);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/19 19:48:48 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/19 21:35:29 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,19 @@ void	adjust_lvl(t_values *env_node, t_shell *shell)
 	char *str = ft_itoa(shell->environ->shlvl);
 	change_node(temp, str);
 	free(str);	
+}
+
+void	custom_node(t_shell *shell, char *key, char *value)
+{
+	t_values	*node;
+
+	node = malloc(sizeof(t_values));
+	node->key = ft_strdup(key);
+	node->value = ft_strdup(value);
+	node->string = ft_strjoin2(node->key, "=", node->value);
+	node->shell = shell;
+	node->next = NULL;
+	addnode(shell->environ, node);
 }
 
 void	create_env(char **env, t_shell *shell)
