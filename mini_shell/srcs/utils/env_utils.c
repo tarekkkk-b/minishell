@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/18 21:42:38 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/19 19:48:48 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,43 @@ void	addnode(t_environ *environ, t_values *node)
 		environ->env = node;
 }
 
+void	change_node(t_values *node, char *new)
+{
+	free(node->string);
+	node->value = ft_strdup(new);
+	node->string = ft_strjoin2(node->key, "=", node->value);
+}
+
+t_values	*locate_node(t_values *temp, char *target_key)
+{
+	t_values	*travel;
+	if (temp)
+	{
+		travel = temp;
+		while (travel)
+		{
+			if (!ft_strncmp(target_key, travel->key, ft_strlen(travel->key)))
+				return (travel);
+			travel = travel->next;
+		}
+	}
+	return (NULL);
+}
+
+void	adjust_lvl(t_values *env_node, t_shell *shell)
+{
+	t_values *temp;
+
+	temp = locate_node(env_node, "SHLVL");
+	if (!temp)
+		return ;	//create SHLVL=1
+	int tempp = ft_atoi(temp->value);
+	shell->environ->shlvl = tempp + 1;
+	char *str = ft_itoa(shell->environ->shlvl);
+	change_node(temp, str);
+	free(str);	
+}
+
 void	create_env(char **env, t_shell *shell)
 {
 	int i = -1;
@@ -87,6 +124,7 @@ void	create_env(char **env, t_shell *shell)
 		assign_nodes(env, shell, node, i);
 		addnode(shell->environ, node);
 	}
+	adjust_lvl(shell->environ->env, shell);
 }
 
 char	**arr(t_values *environ)
@@ -121,4 +159,3 @@ char	**arr(t_values *environ)
 	env[++i] = NULL;
 	return(env);
 }
-
