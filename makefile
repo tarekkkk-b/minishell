@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/18 21:28:30 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/20 00:56:19 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,20 @@ NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
 CFLAGS		+=	-fsanitize=address -g3
+
+# the following flagsg are to be used on 42 computers
 RLFLAGS		=	-lreadline -lhistory
 RLDIR		=	-L/opt/vagrant/embedded/lib
 RLINC		=	-I/opt/vagrant/embedded/include/readline
+
+
+# and the following flags are to be used on personal computers
+# RLDIR += -L/usr/local/opt/readline/lib
+# RLINC += -I/usr/local/opt/readline/include
+# RLFLAGS = -lreadline -lhistory
+
+
+
 LIBFT		=	libft/libft.a
 INC			=	mini_shell/includes
 SRCSPATH	=	mini_shell/srcs

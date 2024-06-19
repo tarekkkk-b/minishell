@@ -3,23 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/19 21:35:29 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/20 00:55:10 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	assign_nodes(char **env, t_shell *shell, t_values *node, int i)
-{
-	node->key = get_key(env[i]);
-	node->value = getenv(node->key);
-	node->string = ft_strjoin2(node->key, "=", node->value);
-	node->shell = shell;
-	node->next = NULL;
-}
+// void	assign_nodes(char **env, t_shell *shell, t_values *node, int i)
+// {
+// 	node->key = get_key(env[i]);
+// 	node->value = getenv(node->key);
+// 	node->string = ft_strjoin2(node->key, "=", node->value);
+// 	node->shell = shell;
+// 	node->next = NULL;
+// }
+
+// dont need this ^^
 
 int	get_arrlen(char **arr)
 {
@@ -58,18 +60,20 @@ t_values	*lstlast(t_values *lst)
 	return (lst);
 }
 
-void	addnode(t_environ *environ, t_values *node)
-{
-	t_values	*temp;
+// void	addnode(t_environ *environ, t_values *node)
+// {
+// 	t_values	*temp;
 
-	if (environ->env)
-	{
-		temp = lstlast(environ->env);
-		temp->next = node;
-	}
-	else
-		environ->env = node;
-}
+// 	if (environ->env)
+// 	{
+// 		temp = lstlast(environ->env);
+// 		temp->next = node;
+// 	}
+// 	else
+// 		environ->env = node;
+// }
+
+// dont need this ^^
 
 void	change_node(t_values *node, char *new)
 {
@@ -110,32 +114,56 @@ void	adjust_lvl(t_values *env_node, t_shell *shell)
 
 void	custom_node(t_shell *shell, char *key, char *value)
 {
+	// added temp here cuz.. ya.. just copied over addnode's lines to the end after the commented addnode, 
+	// realized that shell calls upon shell environment so dont even need environ.
+	// so ya :D
+	// im working lateee, cuz im a singerrrr
+	// oh he looks so cuteee wrapped round my fingerrrr
+	// my twisted humorrr, make him lauggh so oftenn
+	// my honey beeee, come and gget this pollennn.
+	// banggggggger.
 	t_values	*node;
-
+	t_values	*temp;
 	node = malloc(sizeof(t_values));
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
 	node->string = ft_strjoin2(node->key, "=", node->value);
 	node->shell = shell;
 	node->next = NULL;
-	addnode(shell->environ, node);
+	// addnode(shell->environ, node);
+	if (shell->environ->env)
+	{
+		temp = lstlast(shell->environ->env);
+		temp->next = node;
+	}
+	else
+		shell->environ->env = node;
 }
 
 void	create_env(char **env, t_shell *shell)
 {
-	int i = -1;
-	t_values	*node;
-	int	len = get_arrlen(env);
+	// new things are value, key, int i, also i removed the node struct its already in custom node and set i to 0 instead of -1, 
+	// you can change that i just did it to not be confused
+	// removed arrlen cuz ya, replace assigng node and addnode cuz ya
+	// we      cant be friends
+	// but id like to just preee tendd
+	//  you cling to your papers and penn
+	// wait until you like me aga ain
+	// also a banger
+	// my apolocheese
+	int i = 0;
+	char	*str;
 	shell->environ = malloc(sizeof(t_environ));
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = getcwd(NULL, 0);
 	shell->environ->exit = 0;
-	while (++i < len)
+	while (env[i])
 	{
-		node = malloc(sizeof(t_values));
-		assign_nodes(env, shell, node, i);
-		addnode(shell->environ, node);
+		str = get_key(env[i]);
+		custom_node(shell, str, getenv(str));
+		free(str);
+		i++;
 	}
 	adjust_lvl(shell->environ->env, shell);
 }
