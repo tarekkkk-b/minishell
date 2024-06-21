@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/20 00:56:19 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/06/21 15:53:04 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,9 +36,10 @@ EXEC		=	$(SRCSPATH)/execution
 LEX			=	$(SRCSPATH)/lex
 SIG			=	$(SRCSPATH)/signals
 UTILS		=	$(SRCSPATH)/utils
+ENV			=	$(SRCSPATH)/environ
 
 
-SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(UTILS)/env_utils.c
+SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c
 
 
 OBJS		=	$(SRCS:.c=.o)

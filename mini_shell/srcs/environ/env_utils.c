@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/20 00:55:10 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/21 21:00:23 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,18 @@ t_values	*lstlast(t_values *lst)
 	return (lst);
 }
 
-// void	addnode(t_environ *environ, t_values *node)
-// {
-// 	t_values	*temp;
+void	addnode(t_environ *environ, t_values *node)
+{
+	t_values	*temp;
 
-// 	if (environ->env)
-// 	{
-// 		temp = lstlast(environ->env);
-// 		temp->next = node;
-// 	}
-// 	else
-// 		environ->env = node;
-// }
-
-// dont need this ^^
+	if (environ->env)
+	{
+		temp = lstlast(environ->env);
+		temp->next = node;
+	}
+	else
+		environ->env = node;
+}
 
 void	change_node(t_values *node, char *new)
 {
@@ -98,13 +96,14 @@ t_values	*locate_node(t_values *temp, char *target_key)
 	return (NULL);
 }
 
-void	adjust_lvl(t_values *env_node, t_shell *shell)
+void	adjust_lvl(t_shell *shell)
 {
 	t_values *temp;
 
-	temp = locate_node(env_node, "SHLVL");
+	temp = locate_node(shell->environ->env, "SHLVL");
 	if (!temp)
-		return ;	//create SHLVL=1
+		return (custom_node(shell, "SHLVL", "1"));
+		// return ;	//create SHLVL=1
 	int tempp = ft_atoi(temp->value);
 	shell->environ->shlvl = tempp + 1;
 	char *str = ft_itoa(shell->environ->shlvl);
@@ -114,58 +113,50 @@ void	adjust_lvl(t_values *env_node, t_shell *shell)
 
 void	custom_node(t_shell *shell, char *key, char *value)
 {
-	// added temp here cuz.. ya.. just copied over addnode's lines to the end after the commented addnode, 
-	// realized that shell calls upon shell environment so dont even need environ.
-	// so ya :D
-	// im working lateee, cuz im a singerrrr
-	// oh he looks so cuteee wrapped round my fingerrrr
-	// my twisted humorrr, make him lauggh so oftenn
-	// my honey beeee, come and gget this pollennn.
-	// banggggggger.
+	if (!(!locate_node(shell->environ->env, key)))
+		return ;
 	t_values	*node;
-	t_values	*temp;
 	node = malloc(sizeof(t_values));
+	node->index = 0;
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
 	node->string = ft_strjoin2(node->key, "=", node->value);
 	node->shell = shell;
 	node->next = NULL;
-	// addnode(shell->environ, node);
-	if (shell->environ->env)
+	addnode(shell->environ, node);
+}
+
+void	indexer(t_values *head)
+{
+	t_values	*traveler;
+	int			i;
+
+	i = 0;
+	traveler = head;
+	while (traveler)
 	{
-		temp = lstlast(shell->environ->env);
-		temp->next = node;
+		traveler->index = i++;
+		traveler = traveler->next;
 	}
-	else
-		shell->environ->env = node;
 }
 
 void	create_env(char **env, t_shell *shell)
 {
-	// new things are value, key, int i, also i removed the node struct its already in custom node and set i to 0 instead of -1, 
-	// you can change that i just did it to not be confused
-	// removed arrlen cuz ya, replace assigng node and addnode cuz ya
-	// we      cant be friends
-	// but id like to just preee tendd
-	//  you cling to your papers and penn
-	// wait until you like me aga ain
-	// also a banger
-	// my apolocheese
-	int i = 0;
+	int i = -1;
 	char	*str;
 	shell->environ = malloc(sizeof(t_environ));
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = getcwd(NULL, 0);
 	shell->environ->exit = 0;
-	while (env[i])
+	while (env[++i])
 	{
 		str = get_key(env[i]);
 		custom_node(shell, str, getenv(str));
 		free(str);
-		i++;
 	}
-	adjust_lvl(shell->environ->env, shell);
+	adjust_lvl(shell);
+	indexer(shell->environ->env);
 }
 
 char	**arr(t_values *environ)
@@ -200,3 +191,44 @@ char	**arr(t_values *environ)
 	env[++i] = NULL;
 	return(env);
 }
+
+void	popout(t_shell	*shell, char *target)
+{
+	t_values	*tnode;
+	t_values	*temp1 = shell->environ->env;
+	// t_values	*temp2 = shell->environ->env;
+	
+	tnode = locate_node(shell->environ->env, target);
+	if (!tnode)
+		return ;
+	if (tnode->index == 0)
+		shell->environ->env = tnode->next;
+	else
+	{
+		temp1 = shell->environ->env;
+		while (temp1->index != tnode->index - 1)
+			temp1 = temp1->next;
+		temp1->next = tnode->next;
+		// while (temp2->index != tnode->index + 1 && temp2->next != NULL)
+		// 	temp2 = temp2->next;
+		// if (!temp2)
+		// 	temp1->next = temp2;
+		// else
+		// 	temp1->next = temp2->next;
+	}
+	free (tnode);
+}
+
+//POPPING PROTOTYPE
+
+//if index == 0
+	//shell->environ->env = node->next;
+	//free (node);
+
+//else if index != 0
+	//while (temp->index != node->index - 1)
+		//temp = temp->next;
+	//while (temp2->index != node->index + 1 && temp2 != NULL)
+		//temp2 = temp2->next;
+	//temp->next = temp2;
+	//free node;
