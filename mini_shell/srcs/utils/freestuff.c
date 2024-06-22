@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freestuff.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/06/21 22:28:03 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/22 16:58:18 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void    free_values(t_values *env)
 {
     t_values *temp;
+
     while(env != NULL)
     {
         temp = env;
@@ -25,5 +26,30 @@ void    free_values(t_values *env)
         free(temp);
     }
 }
+
+// void    free_list(t_values *head)
+// {
+//     t_values    *temp;
+
+//     if (head)
+//     {
+//         while (head)
+//         {
+//             temp = head->next;
+//             free_node(head);
+//             head = temp;
+//         }
+//     }
+// }
+
+// void    free_node(t_values *node)
+// {
+//     if (node)
+//     {
+//         free(node->key);
+//         free(node->value);
+//         free(node->string);
+//     }
+// }
 
 // if u dont tell me whats wrong i blow up your house

@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/21 15:53:04 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/22 21:09:02 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,8 @@ UTILS		=	$(SRCSPATH)/utils
 ENV			=	$(SRCSPATH)/environ
 
 
-SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c
+SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c \
+				$(UTILS)/freestuff.c
 
 
 OBJS		=	$(SRCS:.c=.o)
@@ -50,7 +51,7 @@ $(LIBFT):
 	@$(MAKE)	-C libft
 	
 $(NAME)	:	$(LIBFT) $(OBJS)
-	@$(CC) $(CFLAGS) $(RLDIR) $(RLINC)  $(LIBFT) $(OBJS) -o $@ $(RLFLAGS)
+	@$(CC) $(CFLAGS) $(RLDIR) $(RLINC) $(OBJS) $(LIBFT)  -o $@ $(RLFLAGS)
 
 %.o: %.c
 	@$(CC) -I$(INC) $(CFLAGS) -c $< -o $@

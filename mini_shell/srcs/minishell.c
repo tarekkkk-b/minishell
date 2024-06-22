@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/21 21:01:17 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/22 21:16:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,12 @@ int	main(int ac, char **av, char **env)
 	char 		*path;
 	char 		*str;
 	t_shell		shell;
+	shell.environ = NULL;
 	(void)av;
 	if (ac != 1)
 		return (-1);
-	// printf("\e[1;1H\e[2J");
+	printf("\e[1;1H\e[2J");
 	create_env(env, &shell);
-	// t_values	*temp;
-	// temp = shell.environ->env;
-	// while (temp)
-	// {
-	// 	printf("%s\n", temp->string);
-	// 	temp = temp->next;
-	// }
-
-	// printf("\n\n\nPOPPED!\n\n\n");
-	// popout(&shell, "SECURITYSESSIONID");
-	// temp = shell.environ->env;
-	// while (temp)
-	// {
-	// 	printf("%s\n", temp->string);
-	// 	temp = temp->next;
-	// }
 	while (1)
 	{
 		path = ft_strjoin(shell.environ->cwd, "> ");

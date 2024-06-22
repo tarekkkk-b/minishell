@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/21 20:50:20 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/22 21:18:10 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ typedef	struct	s_shell
 
 typedef	struct	s_values
 {
-	int				index;
 	char			*key;
 	char			*value;
 	char			*string;
@@ -121,5 +120,9 @@ int			get_arrlen(char **arr);
 void		custom_node(t_shell *shell, char *key, char *value);
 void		adjust_lvl(t_shell *shell);
 void		popout(t_shell	*shell, char *target);
+void		free_values(t_values *env);
+void    free_node(t_values *node);
+void    free_list(t_values *head);
+
 
 #endif
