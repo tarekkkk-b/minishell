@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/22 21:16:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/23 11:02:00 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	main(int ac, char **av, char **env)
 		str = readline(path);
 		if (str[0] != '\0')
 			add_history(str);
+		recieve_str(&shell, str);
 		free (str);
 	}
 }

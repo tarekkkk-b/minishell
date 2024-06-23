@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/22 21:09:02 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/22 21:55:51 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ ENV			=	$(SRCSPATH)/environ
 
 
 SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c \
-				$(UTILS)/freestuff.c
+				$(UTILS)/freestuff.c $(LEX)/first_try.c
 
 
 OBJS		=	$(SRCS:.c=.o)
