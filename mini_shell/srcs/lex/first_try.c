@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/24 12:33:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/24 13:19:38 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@ int	assign_word(char *str, int index, t_shell *shell)
 	char *string = NULL;
 	int temp = index;
 	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
-		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0')
+		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0'  && str[index + 1] != '"'
+		&& str[index + 1] != '\'')
 		index++;
 	int j = 0;
 	string = malloc(sizeof(char) * (index - temp + 2));
@@ -106,7 +107,8 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	index++;
 	temp = index;
 	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
-		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-')
+		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-' && str[index + 1] != '"'
+		&& str[index + 1] != '\'')
 		index++;
 	int j = 0;
 	variable = malloc(sizeof(char) * (index - temp + 2));
@@ -129,7 +131,7 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 	int j = 0;
 	if (str[index] == '"')
 	{
-		while (str[index + 1] && str[index + 1] != '"')
+		while (str[index + 1] && str[index + 1] != '"' && str[index])
 			index++;
 		index++;
 		string = malloc(sizeof(char) * (index - temp + 2));
@@ -138,12 +140,14 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 			string[j] = str[temp];
 			j++;
 			temp++;
+			if (str[temp] == '\0')
+				break ;
 		}
 		string[j] = '\0';
 	}
 	else if (str[index] == '\'')
 	{
-		while (str[index + 1] && str[index + 1] != '\'')
+		while (str[index + 1] && str[index + 1] != '\'' && str[index])
 			index++;
 		index++;
 		string = malloc(sizeof(char) * (index - temp + 2));
@@ -152,6 +156,8 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 			string[j] = str[temp];
 			j++;
 			temp++;
+			if (str[temp] == '\0')
+				break ;
 		}
 		string[j] = '\0';
 	}
