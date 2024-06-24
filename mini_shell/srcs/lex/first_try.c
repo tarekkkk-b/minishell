@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/24 14:13:38 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/24 15:25:53 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,8 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 		}
 		string[j] = '\0';
 	}
-	printf("this is the counter %d\n", counter);
+	printf("string	:	(%s)\n", string);
+	// printf("this is the counter %d\n", counter);
 	if (counter != 2)
 		return ((void)printf("This shit dont work\n"), index);
 	return (index);
@@ -190,6 +191,8 @@ void	recieve_str(t_shell *shell, char *str)
 			i = assign_variable(str, i, shell);
 		else if (str[i] == '"' || str[i] == '\'')
 			i = assign_quotes(str, i, shell);
+		// else if (invalid_char(str[i]))
+		// 	i = assign_invalid(str, i, shell);
 		else
 			i = assign_word(str, i, shell);
 		i++;
