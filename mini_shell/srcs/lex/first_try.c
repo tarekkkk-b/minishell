@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/24 13:19:38 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/24 14:13:38 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,39 +129,47 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 	int temp = index;
 	char *string = NULL;
 	int j = 0;
+	int counter = 0;
 	if (str[index] == '"')
 	{
+		counter += 1;
 		while (str[index + 1] && str[index + 1] != '"' && str[index])
 			index++;
-		index++;
+		if(str[index + 1] == '"'){
+			index++;
+			counter += 1;
+		}
 		string = malloc(sizeof(char) * (index - temp + 2));
 		while (temp <= index)
 		{
 			string[j] = str[temp];
 			j++;
 			temp++;
-			if (str[temp] == '\0')
-				break ;
 		}
 		string[j] = '\0';
 	}
 	else if (str[index] == '\'')
 	{
+		counter += 1;
 		while (str[index + 1] && str[index + 1] != '\'' && str[index])
 			index++;
-		index++;
+		if(str[index + 1] == '\'')
+		{
+			index++;
+			counter += 1;
+		}
 		string = malloc(sizeof(char) * (index - temp + 2));
 		while (temp <= index)
 		{
 			string[j] = str[temp];
 			j++;
 			temp++;
-			if (str[temp] == '\0')
-				break ;
 		}
 		string[j] = '\0';
 	}
-	printf("this is a string: (%s)\n", string);
+	printf("this is the counter %d\n", counter);
+	if (counter != 2)
+		return ((void)printf("This shit dont work\n"), index);
 	return (index);
 }
 
