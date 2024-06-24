@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/23 19:47:29 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/24 10:29:49 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	token_node(t_shell *shell, t_noding *new)
 		shell->parser->noding = new;
 }
 
-int	assigne_pipe(char *str, int index, t_shell *shell)
+int	assign_pipe(char *str, int index, t_shell *shell)
 {
 	(void)shell;
 	(void)str;
@@ -44,7 +44,7 @@ int	assigne_pipe(char *str, int index, t_shell *shell)
 	return (index);
 }
 
-int	assigne_redirection(char *str, int index, t_shell *shell)
+int	assign_redirection(char *str, int index, t_shell *shell)
 {
 	(void)shell;
 	if (str[index + 1] == str[index])
@@ -65,7 +65,7 @@ int	assigne_redirection(char *str, int index, t_shell *shell)
 	return (index);
 }
 
-int	assigne_space(char *str, int index, t_shell *shell)
+int	assign_space(char *str, int index, t_shell *shell)
 {
 	(void)shell;
 	int temp = index;
@@ -76,7 +76,7 @@ int	assigne_space(char *str, int index, t_shell *shell)
 	return (index);
 }
 
-int	assigne_word(char *str, int index, t_shell *shell)
+int	assign_word(char *str, int index, t_shell *shell)
 {
 	(void)shell;
 	(void)str;
@@ -98,6 +98,29 @@ int	assigne_word(char *str, int index, t_shell *shell)
 	return (index);
 }
 
+int	assign_variable(char *str, int index, t_shell *shell)
+{
+	(void)shell;
+	int	temp;
+	char *variable;
+	index++;
+	temp = index;
+	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
+		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-')
+		index++;
+	int j = 0;
+	variable = malloc(sizeof(char) * (index - temp + 2));
+	while (temp <= index)
+	{
+		variable[j] = str[temp];
+		j++;
+		temp++;
+	}
+	variable[j] = '\0';
+	printf("this is a variable : (%s)\n", variable);
+	return (index);
+}
+
 void	recieve_str(t_shell *shell, char *str)
 {
 	(void)shell;
@@ -106,15 +129,15 @@ void	recieve_str(t_shell *shell, char *str)
 	while (str[i])
 	{
 		if (str[i] == '|')
-			i = assigne_pipe(str, i, shell);
+			i = assign_pipe(str, i, shell);
 		else if (str[i] == '>' || str[i] == '<')
-			i = assigne_redirection(str, i, shell);
+			i = assign_redirection(str, i, shell);
 		else if (str[i] == ' ' | str[i] == '\t')
-			i = assigne_space(str, i, shell);
-		// else if (str[i] == '$')
-		// 	assigne_variable()
+			i = assign_space(str, i, shell);
+		else if (str[i] == '$')
+			i = assign_variable(str, i, shell);
 		else
-			i = assigne_word(str, i, shell);
+			i = assign_word(str, i, shell);
 		i++;
 	}
 }
