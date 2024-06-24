@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/24 10:29:49 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:33:25 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,44 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	return (index);
 }
 
+int		assign_quotes(char *str, int index, t_shell *shell)
+{
+	(void)shell;
+	int temp = index;
+	char *string = NULL;
+	int j = 0;
+	if (str[index] == '"')
+	{
+		while (str[index + 1] && str[index + 1] != '"')
+			index++;
+		index++;
+		string = malloc(sizeof(char) * (index - temp + 2));
+		while (temp <= index)
+		{
+			string[j] = str[temp];
+			j++;
+			temp++;
+		}
+		string[j] = '\0';
+	}
+	else if (str[index] == '\'')
+	{
+		while (str[index + 1] && str[index + 1] != '\'')
+			index++;
+		index++;
+		string = malloc(sizeof(char) * (index - temp + 2));
+		while (temp <= index)
+		{
+			string[j] = str[temp];
+			j++;
+			temp++;
+		}
+		string[j] = '\0';
+	}
+	printf("this is a string: (%s)\n", string);
+	return (index);
+}
+
 void	recieve_str(t_shell *shell, char *str)
 {
 	(void)shell;
@@ -136,6 +174,8 @@ void	recieve_str(t_shell *shell, char *str)
 			i = assign_space(str, i, shell);
 		else if (str[i] == '$')
 			i = assign_variable(str, i, shell);
+		else if (str[i] == '"' || str[i] == '\'')
+			i = assign_quotes(str, i, shell);
 		else
 			i = assign_word(str, i, shell);
 		i++;
