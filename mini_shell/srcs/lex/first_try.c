@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/25 17:41:23 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/25 22:05:35 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ int	invalid_chars(char c)
 	if(invalidcheck == 1)
 		return (1);
 	return (0);
-	
-	// if(!(c != '&' && c != ';' && c != '\\' && c != '[]'))
-	// 	return(0);
-	// return (1);
-	
 }
 
 void	token_node(t_shell *shell, t_noding *new)
@@ -149,14 +144,14 @@ int check_invalid(char *str, int i, t_shell *shell)
 
 int	assign_variable(char *str, int index, t_shell *shell)
 {
-	// (void)shell;
+	(void)shell;
 	int	temp;
 	char *variable;
 	index++;
 	temp = index;
 	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
 		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-' && str[index + 1] != '"'
-		&& str[index + 1] != '\'')
+		&& str[index + 1] != '\'' && str[index + 1] != ';' && str[index + 1] != ':' && str[index + 1] != '?')
 		index++;
 	int j = 0;
 	variable = malloc(sizeof(char) * (index - temp + 2));
@@ -220,7 +215,6 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 		string[j] = '\0';
 	}
 	printf("string	:	(%s)\n", string);
-	// printf("this is the counter %d\n", counter);
 	if (counter != 2)
 		return ((void)printf("This shit dont work\n"), index);
 	return (index);
@@ -254,3 +248,36 @@ void	recieve_str(t_shell *shell, char *str)
 // invalid chars are just chars we dont need to handle;
 // invalid variable name is just variable names that need to be valid
 
+//general meta characters in ascii
+
+//0 - 47
+//58 - 64
+//91 - 96
+//123 - 127
+
+//new note this ^^ isnt very accurate
+
+
+//also i realized we were handling the variables thing wrong
+//the validity of a variable should be checkeed upon creatin, the way to tell
+//if a variable is being created is by the =, cuz u create and assign instantly,
+//and this just sparked 2 ideas in my head rn ill say them rq in a sec, when a dollar
+//sign is there tho we read after the $ till we find a delimeter then we check in the
+//env if that var exists (even if it was an invalid name)
+
+//two ideas
+//1- we go thru a word, not treating the = as a delimeter, if we find an = sign
+//right after, that means left is a variable name (and we need to check its validity)
+//and right is value
+//2- store as variable and value
+
+//new note that was added, just realized not everything here is an invalid character
+//or a meta character, if i do _ only its gonna take it as a word, it could be invalid
+//or just an option for a cmd
+
+
+//it is safe to say that 0-32 are not allowed also 127
+// invalid: %, &, (, ), *, ",", ".", /, :, ;,  [, \, ], 
+
+
+//things are getting quite confusing rn but ill research more tmrw
