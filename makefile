@@ -6,7 +6,7 @@
 #    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/24 14:15:36 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/06/25 10:58:58 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,15 @@ CFLAGS		=	-Wall -Werror -Wextra
 CFLAGS		+=	-fsanitize=address -g3
 
 # the following flagsg are to be used on 42 computers
-RLFLAGS		=	-lreadline -lhistory
-RLDIR		=	-L/opt/vagrant/embedded/lib
-RLINC		=	-I/opt/vagrant/embedded/include/readline
+# RLFLAGS		=	-lreadline -lhistory
+# RLDIR		=	-L/opt/vagrant/embedded/lib
+# RLINC		=	-I/opt/vagrant/embedded/include/readline/readline.h
 
 
 # and the following flags are to be used on personal computers
-# RLDIR += -L/usr/local/opt/readline/lib
-# RLINC += -I/usr/local/opt/readline/include
-# RLFLAGS = -lreadline -lhistory
+RLDIR += -L/usr/local/opt/readline/lib
+RLINC += -I/usr/local/opt/readline/include
+RLFLAGS = -lreadline -lhistory
 
 
 
@@ -40,7 +40,7 @@ ENV			=	$(SRCSPATH)/environ
 
 
 SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c \
-				$(UTILS)/freestuff.c $(LEX)/first_try.c
+				$(UTILS)/freestuff.c $(LEX)/first_try.c $(SIG)/exit.c
 
 
 OBJS		=	$(SRCS:.c=.o)

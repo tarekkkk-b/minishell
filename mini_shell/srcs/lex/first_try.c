@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/24 15:25:53 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/25 17:41:23 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,29 @@ t_noding	*last_node(t_noding *lst)
 		lst = lst->next;
 	}
 	return (lst);
+}
+
+int	invalid_chars(char c)
+{
+	char invalid[] = {'&',';','\\','[',']','(',')','{','}'};
+	int i = 0;
+	int invalidcheck = 0;
+	int invalid_length = sizeof(invalid) / sizeof(invalid[0]);
+	while(i < invalid_length && invalidcheck != 1)
+	{
+		if(c != invalid[i])
+			i++;
+		else
+			invalidcheck = 1;
+	}
+	if(invalidcheck == 1)
+		return (1);
+	return (0);
+	
+	// if(!(c != '&' && c != ';' && c != '\\' && c != '[]'))
+	// 	return(0);
+	// return (1);
+	
 }
 
 void	token_node(t_shell *shell, t_noding *new)
@@ -84,7 +107,8 @@ int	assign_word(char *str, int index, t_shell *shell)
 	int temp = index;
 	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
 		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0'  && str[index + 1] != '"'
-		&& str[index + 1] != '\'')
+		&& str[index + 1] != '\'' && str[index + 1] != ';') 
+		// add more of te cases :D
 		index++;
 	int j = 0;
 	string = malloc(sizeof(char) * (index - temp + 2));
@@ -95,13 +119,37 @@ int	assign_word(char *str, int index, t_shell *shell)
 		temp++;
 	}
 	string[j] = '\0';
+	j = 0;
+	// while(string[j])
+	// 	if(invalid_chars(string[j]) == 1)
+	// 		return((void)printf("This character is invalid : (%c) in word (%s)\n", string[j], string), index);
+	// 	else{
+	// 		j++;
+	// 	}
+	// im leavin tis in but comment it
 	printf("this is a word : (%s)\n", string);
 	return (index);
 }
 
-int	assign_variable(char *str, int index, t_shell *shell)
+int check_invalid(char *str, int i, t_shell *shell)
 {
 	(void)shell;
+	int starting = i;
+	i += 1;
+	// char *variable;
+	if((str[0] && !(str[0] >= 0 && str[starting] <= 9)) && ((str[0] == '?') || (str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z')))
+	{
+		while(str[i] && (((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')) || (str[i] >= 0 && str[i] <= 9)))
+			i++;
+		return (i);
+	}
+	return (-1);
+}
+
+
+int	assign_variable(char *str, int index, t_shell *shell)
+{
+	// (void)shell;
 	int	temp;
 	char *variable;
 	index++;
@@ -119,9 +167,13 @@ int	assign_variable(char *str, int index, t_shell *shell)
 		temp++;
 	}
 	variable[j] = '\0';
-	printf("this is a variable : (%s)\n", variable);
+	if(check_invalid(variable, 0, shell) != -1)
+		printf("This is a valid variable : (%s)\n", variable);
+	else
+		printf("this is an invalid variable : (%s)\n", variable);
 	return (index);
 }
+
 
 int		assign_quotes(char *str, int index, t_shell *shell)
 {
@@ -191,10 +243,14 @@ void	recieve_str(t_shell *shell, char *str)
 			i = assign_variable(str, i, shell);
 		else if (str[i] == '"' || str[i] == '\'')
 			i = assign_quotes(str, i, shell);
-		// else if (invalid_char(str[i]))
-		// 	i = assign_invalid(str, i, shell);
+		else if (invalid_chars(str[i]) == 1)
+			printf("this is an invalid character : (%c)\n", str[i]);
 		else
 			i = assign_word(str, i, shell);
 		i++;
 	}
 }
+
+// invalid chars are just chars we dont need to handle;
+// invalid variable name is just variable names that need to be valid
+

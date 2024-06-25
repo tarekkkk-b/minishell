@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/24 10:00:32 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/25 09:48:01 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
+# include <signal.h>
+# include <string.h>
 # include <readline/history.h>
 # include <readline/readline.h>
 # include "../../libft/libft.h"
@@ -124,6 +126,9 @@ void		free_values(t_values *env);
 // void    free_node(t_values *node);
 // void    free_list(t_values *head);
 void	recieve_str(t_shell *shell, char *str);
-
+int    signalhandler(void);
+void    handle_sigint(int sig);
+void 	rl_replace_line (const char * s, int c);
+int		just_test(void);
 
 #endif
