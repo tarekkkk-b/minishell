@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 01:18:48 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/06/25 12:26:50 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/26 14:18:14 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,9 @@ void    handle_sigint(int sig)
     // }
 }
 
-void    handle_sigquit(int sig)
-{
-    (void)sig;
-    just_test();
-}
-
-
 int    signalhandler(void)
 {
     signal(SIGINT, handle_sigint);
-    // signal(SIGQUIT, handle_sigquit);
-    signal(SIGABRT, handle_sigquit);
     signal(SIGQUIT, SIG_IGN);
     return (0);
 }
