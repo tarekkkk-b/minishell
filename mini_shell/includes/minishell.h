@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/25 09:48:01 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/26 18:20:17 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,14 @@ typedef	struct	s_exec
 	struct s_exec	*next;
 }	t_exec;
 
+//		readline struct		//
+
+typedef struct s_readline
+{
+	char	*path;
+	char	*str;
+}	t_readline;
+
 void		assign_nodes(char **env, t_shell *shell, t_values *node, int i);
 char    	*ft_strjoin2(char *str1, char *str2, char *str3);
 char		*get_key(char *env_var);
@@ -129,6 +137,6 @@ void	recieve_str(t_shell *shell, char *str);
 int    signalhandler(void);
 void    handle_sigint(int sig);
 void 	rl_replace_line (const char * s, int c);
-int		just_test(void);
+int		just_test(t_readline rl);
 
 #endif
