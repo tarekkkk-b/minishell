@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/25 22:05:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/27 21:56:35 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ void	recieve_str(t_shell *shell, char *str)
 
 
 //it is safe to say that 0-32 are not allowed also 127
-// invalid: %, &, (, ), *, ",", ".", /, :, ;,  [, \, ], 
+// invalid: &, (, ), *, ;, \,
 
 
 //things are getting quite confusing rn but ill research more tmrw
