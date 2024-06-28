@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/27 21:56:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/28 19:51:51 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,9 @@ int	assign_word(char *str, int index, t_shell *shell)
 	char *string = NULL;
 	int temp = index;
 	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
-		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0'  && str[index + 1] != '"'
-		&& str[index + 1] != '\'' && str[index + 1] != ';') 
-		// add more of te cases :D
+		&& str[index + 1] != '|' && str[index + 1] != '\0'  && str[index + 1] != '"' && str[index + 1] != '\''
+		&& str[index + 1] != ';' && str[index + 1] != '(' && str[index + 1] != ')' && str[index + 1] != '*'
+		&& str[index + 1] != '&' && str[index + 1] != '\\' && str[index + 1] != '$')
 		index++;
 	int j = 0;
 	string = malloc(sizeof(char) * (index - temp + 2));
@@ -141,12 +141,17 @@ int check_invalid(char *str, int i, t_shell *shell)
 	return (-1);
 }
 
-
 int	assign_variable(char *str, int index, t_shell *shell)
 {
 	(void)shell;
 	int	temp;
 	char *variable;
+	// index++;
+	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1]== '\0')
+	{
+		printf("this is a word : ($)\n");
+		return (index);
+	}
 	index++;
 	temp = index;
 	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
