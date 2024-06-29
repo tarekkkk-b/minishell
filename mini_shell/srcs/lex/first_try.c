@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/28 19:51:51 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/29 12:05:39 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_noding	*last_node(t_noding *lst)
 
 int	invalid_chars(char c)
 {
-	char invalid[] = {'&',';','\\','[',']','(',')','{','}'};
+	char invalid[] = {'&',';','\\', '*', '(', ')'};
 	int i = 0;
 	int invalidcheck = 0;
 	int invalid_length = sizeof(invalid) / sizeof(invalid[0]);
@@ -83,6 +83,17 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 	return (index);
 }
 
+int	delimeter(char character)
+{
+	if (character == '>' || character == '<' || character == ' '
+	|| character == '\t' || character == '\'' || character == '"'
+	|| character == '|' || character == '\0' || character == ';'
+	|| character == '\\' || character == ')' || character == '('
+	|| character == '$'|| character == '&' || character == '*')
+		return (1);
+	return (0);
+}
+
 int	assign_space(char *str, int index, t_shell *shell)
 {
 	(void)shell;
@@ -100,10 +111,7 @@ int	assign_word(char *str, int index, t_shell *shell)
 	(void)str;
 	char *string = NULL;
 	int temp = index;
-	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
-		&& str[index + 1] != '|' && str[index + 1] != '\0'  && str[index + 1] != '"' && str[index + 1] != '\''
-		&& str[index + 1] != ';' && str[index + 1] != '(' && str[index + 1] != ')' && str[index + 1] != '*'
-		&& str[index + 1] != '&' && str[index + 1] != '\\' && str[index + 1] != '$')
+	while (!delimeter(str[index + 1]))
 		index++;
 	int j = 0;
 	string = malloc(sizeof(char) * (index - temp + 2));
@@ -115,13 +123,6 @@ int	assign_word(char *str, int index, t_shell *shell)
 	}
 	string[j] = '\0';
 	j = 0;
-	// while(string[j])
-	// 	if(invalid_chars(string[j]) == 1)
-	// 		return((void)printf("This character is invalid : (%c) in word (%s)\n", string[j], string), index);
-	// 	else{
-	// 		j++;
-	// 	}
-	// im leavin tis in but comment it
 	printf("this is a word : (%s)\n", string);
 	return (index);
 }
@@ -131,7 +132,6 @@ int check_invalid(char *str, int i, t_shell *shell)
 	(void)shell;
 	int starting = i;
 	i += 1;
-	// char *variable;
 	if((str[0] && !(str[0] >= 0 && str[starting] <= 9)) && ((str[0] == '?') || (str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z')))
 	{
 		while(str[i] && (((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')) || (str[i] >= 0 && str[i] <= 9)))
@@ -146,7 +146,6 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	(void)shell;
 	int	temp;
 	char *variable;
-	// index++;
 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1]== '\0')
 	{
 		printf("this is a word : ($)\n");
@@ -154,9 +153,10 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	}
 	index++;
 	temp = index;
-	while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
-		&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-' && str[index + 1] != '"'
-		&& str[index + 1] != '\'' && str[index + 1] != ';' && str[index + 1] != ':' && str[index + 1] != '?')
+	// while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
+	// 	&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-' && str[index + 1] != '"'
+	// 	&& str[index + 1] != '\'' && str[index + 1] != ';' && str[index + 1] != ':' && str[index + 1] != '?')
+	while (!delimeter(str[index + 1]))
 		index++;
 	int j = 0;
 	variable = malloc(sizeof(char) * (index - temp + 2));

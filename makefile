@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#    By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/27 20:32:34 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/06/29 12:40:54 by tarekkkk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
