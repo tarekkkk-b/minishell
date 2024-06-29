@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/26 18:20:17 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/06/29 13:31:10 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,11 @@ typedef enum	s_tokens
 	delimiter,
 	append,
 	space,
-	variable,
+	var_value,
+	equal,
+	expandable,
+	valid_var,
+	invalid_var,
 	invalid
 }	t_tokens;
 

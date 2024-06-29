@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/29 12:05:39 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/06/29 15:17:04 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,50 +130,64 @@ int	assign_word(char *str, int index, t_shell *shell)
 int check_invalid(char *str, int i, t_shell *shell)
 {
 	(void)shell;
-	int starting = i;
-	i += 1;
-	if((str[0] && !(str[0] >= 0 && str[starting] <= 9)) && ((str[0] == '?') || (str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z')))
-	{
-		while(str[i] && (((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')) || (str[i] >= 0 && str[i] <= 9)))
-			i++;
-		return (i);
-	}
-	return (-1);
+	// int starting = i;
+	// i += 1;
+	// if((str[0] && !(str[0] >= 0 && str[starting] <= 9)) && ((str[0] == '?') || (str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z')))
+	// {
+	// 	while(str[i] && (((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')) || (str[i] >= 0 && str[i] <= 9)))
+	// 		i++;
+	// 	return (i);
+	// }
+	// return (-1);
+	i++;
+	if (str[i] != '_' && !(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A' && str[i] <= 'Z'))
+		return (-1);
+	while (str[i]&& (str[i] == '_' || (str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' & str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z')))
+		i++;
+	return (i);
 }
 
-int	assign_variable(char *str, int index, t_shell *shell)
+// int	assign_variable(char *str, int index, t_shell *shell)
+// {
+// 	(void)shell;
+// 	int	temp;
+// 	char *variable;
+// 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1]== '\0')
+// 	{
+// 		printf("this is a word : ($)\n");
+// 		return (index);
+// 	}
+// 	temp = index;
+// 	index++;
+// 	while (!delimeter(str[index + 1]))
+// 		index++;
+// 	int j = 0;
+// 	variable = malloc(sizeof(char) * (index - temp + 2));
+// 	while (temp <= index)
+// 	{
+// 		variable[j] = str[temp];
+// 		j++;
+// 		temp++;
+// 	}
+// 	variable[j] = '\0';
+// 	if(check_invalid(variable, 0, shell) != -1)
+// 		printf("This is a valid variable : (%s)\n", variable);
+// 	else
+// 		printf("this is an invalid variable : (%s)\n", variable);
+// 	return (index);
+// }
+
+int		assign_variable(char *str, int index, t_shell *shell)
 {
 	(void)shell;
-	int	temp;
-	char *variable;
-	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1]== '\0')
-	{
-		printf("this is a word : ($)\n");
-		return (index);
-	}
-	index++;
+	int temp;
+	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
+		return ((void)printf("just a $\n"), index);
 	temp = index;
-	// while (str[index + 1] != '>' && str[index + 1] != '<' && str[index + 1] != ' ' && str[index + 1] != '\t'
-	// 	&& str[index + 1] != '$' && str[index + 1] != '|' && str[index + 1] != '\0' && str[index + 1] != '-' && str[index + 1] != '"'
-	// 	&& str[index + 1] != '\'' && str[index + 1] != ';' && str[index + 1] != ':' && str[index + 1] != '?')
-	while (!delimeter(str[index + 1]))
+	while (str[index + 1])
 		index++;
-	int j = 0;
-	variable = malloc(sizeof(char) * (index - temp + 2));
-	while (temp <= index)
-	{
-		variable[j] = str[temp];
-		j++;
-		temp++;
-	}
-	variable[j] = '\0';
-	if(check_invalid(variable, 0, shell) != -1)
-		printf("This is a valid variable : (%s)\n", variable);
-	else
-		printf("this is an invalid variable : (%s)\n", variable);
-	return (index);
+	return(index);
 }
-
 
 int		assign_quotes(char *str, int index, t_shell *shell)
 {
@@ -286,3 +300,5 @@ void	recieve_str(t_shell *shell, char *str)
 
 
 //things are getting quite confusing rn but ill research more tmrw
+
+//I FIGURED IT OUT
