@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/29 15:17:04 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/29 18:44:00 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,15 +177,41 @@ int check_invalid(char *str, int i, t_shell *shell)
 // 	return (index);
 // }
 
+int		valid_name(char character, int current, int first)
+{
+	if (current == first)
+	{
+		if (!(character >= 'a' && character <= 'z') 
+		&& !(character >= 'A' && character <= 'Z') && character != '_')
+			return (0);	
+	}
+	else
+	{	
+		if (!(character >= 'a' && character <= 'z') &&
+		!(character >= 'A' && character <= 'Z') && character != '_'
+		&& !(character >= '0' && character <= '9'))
+			return (0);
+	}
+	return (1);
+}
+
 int		assign_variable(char *str, int index, t_shell *shell)
 {
 	(void)shell;
 	int temp;
+	int	j = 0;
+	char *variable;
 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
 		return ((void)printf("just a $\n"), index);
 	temp = index;
-	while (str[index + 1])
+	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
 		index++;
+	variable = malloc(sizeof(char) * (index - temp + 3));
+	variable[j++] = '$';
+	while (temp++ < index)
+		variable[j++] = str[temp];
+	variable[j++] = '\0';
+	printf("this is a variable (%s)\n", variable);
 	return(index);
 }
 
