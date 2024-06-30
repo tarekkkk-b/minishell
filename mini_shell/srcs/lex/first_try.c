@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/29 18:44:00 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/06/30 17:19:07 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,54 @@ void	token_node(t_shell *shell, t_noding *new)
 		shell->parser->noding = new;
 }
 
+t_noding *prev_node(t_shell *shell, t_noding *target)
+{
+	t_noding	*traveler;
+	
+	traveler = NULL;
+	if (shell->parser->noding)
+	{
+		traveler = shell->parser->noding;
+		while (traveler->next != target)
+			traveler = traveler->next;
+	}
+	return (traveler);
+}
+
 int	assign_pipe(char *str, int index, t_shell *shell)
 {
-	(void)shell;
+	// (void)shell;
+	t_noding *new;
+	
 	(void)str;
-	printf("|	:	pipe\n");
+	new = malloc(sizeof(t_noding));
+	new->next = NULL;
+	new->shell = shell;
+	new->value = ft_strdup("|");
+	if (shell->parser->noding == NULL
+	|| last_node(shell->parser->noding)->type == pipes
+	|| last_node(shell->parser->noding)->type == inp_redir
+	|| last_node(shell->parser->noding)->type == opt_redir
+	|| last_node(shell->parser->noding)->type == append
+	|| last_node(shell->parser->noding)->type == here_doc)
+	{
+		new->type = invalid;
+	}	
+	else if (last_node(shell->parser->noding)->type == space)
+	{
+		if (prev_node(shell, last_node(shell->parser->noding))->type == pipes
+		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
+		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
+		|| prev_node(shell, last_node(shell->parser->noding))->type == append
+		|| prev_node(shell, last_node(shell->parser->noding))->type == here_doc)
+		{
+			new->type = invalid;	
+		}
+	}
+	else
+		new->type = pipes;
+	token_node(shell, new);
+	// printf("|	:	pipe\n");
 	return (index);
 }
 
@@ -96,12 +139,19 @@ int	delimeter(char character)
 
 int	assign_space(char *str, int index, t_shell *shell)
 {
-	(void)shell;
-	int temp = index;
+	// (void)shell;
+	t_noding	*new;
+	// int temp = index;
 	while ((str[index] == ' ' || str[index] == '\t') && str[index] != '\0')
 		index++;
 	index--;
-	printf("we have (%d) spaces\n", index - temp + 1);
+	new = malloc(sizeof(t_noding));
+	new->next = NULL;
+	new->shell = shell;
+	new->type = space;
+	new->value = ft_strdup(" ");
+	token_node(shell, new);
+	// printf("we have (%d) spaces\n", index - temp + 1);
 	return (index);
 }
 
@@ -269,7 +319,11 @@ void	recieve_str(t_shell *shell, char *str)
 {
 	(void)shell;
 	int	i = 0;
+	shell->parser = NULL;
+	if (!str)
+		return ;
 	shell->parser = malloc(sizeof(t_parser));
+	shell->parser->noding = NULL;
 	while (str[i])
 	{
 		if (str[i] == '|')
@@ -287,6 +341,13 @@ void	recieve_str(t_shell *shell, char *str)
 		else
 			i = assign_word(str, i, shell);
 		i++;
+	}
+	t_noding *test;
+	test = shell->parser->noding;
+	while (test)
+	{
+		printf("%s	:	%u\n", test->value, test->type);
+		test = test->next;
 	}
 }
 

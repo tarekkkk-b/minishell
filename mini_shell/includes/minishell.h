@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/29 13:31:10 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/30 12:33:19 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,11 +78,7 @@ typedef enum	s_tokens
 	delimiter,
 	append,
 	space,
-	var_value,
-	equal,
-	expandable,
-	valid_var,
-	invalid_var,
+	variable,
 	invalid
 }	t_tokens;
 
