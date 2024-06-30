@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/30 17:19:07 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/06/30 21:24:41 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,47 @@ t_noding	*last_node(t_noding *lst)
 		lst = lst->next;
 	}
 	return (lst);
+}
+
+t_noding *prev_node(t_shell *shell, t_noding *target)
+{
+	t_noding	*traveler;
+	
+	traveler = NULL;
+	if (shell->parser->noding)
+	{
+		traveler = shell->parser->noding;
+		while (traveler->next != target)
+			traveler = traveler->next;
+	}
+	return (traveler);
+}
+
+int	invalid_token(t_shell *shell)
+{
+	if (!shell->parser->noding)
+		return (0);
+	if (last_node(shell->parser->noding)->type == pipes
+	|| last_node(shell->parser->noding)->type == inp_redir
+	|| last_node(shell->parser->noding)->type == opt_redir
+	|| last_node(shell->parser->noding)->type == append
+	|| last_node(shell->parser->noding)->type == here_doc)
+	{
+		return (1);
+	}	
+	else if (last_node(shell->parser->noding)->type == space)
+	{
+		if (!prev_node(shell, last_node(shell->parser->noding))
+		|| prev_node(shell, last_node(shell->parser->noding))->type == pipes
+		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
+		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
+		|| prev_node(shell, last_node(shell->parser->noding))->type == append
+		|| prev_node(shell, last_node(shell->parser->noding))->type == here_doc)
+		{
+			return (1);	
+		}
+	}
+	return (0);
 }
 
 int	invalid_chars(char c)
@@ -54,20 +95,6 @@ void	token_node(t_shell *shell, t_noding *new)
 		shell->parser->noding = new;
 }
 
-t_noding *prev_node(t_shell *shell, t_noding *target)
-{
-	t_noding	*traveler;
-	
-	traveler = NULL;
-	if (shell->parser->noding)
-	{
-		traveler = shell->parser->noding;
-		while (traveler->next != target)
-			traveler = traveler->next;
-	}
-	return (traveler);
-}
-
 int	assign_pipe(char *str, int index, t_shell *shell)
 {
 	// (void)shell;
@@ -78,28 +105,12 @@ int	assign_pipe(char *str, int index, t_shell *shell)
 	new->next = NULL;
 	new->shell = shell;
 	new->value = ft_strdup("|");
-	if (shell->parser->noding == NULL
-	|| last_node(shell->parser->noding)->type == pipes
-	|| last_node(shell->parser->noding)->type == inp_redir
-	|| last_node(shell->parser->noding)->type == opt_redir
-	|| last_node(shell->parser->noding)->type == append
-	|| last_node(shell->parser->noding)->type == here_doc)
-	{
-		new->type = invalid;
-	}	
-	else if (last_node(shell->parser->noding)->type == space)
-	{
-		if (prev_node(shell, last_node(shell->parser->noding))->type == pipes
-		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
-		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
-		|| prev_node(shell, last_node(shell->parser->noding))->type == append
-		|| prev_node(shell, last_node(shell->parser->noding))->type == here_doc)
-		{
-			new->type = invalid;	
-		}
-	}
-	else
+	if (!invalid_token(shell))
 		new->type = pipes;
+	if (!shell->parser->noding)
+		new->type = invalid;
+	else
+		new->type = invalid;
 	token_node(shell, new);
 	// printf("|	:	pipe\n");
 	return (index);
@@ -107,22 +118,61 @@ int	assign_pipe(char *str, int index, t_shell *shell)
 
 int	assign_redirection(char *str, int index, t_shell *shell)
 {
-	(void)shell;
+	t_noding *new;
+	new = malloc(sizeof(t_noding));
+	new->next = NULL;
+	new->shell = shell;
 	if (str[index + 1] == str[index])
 	{
 		if (str[index] == '>')
-			printf(">>	:	append\n");
+		{
+			if (!invalid_token(shell))
+			{
+				new->type = append;
+				new->value = ft_strdup(">>");
+			}
+			else
+				new->type = invalid;
+			// printf(">>	:	append\n");
+		}
 		else if (str[index] == '<')
-			printf("<<	:	heredoc\n");
+		{
+			if (!invalid_token(shell))
+			{
+				new->type = here_doc;
+				new->value = ft_strdup("<<");
+			}
+			else
+				new->type = invalid;
+			// printf("<<	:	heredoc\n");
+		}
 		index++;
 	}
 	else if (str[index + 1] != str[index])
 	{
 		if (str[index] == '>')
-			printf(">	:	output redirection\n");
+		{
+			if (!invalid_token(shell))
+			{
+				new->type = opt_redir;
+				new->value = ft_strdup(">");
+			}
+			else
+				new->type = invalid;	
+		}
 		else if (str[index] == '<')
-			printf("<	:	input redirection\n");	
+		{	
+			if (!invalid_token(shell))
+			{
+				new->type = inp_redir;
+				new->value = ft_strdup("<");
+			}
+			else
+				new->type = invalid;	
+			// printf("<	:	input redirection\n");	
+		}
 	}
+	token_node(shell, new);
 	return (index);
 }
 
@@ -180,15 +230,6 @@ int	assign_word(char *str, int index, t_shell *shell)
 int check_invalid(char *str, int i, t_shell *shell)
 {
 	(void)shell;
-	// int starting = i;
-	// i += 1;
-	// if((str[0] && !(str[0] >= 0 && str[starting] <= 9)) && ((str[0] == '?') || (str[0] >= 'A' && str[0] <= 'Z') || (str[0] >= 'a' && str[0] <= 'z')))
-	// {
-	// 	while(str[i] && (((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= 'a' && str[i] <= 'z')) || (str[i] >= 0 && str[i] <= 9)))
-	// 		i++;
-	// 	return (i);
-	// }
-	// return (-1);
 	i++;
 	if (str[i] != '_' && !(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A' && str[i] <= 'Z'))
 		return (-1);
@@ -196,36 +237,6 @@ int check_invalid(char *str, int i, t_shell *shell)
 		i++;
 	return (i);
 }
-
-// int	assign_variable(char *str, int index, t_shell *shell)
-// {
-// 	(void)shell;
-// 	int	temp;
-// 	char *variable;
-// 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1]== '\0')
-// 	{
-// 		printf("this is a word : ($)\n");
-// 		return (index);
-// 	}
-// 	temp = index;
-// 	index++;
-// 	while (!delimeter(str[index + 1]))
-// 		index++;
-// 	int j = 0;
-// 	variable = malloc(sizeof(char) * (index - temp + 2));
-// 	while (temp <= index)
-// 	{
-// 		variable[j] = str[temp];
-// 		j++;
-// 		temp++;
-// 	}
-// 	variable[j] = '\0';
-// 	if(check_invalid(variable, 0, shell) != -1)
-// 		printf("This is a valid variable : (%s)\n", variable);
-// 	else
-// 		printf("this is an invalid variable : (%s)\n", variable);
-// 	return (index);
-// }
 
 int		valid_name(char character, int current, int first)
 {
@@ -247,21 +258,25 @@ int		valid_name(char character, int current, int first)
 
 int		assign_variable(char *str, int index, t_shell *shell)
 {
-	(void)shell;
+	t_noding *new;
 	int temp;
 	int	j = 0;
-	char *variable;
 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
 		return ((void)printf("just a $\n"), index);
+	new = malloc(sizeof(t_noding));
+	new->next = NULL;
+	new->shell = shell;
+	new->type = variable;
 	temp = index;
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
 		index++;
-	variable = malloc(sizeof(char) * (index - temp + 3));
-	variable[j++] = '$';
+	new->value = malloc(sizeof(char) * (index - temp + 3));
+	new->value[j++] = '$';
 	while (temp++ < index)
-		variable[j++] = str[temp];
-	variable[j++] = '\0';
-	printf("this is a variable (%s)\n", variable);
+		new->value[j++] = str[temp];
+	new->value[j++] = '\0';
+	token_node(shell, new);
+	// printf("this is a variable (%s)\n", variable);
 	return(index);
 }
 
@@ -346,7 +361,7 @@ void	recieve_str(t_shell *shell, char *str)
 	test = shell->parser->noding;
 	while (test)
 	{
-		printf("%s	:	%u\n", test->value, test->type);
+		printf("%s		:		%u\n", test->value, test->type);
 		test = test->next;
 	}
 }
