@@ -6,7 +6,7 @@
 /*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/06/30 21:24:41 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/02 00:24:05 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 t_noding	*last_node(t_noding *lst)
 {
+	if (!lst)
+		return (NULL);
 	while (lst)
 	{
 		if (!lst->next)
@@ -28,10 +30,12 @@ t_noding *prev_node(t_shell *shell, t_noding *target)
 	t_noding	*traveler;
 	
 	traveler = NULL;
+	if (!shell->parser->noding || !target)
+		return (NULL);
 	if (shell->parser->noding)
 	{
 		traveler = shell->parser->noding;
-		while (traveler->next != target)
+		while (traveler->next && traveler->next != target)
 			traveler = traveler->next;
 	}
 	return (traveler);
@@ -39,7 +43,7 @@ t_noding *prev_node(t_shell *shell, t_noding *target)
 
 int	invalid_token(t_shell *shell)
 {
-	if (!shell->parser->noding)
+	if (!shell->parser->noding || !last_node(shell->parser->noding))
 		return (0);
 	if (last_node(shell->parser->noding)->type == pipes
 	|| last_node(shell->parser->noding)->type == inp_redir
@@ -105,12 +109,16 @@ int	assign_pipe(char *str, int index, t_shell *shell)
 	new->next = NULL;
 	new->shell = shell;
 	new->value = ft_strdup("|");
-	if (!invalid_token(shell))
-		new->type = pipes;
-	if (!shell->parser->noding)
+	// if (!invalid_token(shell))
+	// 	new->type = pipes;
+	// if (!shell->parser->noding)
+	// 	new->type = invalid;
+	// else
+	// 	new->type = invalid;
+	if (invalid_token(shell) || !shell->parser->noding)
 		new->type = invalid;
 	else
-		new->type = invalid;
+		new->type = pipes;
 	token_node(shell, new);
 	// printf("|	:	pipe\n");
 	return (index);
@@ -127,23 +135,19 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 		if (str[index] == '>')
 		{
 			if (!invalid_token(shell))
-			{
 				new->type = append;
-				new->value = ft_strdup(">>");
-			}
 			else
 				new->type = invalid;
+			new->value = ft_strdup(">>");
 			// printf(">>	:	append\n");
 		}
 		else if (str[index] == '<')
 		{
 			if (!invalid_token(shell))
-			{
 				new->type = here_doc;
-				new->value = ft_strdup("<<");
-			}
 			else
 				new->type = invalid;
+			new->value = ft_strdup("<<");
 			// printf("<<	:	heredoc\n");
 		}
 		index++;
@@ -153,22 +157,19 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 		if (str[index] == '>')
 		{
 			if (!invalid_token(shell))
-			{
 				new->type = opt_redir;
-				new->value = ft_strdup(">");
-			}
 			else
-				new->type = invalid;	
+				new->type = invalid;
+			new->value = ft_strdup(">");
+			// printf(">	:	output redirection\n");
 		}
 		else if (str[index] == '<')
 		{	
 			if (!invalid_token(shell))
-			{
 				new->type = inp_redir;
-				new->value = ft_strdup("<");
-			}
 			else
-				new->type = invalid;	
+				new->type = invalid;
+			new->value = ft_strdup("<");
 			// printf("<	:	input redirection\n");	
 		}
 	}
