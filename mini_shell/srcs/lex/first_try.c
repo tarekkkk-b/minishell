@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/02 00:24:05 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/02 20:45:09 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ int	invalid_token(t_shell *shell)
 {
 	if (!shell->parser->noding || !last_node(shell->parser->noding))
 		return (0);
-	if (last_node(shell->parser->noding)->type == pipes
-	|| last_node(shell->parser->noding)->type == inp_redir
+		// last_node(shell->parser->noding)->type == pipes
+	if (
+	last_node(shell->parser->noding)->type == inp_redir
 	|| last_node(shell->parser->noding)->type == opt_redir
 	|| last_node(shell->parser->noding)->type == append
 	|| last_node(shell->parser->noding)->type == here_doc)
@@ -56,7 +57,7 @@ int	invalid_token(t_shell *shell)
 	else if (last_node(shell->parser->noding)->type == space)
 	{
 		if (!prev_node(shell, last_node(shell->parser->noding))
-		|| prev_node(shell, last_node(shell->parser->noding))->type == pipes
+		// || prev_node(shell, last_node(shell->parser->noding))->type == pipes
 		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
 		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
 		|| prev_node(shell, last_node(shell->parser->noding))->type == append
@@ -115,7 +116,8 @@ int	assign_pipe(char *str, int index, t_shell *shell)
 	// 	new->type = invalid;
 	// else
 	// 	new->type = invalid;
-	if (invalid_token(shell) || !shell->parser->noding)
+	if (invalid_token(shell) || !shell->parser->noding || last_node(shell->parser->noding)->type == pipes
+	|| (last_node(shell->parser->noding)->type == space && prev_node(shell, last_node(shell->parser->noding))->type == pipes))
 		new->type = invalid;
 	else
 		new->type = pipes;
@@ -208,23 +210,26 @@ int	assign_space(char *str, int index, t_shell *shell)
 
 int	assign_word(char *str, int index, t_shell *shell)
 {
-	(void)shell;
-	(void)str;
-	char *string = NULL;
+	t_noding *new;
+	new = malloc(sizeof(t_noding));
+	new->next = NULL;
+	new->shell = shell;
+	new->type = option;
 	int temp = index;
 	while (!delimeter(str[index + 1]))
 		index++;
 	int j = 0;
-	string = malloc(sizeof(char) * (index - temp + 2));
+	new->value = malloc(sizeof(char) * (index - temp + 2));
 	while (temp <= index)
 	{
-		string[j] = str[temp];
+		new->value[j] = str[temp];
 		j++;
 		temp++;
 	}
-	string[j] = '\0';
+	new->value[j] = '\0';
 	j = 0;
-	printf("this is a word : (%s)\n", string);
+	token_node(shell, new);
+	// printf("this is a word : (%s)\n", new->value);
 	return (index);
 }
 
@@ -283,9 +288,12 @@ int		assign_variable(char *str, int index, t_shell *shell)
 
 int		assign_quotes(char *str, int index, t_shell *shell)
 {
-	(void)shell;
+	t_noding	*new;
+	new = malloc(sizeof(t_noding));
+	new->shell = shell;
+	new->next = NULL;
+	new->value = NULL;
 	int temp = index;
-	char *string = NULL;
 	int j = 0;
 	int counter = 0;
 	if (str[index] == '"')
@@ -297,14 +305,18 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 			index++;
 			counter += 1;
 		}
-		string = malloc(sizeof(char) * (index - temp + 2));
+		new->value = malloc(sizeof(char) * (index - temp + 2));
 		while (temp <= index)
 		{
-			string[j] = str[temp];
+			new->value[j] = str[temp];
 			j++;
 			temp++;
 		}
-		string[j] = '\0';
+		new->value[j] = '\0';
+		if (counter != 2)
+			new->type = invalid;
+		else
+			new->type = dqoutes;
 	}
 	else if (str[index] == '\'')
 	{
@@ -316,19 +328,97 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 			index++;
 			counter += 1;
 		}
-		string = malloc(sizeof(char) * (index - temp + 2));
+		new->value = malloc(sizeof(char) * (index - temp + 2));
 		while (temp <= index)
 		{
-			string[j] = str[temp];
+			new->value[j] = str[temp];
 			j++;
 			temp++;
 		}
-		string[j] = '\0';
+		new->value[j] = '\0';
+		if (counter != 2)
+			new->type = invalid;
+		else
+			new->type = sqoutes;
 	}
-	printf("string	:	(%s)\n", string);
-	if (counter != 2)
-		return ((void)printf("This shit dont work\n"), index);
+	token_node(shell, new);
+	// printf("string	:	(%s)\n", new->value);
 	return (index);
+}
+
+void	she_asked_for_a_second_round(t_shell *shell)
+{
+	t_noding	*traveler;
+	if (!shell->parser || !shell->parser->noding)
+		return ;
+	traveler = shell->parser->noding;
+	while (traveler)
+	{
+		if (traveler->type == inp_redir)
+		{
+			if (traveler->next && traveler->next->type == option)
+			{
+				printf("\n\nCONDITION 1\n\n");
+				traveler->next->type = inp_file;
+			}
+			else if (traveler->next && traveler->next->type == space)
+			{
+				printf("\n\nCONDITION 2\n\n");
+				if (traveler->next->next && traveler->next->next->type == option)
+					traveler->next->next->type = inp_file;
+				else
+					traveler->type = invalid;
+			}
+			else
+			{
+				printf("\n\nCONDITION 3\n\n");
+				traveler->type = invalid;
+			}
+		}
+		else if (traveler->type == opt_redir || traveler->type == append)
+		{
+			if (traveler->next && traveler->next->type == option)
+			{
+				printf("\n\nCONDITION 1\n\n");
+				traveler->next->type = opt_file;
+			}
+			else if (traveler->next && traveler->next->type == space)
+			{
+				printf("\n\nCONDITION 2\n\n");
+				if (traveler->next->next && traveler->next->next->type == option)
+					traveler->next->next->type = opt_file;
+				else
+					traveler->type = invalid;
+			}
+			else
+			{
+				printf("\n\nCONDITION 3\n\n");
+				traveler->type = invalid;
+			}
+		}
+		else if (traveler->type == here_doc)
+		{
+			if (traveler->next && traveler->next->type == option)
+			{
+				printf("\n\nCONDITION 1\n\n");
+				traveler->next->type = delimiter;
+			}
+			else if (traveler->next && traveler->next->type == space)
+			{
+				printf("\n\nCONDITION 2\n\n");
+				if (traveler->next->next && traveler->next->next->type == option)
+					traveler->next->next->type = delimiter;
+				else
+					traveler->type = invalid;
+			}
+			else
+			{
+				printf("\n\nCONDITION 3\n\n");
+				traveler->type = invalid;
+			}
+		}
+		traveler = traveler->next;
+	}
 }
 
 void	recieve_str(t_shell *shell, char *str)
@@ -358,6 +448,7 @@ void	recieve_str(t_shell *shell, char *str)
 			i = assign_word(str, i, shell);
 		i++;
 	}
+	she_asked_for_a_second_round(shell);
 	t_noding *test;
 	test = shell->parser->noding;
 	while (test)
