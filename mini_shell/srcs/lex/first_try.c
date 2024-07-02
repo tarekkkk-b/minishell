@@ -3,15 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/02 20:45:09 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/03 00:49:43 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+/// @brief gets the last node in a lis
+/// @param lst the head
+/// @return a pointer to the last node
 t_noding	*last_node(t_noding *lst)
 {
 	if (!lst)
@@ -25,6 +28,10 @@ t_noding	*last_node(t_noding *lst)
 	return (lst);
 }
 
+/// @brief gets the node thats right before a partiular node
+/// @param shell 
+/// @param target the node u wanna find what behind it is
+/// @return the pointer to the node
 t_noding *prev_node(t_shell *shell, t_noding *target)
 {
 	t_noding	*traveler;
@@ -41,6 +48,9 @@ t_noding *prev_node(t_shell *shell, t_noding *target)
 	return (traveler);
 }
 
+/// @brief checks if the previous node was an operater
+/// @param shell 
+/// @return true or false
 int	invalid_token(t_shell *shell)
 {
 	if (!shell->parser->noding || !last_node(shell->parser->noding))
@@ -68,6 +78,10 @@ int	invalid_token(t_shell *shell)
 	}
 	return (0);
 }
+//this function^^ was checking for pipes too
+//had to remove that cuz operators could come after pipes
+
+
 
 int	invalid_chars(char c)
 {
@@ -87,6 +101,10 @@ int	invalid_chars(char c)
 	return (0);
 }
 
+
+/// @brief adds a node to a linked list
+/// @param shell 
+/// @param  
 void	token_node(t_shell *shell, t_noding *new)
 {
 	t_noding	*temp;
@@ -116,6 +134,8 @@ int	assign_pipe(char *str, int index, t_shell *shell)
 	// 	new->type = invalid;
 	// else
 	// 	new->type = invalid;
+
+	//had to manually check here for previous nodes if they were pipes
 	if (invalid_token(shell) || !shell->parser->noding || last_node(shell->parser->noding)->type == pipes
 	|| (last_node(shell->parser->noding)->type == space && prev_node(shell, last_node(shell->parser->noding))->type == pipes))
 		new->type = invalid;
@@ -239,7 +259,8 @@ int check_invalid(char *str, int i, t_shell *shell)
 	i++;
 	if (str[i] != '_' && !(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A' && str[i] <= 'Z'))
 		return (-1);
-	while (str[i]&& (str[i] == '_' || (str[i] >= '0' && str[i] <= '9') || (str[i] >= 'a' & str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z')))
+	while (str[i]&& (str[i] == '_' || (str[i] >= '0' && str[i] <= '9')
+	|| (str[i] >= 'a' & str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z')))
 		i++;
 	return (i);
 }
@@ -346,6 +367,8 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 	return (index);
 }
 
+//very rough function that for now assigns the correct destination/source
+//of redirections, need to shorten it and do more things 
 void	she_asked_for_a_second_round(t_shell *shell)
 {
 	t_noding	*traveler;
