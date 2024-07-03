@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/03 00:49:43 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/03 09:53:34 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,6 +367,29 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 	return (index);
 }
 
+
+void	test(t_noding *traveler, t_tokens actual_token)
+{
+	if (traveler->next && traveler->next->type == option)
+	{
+		printf("\n\nCONDITION 1\n\n");
+		traveler->next->type = actual_token;
+	}
+	else if (traveler->next && traveler->next->type == space)
+	{
+		printf("\n\nCONDITION 2\n\n");
+		if (traveler->next->next && traveler->next->next->type == option)
+			traveler->next->next->type = actual_token;
+		else
+			traveler->type = invalid;
+	}
+	else
+	{
+		printf("\n\nCONDITION 3\n\n");
+		traveler->type = invalid;
+	}
+}
+
 //very rough function that for now assigns the correct destination/source
 //of redirections, need to shorten it and do more things 
 void	she_asked_for_a_second_round(t_shell *shell)
@@ -377,69 +400,76 @@ void	she_asked_for_a_second_round(t_shell *shell)
 	traveler = shell->parser->noding;
 	while (traveler)
 	{
+		//i managed to make it shorter by creating this pattern as a function 
 		if (traveler->type == inp_redir)
-		{
-			if (traveler->next && traveler->next->type == option)
-			{
-				printf("\n\nCONDITION 1\n\n");
-				traveler->next->type = inp_file;
-			}
-			else if (traveler->next && traveler->next->type == space)
-			{
-				printf("\n\nCONDITION 2\n\n");
-				if (traveler->next->next && traveler->next->next->type == option)
-					traveler->next->next->type = inp_file;
-				else
-					traveler->type = invalid;
-			}
-			else
-			{
-				printf("\n\nCONDITION 3\n\n");
-				traveler->type = invalid;
-			}
-		}
+			test(traveler, inp_file);
 		else if (traveler->type == opt_redir || traveler->type == append)
-		{
-			if (traveler->next && traveler->next->type == option)
-			{
-				printf("\n\nCONDITION 1\n\n");
-				traveler->next->type = opt_file;
-			}
-			else if (traveler->next && traveler->next->type == space)
-			{
-				printf("\n\nCONDITION 2\n\n");
-				if (traveler->next->next && traveler->next->next->type == option)
-					traveler->next->next->type = opt_file;
-				else
-					traveler->type = invalid;
-			}
-			else
-			{
-				printf("\n\nCONDITION 3\n\n");
-				traveler->type = invalid;
-			}
-		}
+			test(traveler, opt_file);
 		else if (traveler->type == here_doc)
-		{
-			if (traveler->next && traveler->next->type == option)
-			{
-				printf("\n\nCONDITION 1\n\n");
-				traveler->next->type = delimiter;
-			}
-			else if (traveler->next && traveler->next->type == space)
-			{
-				printf("\n\nCONDITION 2\n\n");
-				if (traveler->next->next && traveler->next->next->type == option)
-					traveler->next->next->type = delimiter;
-				else
-					traveler->type = invalid;
-			}
-			else
-			{
-				printf("\n\nCONDITION 3\n\n");
-				traveler->type = invalid;
-			}
-		}
+			test(traveler, delimiter);
+		// if (traveler->type == inp_redir)
+		// {
+		// 	if (traveler->next && traveler->next->type == option)
+		// 	{
+		// 		printf("\n\nCONDITION 1\n\n");
+		// 		traveler->next->type = inp_file;
+		// 	}
+		// 	else if (traveler->next && traveler->next->type == space)
+		// 	{
+		// 		printf("\n\nCONDITION 2\n\n");
+		// 		if (traveler->next->next && traveler->next->next->type == option)
+		// 			traveler->next->next->type = inp_file;
+		// 		else
+		// 			traveler->type = invalid;
+		// 	}
+		// 	else
+		// 	{
+		// 		printf("\n\nCONDITION 3\n\n");
+		// 		traveler->type = invalid;
+		// 	}
+		// }
+		// else if (traveler->type == opt_redir || traveler->type == append)
+		// {
+		// 	if (traveler->next && traveler->next->type == option)
+		// 	{
+		// 		printf("\n\nCONDITION 1\n\n");
+		// 		traveler->next->type = opt_file;
+		// 	}
+		// 	else if (traveler->next && traveler->next->type == space)
+		// 	{
+		// 		printf("\n\nCONDITION 2\n\n");
+		// 		if (traveler->next->next && traveler->next->next->type == option)
+		// 			traveler->next->next->type = opt_file;
+		// 		else
+		// 			traveler->type = invalid;
+		// 	}
+		// 	else
+		// 	{
+		// 		printf("\n\nCONDITION 3\n\n");
+		// 		traveler->type = invalid;
+		// 	}
+		// }
+		// else if (traveler->type == here_doc)
+		// {
+		// 	if (traveler->next && traveler->next->type == option)
+		// 	{
+		// 		printf("\n\nCONDITION 1\n\n");
+		// 		traveler->next->type = delimiter;
+		// 	}
+		// 	else if (traveler->next && traveler->next->type == space)
+		// 	{
+		// 		printf("\n\nCONDITION 2\n\n");
+		// 		if (traveler->next->next && traveler->next->next->type == option)
+		// 			traveler->next->next->type = delimiter;
+		// 		else
+		// 			traveler->type = invalid;
+		// 	}
+		// 	else
+		// 	{
+		// 		printf("\n\nCONDITION 3\n\n");
+		// 		traveler->type = invalid;
+		// 	}
+		// }
 		traveler = traveler->next;
 	}
 }
