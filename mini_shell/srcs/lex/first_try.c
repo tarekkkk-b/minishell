@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/03 09:53:34 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/05 22:05:20 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,17 +322,14 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 		counter += 1;
 		while (str[index + 1] && str[index + 1] != '"' && str[index])
 			index++;
-		if(str[index + 1] == '"'){
+		if(str[index + 1] == '"')
+		{
 			index++;
 			counter += 1;
 		}
 		new->value = malloc(sizeof(char) * (index - temp + 2));
 		while (temp <= index)
-		{
-			new->value[j] = str[temp];
-			j++;
-			temp++;
-		}
+			new->value[j++] = str[temp++];
 		new->value[j] = '\0';
 		if (counter != 2)
 			new->type = invalid;
@@ -348,19 +345,18 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 		{
 			index++;
 			counter += 1;
-		}
-		new->value = malloc(sizeof(char) * (index - temp + 2));
-		while (temp <= index)
-		{
-			new->value[j] = str[temp];
-			j++;
 			temp++;
 		}
+		new->value = malloc(sizeof(char) * (index - temp + 1));
+		while (temp < index)
+			new->value[j++] = str[temp++];
 		new->value[j] = '\0';
 		if (counter != 2)
 			new->type = invalid;
 		else
-			new->type = sqoutes;
+			new->type = option;
+		//removed sqoutes from enum, sqoutes technically are just words
+		//also removed the sqoutes characters 
 	}
 	token_node(shell, new);
 	// printf("string	:	(%s)\n", new->value);
@@ -407,69 +403,6 @@ void	she_asked_for_a_second_round(t_shell *shell)
 			test(traveler, opt_file);
 		else if (traveler->type == here_doc)
 			test(traveler, delimiter);
-		// if (traveler->type == inp_redir)
-		// {
-		// 	if (traveler->next && traveler->next->type == option)
-		// 	{
-		// 		printf("\n\nCONDITION 1\n\n");
-		// 		traveler->next->type = inp_file;
-		// 	}
-		// 	else if (traveler->next && traveler->next->type == space)
-		// 	{
-		// 		printf("\n\nCONDITION 2\n\n");
-		// 		if (traveler->next->next && traveler->next->next->type == option)
-		// 			traveler->next->next->type = inp_file;
-		// 		else
-		// 			traveler->type = invalid;
-		// 	}
-		// 	else
-		// 	{
-		// 		printf("\n\nCONDITION 3\n\n");
-		// 		traveler->type = invalid;
-		// 	}
-		// }
-		// else if (traveler->type == opt_redir || traveler->type == append)
-		// {
-		// 	if (traveler->next && traveler->next->type == option)
-		// 	{
-		// 		printf("\n\nCONDITION 1\n\n");
-		// 		traveler->next->type = opt_file;
-		// 	}
-		// 	else if (traveler->next && traveler->next->type == space)
-		// 	{
-		// 		printf("\n\nCONDITION 2\n\n");
-		// 		if (traveler->next->next && traveler->next->next->type == option)
-		// 			traveler->next->next->type = opt_file;
-		// 		else
-		// 			traveler->type = invalid;
-		// 	}
-		// 	else
-		// 	{
-		// 		printf("\n\nCONDITION 3\n\n");
-		// 		traveler->type = invalid;
-		// 	}
-		// }
-		// else if (traveler->type == here_doc)
-		// {
-		// 	if (traveler->next && traveler->next->type == option)
-		// 	{
-		// 		printf("\n\nCONDITION 1\n\n");
-		// 		traveler->next->type = delimiter;
-		// 	}
-		// 	else if (traveler->next && traveler->next->type == space)
-		// 	{
-		// 		printf("\n\nCONDITION 2\n\n");
-		// 		if (traveler->next->next && traveler->next->next->type == option)
-		// 			traveler->next->next->type = delimiter;
-		// 		else
-		// 			traveler->type = invalid;
-		// 	}
-		// 	else
-		// 	{
-		// 		printf("\n\nCONDITION 3\n\n");
-		// 		traveler->type = invalid;
-		// 	}
-		// }
 		traveler = traveler->next;
 	}
 }
@@ -501,6 +434,12 @@ void	recieve_str(t_shell *shell, char *str)
 			i = assign_word(str, i, shell);
 		i++;
 	}
+	//i think smth else should happen first
+	//we need to make sure that whatever comes after a heredoc is a delimeter
+	//regardless of the token, we need to join and expand accordingly tokenize
+	//as needed again
+	//and also join the tokens accordingly
+	//also i dont feel like working rn at all ill see what i can do tmrw. 
 	she_asked_for_a_second_round(shell);
 	t_noding *test;
 	test = shell->parser->noding;
