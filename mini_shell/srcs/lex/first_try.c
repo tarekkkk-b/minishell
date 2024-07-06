@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/05 22:05:20 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/06 14:29:15 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static const char * const types[] = {
+	[command] = "CMD",
+	[option] = "ARG",
+	[pipes] = "PIPE",
+	[inp_redir] = "INP_REDIR",
+	[inp_file] = "INP_FILE",
+	[opt_redir] = "OPT_REDIR",
+	[opt_file] = "OPT_FILE",
+	[here_doc] = "HEREDOC",
+	[delimiter] = "DELIMITER",
+	[append] = "APPEND",
+	[space] = "SPACE",
+	[variable] = "VARIABLE",
+	[dqoutes] = "QOUTES",
+	[invalid] = "INVALID"
+};
 
 /// @brief gets the last node in a lis
 /// @param lst the head
@@ -80,8 +97,6 @@ int	invalid_token(t_shell *shell)
 }
 //this function^^ was checking for pipes too
 //had to remove that cuz operators could come after pipes
-
-
 
 int	invalid_chars(char c)
 {
@@ -199,7 +214,7 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 	return (index);
 }
 
-int	delimeter(char character)
+int	delimeter_char(char character)
 {
 	if (character == '>' || character == '<' || character == ' '
 	|| character == '\t' || character == '\'' || character == '"'
@@ -236,7 +251,7 @@ int	assign_word(char *str, int index, t_shell *shell)
 	new->shell = shell;
 	new->type = option;
 	int temp = index;
-	while (!delimeter(str[index + 1]))
+	while (!delimeter_char(str[index + 1]))
 		index++;
 	int j = 0;
 	new->value = malloc(sizeof(char) * (index - temp + 2));
@@ -324,11 +339,12 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 			index++;
 		if(str[index + 1] == '"')
 		{
+			temp++;
 			index++;
 			counter += 1;
 		}
-		new->value = malloc(sizeof(char) * (index - temp + 2));
-		while (temp <= index)
+		new->value = malloc(sizeof(char) * (index - temp + 1));
+		while (temp < index)
 			new->value[j++] = str[temp++];
 		new->value[j] = '\0';
 		if (counter != 2)
@@ -407,6 +423,33 @@ void	she_asked_for_a_second_round(t_shell *shell)
 	}
 }
 
+void	get_delimeter(t_shell *shell, t_noding *head)
+{
+	(void)shell;
+	t_noding *traveler;
+
+	traveler = head;
+	while (traveler && traveler->next)
+	{
+		if (traveler->type == here_doc)
+		{
+			if (traveler->next && traveler->next->type == space)
+				traveler = traveler->next;
+			traveler = traveler->next;
+			char *str = NULL;
+			while (traveler && traveler->type != space)
+			{
+				str = ft_strjoin(str, traveler->value);
+				traveler = traveler->next;
+				//pop_node;
+			}
+			printf("%s\n", str);	
+		}
+		if (traveler && traveler->next)
+			traveler = traveler->next;
+	}
+}
+
 void	recieve_str(t_shell *shell, char *str)
 {
 	(void)shell;
@@ -439,13 +482,14 @@ void	recieve_str(t_shell *shell, char *str)
 	//regardless of the token, we need to join and expand accordingly tokenize
 	//as needed again
 	//and also join the tokens accordingly
-	//also i dont feel like working rn at all ill see what i can do tmrw. 
+	//also i dont feel like working rn at all ill see what i can do tmrw.
+	get_delimeter(shell, shell->parser->noding);
 	she_asked_for_a_second_round(shell);
 	t_noding *test;
 	test = shell->parser->noding;
 	while (test)
 	{
-		printf("%s		:		%u\n", test->value, test->type);
+		printf("%s		:		%s\n", test->value, types[test->type]);
 		test = test->next;
 	}
 }
