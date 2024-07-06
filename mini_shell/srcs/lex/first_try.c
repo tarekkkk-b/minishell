@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/06 14:29:15 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:50:56 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,22 +382,22 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 
 void	test(t_noding *traveler, t_tokens actual_token)
 {
-	if (traveler->next && traveler->next->type == option)
+	if (traveler->next && (traveler->next->type == option || traveler->next->type == actual_token))
 	{
-		printf("\n\nCONDITION 1\n\n");
+		// printf("\n\nCONDITION 1\n\n");
 		traveler->next->type = actual_token;
 	}
 	else if (traveler->next && traveler->next->type == space)
 	{
-		printf("\n\nCONDITION 2\n\n");
-		if (traveler->next->next && traveler->next->next->type == option)
+		// printf("\n\nCONDITION 2\n\n");
+		if (traveler->next->next && (traveler->next->next->type == option || traveler->next->next->type == actual_token))
 			traveler->next->next->type = actual_token;
 		else
 			traveler->type = invalid;
 	}
 	else
 	{
-		printf("\n\nCONDITION 3\n\n");
+		// printf("\n\nCONDITION 3\n\n");
 		traveler->type = invalid;
 	}
 }
@@ -423,28 +423,70 @@ void	she_asked_for_a_second_round(t_shell *shell)
 	}
 }
 
+void	popout_tokens(t_shell *shell, t_noding *token)
+{
+	t_noding *temp;
+	t_noding *bye;
+
+	if (!shell || !token)
+		return ;
+	if (token == shell->parser->noding)
+		shell->parser->noding = shell->parser->noding->next;
+	temp = shell->parser->noding;
+	bye = token;
+	while (temp->next != bye)
+		temp = temp->next;
+	temp->next = bye->next;
+	free(bye);
+}
+
 void	get_delimeter(t_shell *shell, t_noding *head)
 {
 	(void)shell;
 	t_noding *traveler;
+	t_noding *temp;
+	t_noding *new;
+	t_noding *store = NULL;
+	char *str = NULL;
 
 	traveler = head;
+	new = NULL;
 	while (traveler && traveler->next)
 	{
 		if (traveler->type == here_doc)
 		{
+			store = traveler;
 			if (traveler->next && traveler->next->type == space)
 				traveler = traveler->next;
 			traveler = traveler->next;
-			char *str = NULL;
-			while (traveler && traveler->type != space)
+			//make sure other things dont join
+			while (traveler && traveler->type != space && traveler->type != pipes)
 			{
 				str = ft_strjoin(str, traveler->value);
+				temp = traveler;
 				traveler = traveler->next;
+				popout_tokens(shell, temp);
 				//pop_node;
 			}
-			printf("%s\n", str);	
+			// printf("%s\n", str);
+			// if (traveler && traveler->next)
+			// {
+				// printf("this is the current node ((%s))\n", traveler->value);
+				// printf("this is the alleged next node ((%s))\n", traveler->next->value);
+				new = malloc(sizeof(t_noding));
+				if (!traveler)
+					new->next = NULL;
+				else
+					new->next = traveler;
+				store->next = new;
+				new->shell = shell;
+				new->value = ft_strdup(str);
+				new->type = delimiter;
+			// }
+			if (str)
+				free(str);
 		}
+		//addnode here
 		if (traveler && traveler->next)
 			traveler = traveler->next;
 	}
