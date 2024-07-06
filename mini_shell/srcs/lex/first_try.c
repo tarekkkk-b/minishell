@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/06 16:50:56 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/06 16:59:12 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -303,12 +303,14 @@ int		assign_variable(char *str, int index, t_shell *shell)
 	t_noding *new;
 	int temp;
 	int	j = 0;
-	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
-		return ((void)printf("just a $\n"), index);
+		// return ((void)printf("just a $\n"), index);
 	new = malloc(sizeof(t_noding));
 	new->next = NULL;
 	new->shell = shell;
-	new->type = variable;
+	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
+		new->type = option;
+	else
+		new->type = variable;
 	temp = index;
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
 		index++;
@@ -383,23 +385,16 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 void	test(t_noding *traveler, t_tokens actual_token)
 {
 	if (traveler->next && (traveler->next->type == option || traveler->next->type == actual_token))
-	{
-		// printf("\n\nCONDITION 1\n\n");
 		traveler->next->type = actual_token;
-	}
 	else if (traveler->next && traveler->next->type == space)
 	{
-		// printf("\n\nCONDITION 2\n\n");
 		if (traveler->next->next && (traveler->next->next->type == option || traveler->next->next->type == actual_token))
 			traveler->next->next->type = actual_token;
 		else
 			traveler->type = invalid;
 	}
 	else
-	{
-		// printf("\n\nCONDITION 3\n\n");
 		traveler->type = invalid;
-	}
 }
 
 //very rough function that for now assigns the correct destination/source
@@ -460,7 +455,7 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 				traveler = traveler->next;
 			traveler = traveler->next;
 			//make sure other things dont join
-			while (traveler && traveler->type != space && traveler->type != pipes)
+			while (traveler && traveler->type != space && traveler->type != pipes && traveler->type != invalid)
 			{
 				str = ft_strjoin(str, traveler->value);
 				temp = traveler;
@@ -468,21 +463,15 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 				popout_tokens(shell, temp);
 				//pop_node;
 			}
-			// printf("%s\n", str);
-			// if (traveler && traveler->next)
-			// {
-				// printf("this is the current node ((%s))\n", traveler->value);
-				// printf("this is the alleged next node ((%s))\n", traveler->next->value);
-				new = malloc(sizeof(t_noding));
-				if (!traveler)
-					new->next = NULL;
-				else
-					new->next = traveler;
-				store->next = new;
-				new->shell = shell;
-				new->value = ft_strdup(str);
-				new->type = delimiter;
-			// }
+			new = malloc(sizeof(t_noding));
+			if (!traveler)
+				new->next = NULL;
+			else
+				new->next = traveler;
+			store->next = new;
+			new->shell = shell;
+			new->value = ft_strdup(str);
+			new->type = delimiter;
 			if (str)
 				free(str);
 		}
