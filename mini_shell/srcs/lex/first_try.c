@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/07 11:13:07 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/07 21:32:37 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -494,7 +494,17 @@ void	expand_vars(t_shell *shell)
 		if (traveler->type == variable)
 		{
 			env_traveler = locate_node(shell->environ->env, traveler->value);
-			printf("%s\n", env_traveler->value);
+			free(traveler->value);
+			if (!env_traveler)
+				traveler->value = ft_strdup("");
+			else
+				traveler->value = ft_strdup(env_traveler->value);
+			// printf("%s\n", env_traveler->value);
+			traveler->type = option;
+		}
+		else if (traveler->type == dqoutes)
+		{
+			
 		}
 		traveler = traveler->next;
 	}
