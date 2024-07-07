@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/07 11:11:25 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/07 14:45:05 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdio.h>
 # include <signal.h>
 # include <string.h>
+#include <sys/syslimits.h>
+// useful header ^^^
 # include <readline/history.h>
 # include <readline/readline.h>
 # include "../../libft/libft.h"
@@ -140,5 +142,13 @@ void    handle_sigint(int sig);
 void 	rl_replace_line (const char * s, int c);
 int		just_test(t_readline rl);
 t_values	*locate_node(t_values *temp, char *target_key);
+int builtin_env(t_environ *environ);
+
+//**	builtins	**//
+
+int builtin_check(t_readline rl, t_shell *shell);
+int builtin_exit(t_readline rl);
+int	builtin_pwd(t_shell *shell);
+int builtin_echo(char *str);
 
 #endif
