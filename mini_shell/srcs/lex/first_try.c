@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/06 16:59:12 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/07 11:13:07 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,8 +314,8 @@ int		assign_variable(char *str, int index, t_shell *shell)
 	temp = index;
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
 		index++;
-	new->value = malloc(sizeof(char) * (index - temp + 3));
-	new->value[j++] = '$';
+	new->value = malloc(sizeof(char) * (index - temp + 2));
+	// new->value[j++] = '$';
 	while (temp++ < index)
 		new->value[j++] = str[temp];
 	new->value[j++] = '\0';
@@ -432,6 +432,7 @@ void	popout_tokens(t_shell *shell, t_noding *token)
 	while (temp->next != bye)
 		temp = temp->next;
 	temp->next = bye->next;
+	free(bye->value);
 	free(bye);
 }
 
@@ -481,6 +482,24 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 	}
 }
 
+void	expand_vars(t_shell *shell)
+{
+	t_noding 	*traveler;
+	t_values	*env_traveler = NULL;
+	if (!shell || !shell->parser || !shell->parser->noding)
+		return ;
+	traveler = shell->parser->noding;
+	while (traveler)
+	{
+		if (traveler->type == variable)
+		{
+			env_traveler = locate_node(shell->environ->env, traveler->value);
+			printf("%s\n", env_traveler->value);
+		}
+		traveler = traveler->next;
+	}
+}
+
 void	recieve_str(t_shell *shell, char *str)
 {
 	(void)shell;
@@ -516,6 +535,7 @@ void	recieve_str(t_shell *shell, char *str)
 	//also i dont feel like working rn at all ill see what i can do tmrw.
 	get_delimeter(shell, shell->parser->noding);
 	she_asked_for_a_second_round(shell);
+	expand_vars(shell);
 	t_noding *test;
 	test = shell->parser->noding;
 	while (test)
