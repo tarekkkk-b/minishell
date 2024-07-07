@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/07 21:32:37 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/08 01:30:34 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -482,6 +482,50 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 	}
 }
 
+int		check_qoutes(t_noding *suspect)
+{
+	int i = 0;
+	while (suspect->value[i++])
+		if (suspect->value[i] == '$')
+			if (suspect->value[i + 1] && valid_name(suspect->value[i + 1], i + 1, i))
+				return (1);
+	return (0);
+}
+
+void	divide_qoutes(t_shell *shell, t_noding *suspect)
+{
+	(void)shell;
+	int counter = 0;
+	int reset = 0;
+	int i = 0;
+	int copier = 0;
+	char *str = NULL;
+	while (suspect->value[i] && suspect->value[i + 1])
+	{
+		reset = i;
+		if (suspect->value[i] != '$')
+		{
+			while (suspect->value[i + 1] && suspect->value[i + 1] != '$')
+			{
+				i++;
+				counter++;
+			}
+			str = malloc(sizeof(char) * (counter - reset + 3));
+			while (reset < counter)
+				str[copier++] = suspect->value[reset++];
+			str[copier++] = '\0';
+			copier = 0;
+			printf("\n\n((%s))\n", str);
+		}
+		// else if()
+		// {
+			
+		// }
+		// if (suspect->value[i + 1])
+			i++;
+	}
+}
+
 void	expand_vars(t_shell *shell)
 {
 	t_noding 	*traveler;
@@ -504,7 +548,8 @@ void	expand_vars(t_shell *shell)
 		}
 		else if (traveler->type == dqoutes)
 		{
-			
+			if (check_qoutes(traveler))
+				divide_qoutes(shell, traveler);
 		}
 		traveler = traveler->next;
 	}
