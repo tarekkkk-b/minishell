@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/08 01:30:34 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/08 17:51:50 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,8 +314,8 @@ int		assign_variable(char *str, int index, t_shell *shell)
 	temp = index;
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
 		index++;
-	new->value = malloc(sizeof(char) * (index - temp + 2));
-	// new->value[j++] = '$';
+	new->value = malloc(sizeof(char) * (index - temp + 3));
+	new->value[j++] = '$';
 	while (temp++ < index)
 		new->value[j++] = str[temp];
 	new->value[j++] = '\0';
@@ -498,30 +498,48 @@ void	divide_qoutes(t_shell *shell, t_noding *suspect)
 	int counter = 0;
 	int reset = 0;
 	int i = 0;
-	int copier = 0;
-	char *str = NULL;
+	// int copier = 0;
+	// char *str = NULL;
 	while (suspect->value[i] && suspect->value[i + 1])
 	{
-		reset = i;
 		if (suspect->value[i] != '$')
 		{
-			while (suspect->value[i + 1] && suspect->value[i + 1] != '$')
+			printf("condition 1:	");
+			while (suspect->value[i] && suspect->value[i] != '$')
+			{
+				printf("%c", suspect->value[i]);
+				i++;
+			}
+			i--;
+			printf("\n\n\n");
+		}
+		if(suspect->value[i] == '$')
+		{
+			reset = i;
+			char *new_variable = NULL;
+			if (suspect->value[i + 1])
+			{
+				reset++;
+				i++;
+			}
+			counter = 0;
+			while (suspect->value[i] && valid_name(suspect->value[i], i, reset))
 			{
 				i++;
-				counter++;
 			}
-			str = malloc(sizeof(char) * (counter - reset + 3));
-			while (reset < counter)
-				str[copier++] = suspect->value[reset++];
-			str[copier++] = '\0';
-			copier = 0;
-			printf("\n\n((%s))\n", str);
+			// i--;
+			new_variable = malloc(sizeof(char) * (i - reset + 2));
+			while (reset < i)
+			{
+				new_variable[counter] = suspect->value[reset];
+				counter++;
+				reset++;
+			}
+			i--;
+			new_variable[counter++] = '\0';
+			printf("condition 2:	%s\n\n\n", new_variable);
 		}
-		// else if()
-		// {
-			
-		// }
-		// if (suspect->value[i + 1])
+		if (suspect->value[i] && suspect->value[i + 1])
 			i++;
 	}
 }
@@ -537,7 +555,13 @@ void	expand_vars(t_shell *shell)
 	{
 		if (traveler->type == variable)
 		{
-			env_traveler = locate_node(shell->environ->env, traveler->value);
+			char *str = malloc(sizeof(char) * (ft_strlen(traveler->value)));
+			int t = 1;
+			int o = 0;
+			while (traveler->value[t])
+				str[o++] = traveler->value[t++];
+			env_traveler = locate_node(shell->environ->env, str);
+			free(str);
 			free(traveler->value);
 			if (!env_traveler)
 				traveler->value = ft_strdup("");
@@ -546,6 +570,7 @@ void	expand_vars(t_shell *shell)
 			// printf("%s\n", env_traveler->value);
 			traveler->type = option;
 		}
+		//seperate qoutes needs to happen b4 variable expansion
 		else if (traveler->type == dqoutes)
 		{
 			if (check_qoutes(traveler))
@@ -588,9 +613,17 @@ void	recieve_str(t_shell *shell, char *str)
 	//as needed again
 	//and also join the tokens accordingly
 	//also i dont feel like working rn at all ill see what i can do tmrw.
+	//new order
+	//get delim
 	get_delimeter(shell, shell->parser->noding);
-	she_asked_for_a_second_round(shell);
+	//separate quotes
+	//expand variables
 	expand_vars(shell);
+	//join words and pop spaces
+	//assign redirection and destinations
+	she_asked_for_a_second_round(shell);
+	//assign commands
+	//create exec link list
 	t_noding *test;
 	test = shell->parser->noding;
 	while (test)
