@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/08 17:51:50 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:06:11 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -420,16 +420,21 @@ void	she_asked_for_a_second_round(t_shell *shell)
 
 void	popout_tokens(t_shell *shell, t_noding *token)
 {
-	t_noding *temp;
+	t_noding *temp = NULL;
 	t_noding *bye;
 
 	if (!shell || !token)
 		return ;
-	if (token == shell->parser->noding)
-		shell->parser->noding = shell->parser->noding->next;
 	temp = shell->parser->noding;
+	if (token == shell->parser->noding)
+	{
+		shell->parser->noding = shell->parser->noding->next;
+		free (temp->value);
+		free(temp);
+		return ;
+	}
 	bye = token;
-	while (temp->next != bye)
+	while (temp && temp->next && temp->next != bye)
 		temp = temp->next;
 	temp->next = bye->next;
 	free(bye->value);
@@ -492,27 +497,45 @@ int		check_qoutes(t_noding *suspect)
 	return (0);
 }
 
-void	divide_qoutes(t_shell *shell, t_noding *suspect)
+t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 {
 	(void)shell;
 	int counter = 0;
 	int reset = 0;
 	int i = 0;
-	// int copier = 0;
+	t_noding	*new = NULL;
+	t_noding	*add_after = suspect;
+	int copier = 0;
+	printf("<<%d>>\n", suspect->next == NULL);
 	// char *str = NULL;
 	while (suspect->value[i] && suspect->value[i + 1])
 	{
 		if (suspect->value[i] != '$')
 		{
+			new = malloc(sizeof(t_noding));
+			new->shell = shell;
+			new->next = add_after->next;
+			new->type = option;
+			new->value = NULL;
 			printf("condition 1:	");
+			copier = i;
 			while (suspect->value[i] && suspect->value[i] != '$')
 			{
 				printf("%c", suspect->value[i]);
 				i++;
 			}
+			new->value = malloc(sizeof(char) * (i - copier + 1));
+			int j = 0;
+			while (copier < i)
+				new->value[j++] = suspect->value[copier++];
+			new->value[j++] = '\0';
 			i--;
-			printf("\n\n\n");
+			add_after->next = new;
+			printf("\n((((%s))))\n\n\n", new->value);
+			// if (add_after->next)
+			add_after = add_after->next;
 		}
+		//remeber to only take one number if its right after $
 		if(suspect->value[i] == '$')
 		{
 			reset = i;
@@ -524,24 +547,18 @@ void	divide_qoutes(t_shell *shell, t_noding *suspect)
 			}
 			counter = 0;
 			while (suspect->value[i] && valid_name(suspect->value[i], i, reset))
-			{
 				i++;
-			}
-			// i--;
 			new_variable = malloc(sizeof(char) * (i - reset + 2));
 			while (reset < i)
-			{
-				new_variable[counter] = suspect->value[reset];
-				counter++;
-				reset++;
-			}
-			i--;
+				new_variable[counter++] = suspect->value[reset++];
 			new_variable[counter++] = '\0';
+			i--;
 			printf("condition 2:	%s\n\n\n", new_variable);
 		}
 		if (suspect->value[i] && suspect->value[i + 1])
 			i++;
 	}
+	return (add_after);
 }
 
 void	expand_vars(t_shell *shell)
@@ -570,12 +587,36 @@ void	expand_vars(t_shell *shell)
 			// printf("%s\n", env_traveler->value);
 			traveler->type = option;
 		}
-		//seperate qoutes needs to happen b4 variable expansion
-		else if (traveler->type == dqoutes)
+		traveler = traveler->next;
+	}
+}
+
+void	quotes(t_shell *shell)
+{
+	t_noding	*traveler;
+	t_noding	*temp;
+
+	if (!shell || !shell->parser || !shell->parser->noding)
+		return ;
+	traveler = shell->parser->noding;
+	//seperate qoutes needs to happen b4 variable expansion
+	int i = 0;
+	while (traveler)
+	{
+		i++;
+		if (i == 11)
+			break ;
+		if (traveler->type == dqoutes)
 		{
 			if (check_qoutes(traveler))
-				divide_qoutes(shell, traveler);
+			{
+				temp = traveler;
+				traveler = divide_qoutes(shell, traveler);
+				printf("<%s>\n", traveler->value);
+				popout_tokens(shell, temp);
+			}
 		}
+		printf("(((%s)))\n", traveler->value);
 		traveler = traveler->next;
 	}
 }
@@ -617,6 +658,7 @@ void	recieve_str(t_shell *shell, char *str)
 	//get delim
 	get_delimeter(shell, shell->parser->noding);
 	//separate quotes
+	quotes(shell);
 	//expand variables
 	expand_vars(shell);
 	//join words and pop spaces
@@ -671,3 +713,14 @@ void	recieve_str(t_shell *shell, char *str)
 //things are getting quite confusing rn but ill research more tmrw
 
 //I FIGURED IT OUT
+
+
+// "hithere$PATH+hi$USER" = suspect, add_after
+
+// qoutes->NULL;
+
+// hithere == word
+
+// 		word->NULL
+		
+// quotes->NULL
