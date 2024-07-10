@@ -6,7 +6,7 @@
 /*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/10 13:08:03 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/10 14:38:38 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -528,8 +528,16 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			new->value = NULL;
 			printf("condition 1:	");
 			copier = i;
-			while (suspect->value[i] && suspect->value[i] != '$')
+			while (suspect->value[i])
 			{
+				if (suspect->value[i + 1] == '$')
+				{
+					if (valid_name(suspect->value[i + 2], i + 2, i + 1))
+					{				
+						i++;
+						break ;
+					}
+				}
 				printf("%c", suspect->value[i]);
 				i++;
 			}
@@ -538,7 +546,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			while (copier < i)
 				new->value[j++] = suspect->value[copier++];
 			new->value[j++] = '\0';
-			i--;
+			// i--;
 			add_after->next = new;
 			printf("\n((((%s))))\n\n\n", new->value);
 			// if (add_after->next)
@@ -550,13 +558,17 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			reset = i;
 			char *new_variable = NULL;
 			if (suspect->value[i + 1])
-			{
-				reset++;
 				i++;
-			}
 			counter = 0;
 			while (suspect->value[i] && valid_name(suspect->value[i], i, reset))
+			{
+				if (valid_name(suspect->value[i], i, reset) == 2)
+				{
+					i++;
+					break ;
+				}
 				i++;
+			}
 			new_variable = malloc(sizeof(char) * (i - reset + 2));
 			while (reset < i)
 				new_variable[counter++] = suspect->value[reset++];
@@ -661,14 +673,14 @@ void	recieve_str(t_shell *shell, char *str)
 	//also i dont feel like working rn at all ill see what i can do tmrw.
 	//new order
 	//get delim
-	// get_delimeter(shell, shell->parser->noding);
+	get_delimeter(shell, shell->parser->noding);
 	//separate quotes
-	// quotes(shell);
+	quotes(shell);
 	//expand variables
-	// expand_vars(shell);
+	expand_vars(shell);
 	//join words and pop spaces
 	//assign redirection and destinations
-	// she_asked_for_a_second_round(shell);
+	she_asked_for_a_second_round(shell);
 	//assign commands
 	//create exec link list
 	t_noding *test;
