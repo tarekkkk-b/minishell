@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/09 22:06:11 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/10 11:59:42 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -600,12 +600,8 @@ void	quotes(t_shell *shell)
 		return ;
 	traveler = shell->parser->noding;
 	//seperate qoutes needs to happen b4 variable expansion
-	int i = 0;
 	while (traveler)
 	{
-		i++;
-		if (i == 11)
-			break ;
 		if (traveler->type == dqoutes)
 		{
 			if (check_qoutes(traveler))
