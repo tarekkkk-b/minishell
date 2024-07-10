@@ -6,7 +6,7 @@
 /*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/10 11:59:42 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/10 13:08:03 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,6 +284,8 @@ int		valid_name(char character, int current, int first)
 {
 	if (current == first)
 	{
+		if (character >= '0' && character <= '9')
+			return (2);
 		if (!(character >= 'a' && character <= 'z') 
 		&& !(character >= 'A' && character <= 'Z') && character != '_')
 			return (0);	
@@ -313,7 +315,14 @@ int		assign_variable(char *str, int index, t_shell *shell)
 		new->type = variable;
 	temp = index;
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
+	{
+		if (valid_name(str[index + 1], index + 1, temp + 1) == 2)
+		{
+			index++;
+			break ;
+		}
 		index++;
+	}
 	new->value = malloc(sizeof(char) * (index - temp + 3));
 	new->value[j++] = '$';
 	while (temp++ < index)
@@ -652,14 +661,14 @@ void	recieve_str(t_shell *shell, char *str)
 	//also i dont feel like working rn at all ill see what i can do tmrw.
 	//new order
 	//get delim
-	get_delimeter(shell, shell->parser->noding);
+	// get_delimeter(shell, shell->parser->noding);
 	//separate quotes
-	quotes(shell);
+	// quotes(shell);
 	//expand variables
-	expand_vars(shell);
+	// expand_vars(shell);
 	//join words and pop spaces
 	//assign redirection and destinations
-	she_asked_for_a_second_round(shell);
+	// she_asked_for_a_second_round(shell);
 	//assign commands
 	//create exec link list
 	t_noding *test;
