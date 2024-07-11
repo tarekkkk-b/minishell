@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/10 14:38:38 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/11 20:45:49 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -499,34 +499,37 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 int		check_qoutes(t_noding *suspect)
 {
 	int i = 0;
-	while (suspect->value[i++])
+	while (suspect->value[i])
+	{
 		if (suspect->value[i] == '$')
-			if (suspect->value[i + 1] && valid_name(suspect->value[i + 1], i + 1, i))
-				return (1);
+			if (suspect->value[i + 1] && valid_name(suspect->value[i + 1], i + 1, i + 1))
+				return (1);	
+		i++;
+	}
 	return (0);
 }
 
 t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 {
-	(void)shell;
 	int counter = 0;
 	int reset = 0;
 	int i = 0;
 	t_noding	*new = NULL;
 	t_noding	*add_after = suspect;
 	int copier = 0;
-	printf("<<%d>>\n", suspect->next == NULL);
+	// printf("<<%d>>\n", suspect->next == NULL);
 	// char *str = NULL;
 	while (suspect->value[i] && suspect->value[i + 1])
 	{
 		if (suspect->value[i] != '$')
 		{
+			printf("okay\n");
 			new = malloc(sizeof(t_noding));
 			new->shell = shell;
 			new->next = add_after->next;
 			new->type = option;
 			new->value = NULL;
-			printf("condition 1:	");
+			// printf("condition 1:	");
 			copier = i;
 			while (suspect->value[i])
 			{
@@ -538,7 +541,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 						break ;
 					}
 				}
-				printf("%c", suspect->value[i]);
+				// printf("%c", suspect->value[i]);
 				i++;
 			}
 			new->value = malloc(sizeof(char) * (i - copier + 1));
@@ -548,13 +551,14 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			new->value[j++] = '\0';
 			// i--;
 			add_after->next = new;
-			printf("\n((((%s))))\n\n\n", new->value);
+			// printf("\n((((%s))))\n\n\n", new->value);
 			// if (add_after->next)
 			add_after = add_after->next;
 		}
-		//remeber to only take one number if its right after $
+		//remember to only take one number if its right after $
 		if(suspect->value[i] == '$')
 		{
+			printf("not okay\n");
 			reset = i;
 			char *new_variable = NULL;
 			if (suspect->value[i + 1])
@@ -562,9 +566,9 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			counter = 0;
 			while (suspect->value[i] && valid_name(suspect->value[i], i, reset))
 			{
-				if (valid_name(suspect->value[i], i, reset) == 2)
+				if (valid_name(suspect->value[i], i, reset + 1) == 2)
 				{
-					i++;
+					// i++;
 					break ;
 				}
 				i++;
@@ -585,6 +589,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 void	expand_vars(t_shell *shell)
 {
 	t_noding 	*traveler;
+	t_noding 	*temp;
 	t_values	*env_traveler = NULL;
 	if (!shell || !shell->parser || !shell->parser->noding)
 		return ;
@@ -599,16 +604,29 @@ void	expand_vars(t_shell *shell)
 			while (traveler->value[t])
 				str[o++] = traveler->value[t++];
 			env_traveler = locate_node(shell->environ->env, str);
-			free(str);
-			free(traveler->value);
+			free (str);
 			if (!env_traveler)
-				traveler->value = ft_strdup("");
+			{
+				temp = traveler;
+				// if (traveler->next)
+				traveler = traveler->next;
+				popout_tokens(shell, temp);
+			}
 			else
+			{
+				free(traveler->value);
+				// if (!env_traveler)
+				// 	traveler->value = ft_strdup("");
+				// else
 				traveler->value = ft_strdup(env_traveler->value);
-			// printf("%s\n", env_traveler->value);
-			traveler->type = option;
+				// printf("%s\n", env_traveler->value);
+				traveler->type = option;
+			}
 		}
-		traveler = traveler->next;
+		if (traveler && traveler->next)
+			traveler = traveler->next;
+		else
+			break ;
 	}
 }
 
@@ -629,12 +647,15 @@ void	quotes(t_shell *shell)
 			{
 				temp = traveler;
 				traveler = divide_qoutes(shell, traveler);
-				printf("<%s>\n", traveler->value);
-				popout_tokens(shell, temp);
+				// traveler = traveler->next;
+				// popout_tokens(shell, temp);
 			}
 		}
-		printf("(((%s)))\n", traveler->value);
-		traveler = traveler->next;
+		if (traveler && traveler->next)
+			traveler = traveler->next;
+		else
+			break ;
+		// printf("(((%s)))\n", traveler->value);
 	}
 }
 
