@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/11 20:45:49 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/11 21:36:06 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -519,7 +519,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 	int copier = 0;
 	// printf("<<%d>>\n", suspect->next == NULL);
 	// char *str = NULL;
-	while (suspect->value[i] && suspect->value[i + 1])
+	while (suspect->value[i])
 	{
 		if (suspect->value[i] != '$')
 		{
@@ -568,7 +568,9 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			{
 				if (valid_name(suspect->value[i], i, reset + 1) == 2)
 				{
-					// i++;
+					printf("break\n");
+					i++;
+					printf("<<%c>>\n\n", suspect->value[i]);
 					break ;
 				}
 				i++;
@@ -577,11 +579,12 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			while (reset < i)
 				new_variable[counter++] = suspect->value[reset++];
 			new_variable[counter++] = '\0';
-			i--;
 			printf("condition 2:	%s\n\n\n", new_variable);
+			i--;
 		}
-		if (suspect->value[i] && suspect->value[i + 1])
+		if (suspect->value[i])
 			i++;
+			// printf("<<%c>>\n\n", suspect->value[i]);
 	}
 	return (add_after);
 }
@@ -647,8 +650,8 @@ void	quotes(t_shell *shell)
 			{
 				temp = traveler;
 				traveler = divide_qoutes(shell, traveler);
-				// traveler = traveler->next;
-				// popout_tokens(shell, temp);
+				traveler = traveler->next;
+				popout_tokens(shell, temp);
 			}
 		}
 		if (traveler && traveler->next)
