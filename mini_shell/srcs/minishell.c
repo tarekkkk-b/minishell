@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/08 15:44:16 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:26:46 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	main(int ac, char **av, char **env)
 		if(!rl.str)
 			if(builtin_exit(rl))
 				return (1);
-		// removed the exit thingies and added it to builtin
 		// just adding this here to test :)
 		// if(builtin_check(rl, &shell) == 1)
 		// 	return (1);

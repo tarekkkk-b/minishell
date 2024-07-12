@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/11 18:12:29 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/07/12 16:26:30 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,7 +100,8 @@ ENV			=	$(SRCSPATH)/environ
 
 SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c \
 				$(UTILS)/freestuff.c $(LEX)/first_try.c $(SIG)/exit.c $(BUILT)/env.c \
-				$(BUILT)/exit.c $(BUILT)/builtin_check.c $(BUILT)/pwd.c $(BUILT)/echo.c
+				$(BUILT)/exit.c $(BUILT)/builtin_check.c $(BUILT)/pwd.c $(BUILT)/echo.c \
+				$(BUILT)/cd.c
 
 
 OBJS		=	$(SRCS:.c=.o)

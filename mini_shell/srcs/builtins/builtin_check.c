@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/07 14:26:35 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/12 14:58:18 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int builtin_check(t_readline rl, t_shell *shell)
             return (1);
     if(ft_strncmp(rl.str, "pwd", 4) == 0)
         builtin_pwd(shell);
+    if(ft_strncmp(rl.str, "cd", 3) == 0)
+        builtin_cd(shell);
     // if(ft_strncmp(rl.str, "echo", 4) == 0)
     //     builtin_echo(rl.str);
     // ECHO DOES NOT WORK, BUT I HAVE AN IDEA NOW, WILL WORK ON IT TOMORROW AFTER I EXPLAIN SMTH
