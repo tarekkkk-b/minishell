@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/11 21:36:06 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/12 22:08:26 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -450,13 +450,23 @@ void	popout_tokens(t_shell *shell, t_noding *token)
 	free(bye);
 }
 
+int		operater_tokens(t_noding *node)
+{
+	if (!node)
+		return (-1);
+	if (node->type == invalid || node->type == pipes
+	|| node->type == inp_redir || node->type == opt_redir
+	|| node->type == here_doc || node->type == append)
+		return (1);
+	return (0);
+}
+
 void	get_delimeter(t_shell *shell, t_noding *head)
 {
-	(void)shell;
 	t_noding *traveler;
 	t_noding *temp;
 	t_noding *new;
-	t_noding *store = NULL;
+	t_noding *add_after = NULL;
 	char *str = NULL;
 
 	traveler = head;
@@ -465,13 +475,13 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 	{
 		if (traveler->type == here_doc)
 		{
-			store = traveler;
+			add_after = traveler;
 			if (traveler->next && traveler->next->type == space)
 				traveler = traveler->next;
 			traveler = traveler->next;
-			//make sure other things dont join
-			while (traveler && traveler->type != space && traveler->type != pipes && traveler->type != invalid)
+			while (traveler && traveler->type != space && !operater_tokens(traveler))
 			{
+				//need to free str
 				str = ft_strjoin(str, traveler->value);
 				temp = traveler;
 				traveler = traveler->next;
@@ -483,7 +493,7 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 				new->next = NULL;
 			else
 				new->next = traveler;
-			store->next = new;
+			add_after->next = new;
 			new->shell = shell;
 			new->value = ft_strdup(str);
 			new->type = delimiter;
@@ -523,7 +533,6 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 	{
 		if (suspect->value[i] != '$')
 		{
-			printf("okay\n");
 			new = malloc(sizeof(t_noding));
 			new->shell = shell;
 			new->next = add_after->next;
@@ -558,9 +567,12 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 		//remember to only take one number if its right after $
 		if(suspect->value[i] == '$')
 		{
-			printf("not okay\n");
+			new = malloc(sizeof(t_noding));
+			new->shell = shell;
+			new->type = variable;
+			new->next = add_after->next;
 			reset = i;
-			char *new_variable = NULL;
+			// char *new_variable = NULL;
 			if (suspect->value[i + 1])
 				i++;
 			counter = 0;
@@ -568,19 +580,19 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			{
 				if (valid_name(suspect->value[i], i, reset + 1) == 2)
 				{
-					printf("break\n");
 					i++;
-					printf("<<%c>>\n\n", suspect->value[i]);
 					break ;
 				}
 				i++;
 			}
-			new_variable = malloc(sizeof(char) * (i - reset + 2));
+			new->value = malloc(sizeof(char) * (i - reset + 2));
 			while (reset < i)
-				new_variable[counter++] = suspect->value[reset++];
-			new_variable[counter++] = '\0';
-			printf("condition 2:	%s\n\n\n", new_variable);
+				new->value[counter++] = suspect->value[reset++];
+			new->value[counter++] = '\0';
+			// printf("condition 2:	%s\n\n\n", new_variable);
 			i--;
+			add_after->next = new;
+			add_after = add_after->next;
 		}
 		if (suspect->value[i])
 			i++;
@@ -601,11 +613,12 @@ void	expand_vars(t_shell *shell)
 	{
 		if (traveler->type == variable)
 		{
-			char *str = malloc(sizeof(char) * (ft_strlen(traveler->value)));
+			char *str = malloc(sizeof(char) * (ft_strlen(traveler->value) + 1));
 			int t = 1;
 			int o = 0;
 			while (traveler->value[t])
 				str[o++] = traveler->value[t++];
+			str[o++] = '\0';
 			env_traveler = locate_node(shell->environ->env, str);
 			free (str);
 			if (!env_traveler)
@@ -662,6 +675,56 @@ void	quotes(t_shell *shell)
 	}
 }
 
+void	join_tokens(t_shell *shell)
+{
+	t_noding	*traveler = shell->parser->noding;
+	t_noding	*temp;
+	t_noding	*new = NULL;
+	t_noding	*add_after = NULL;
+	int			join = 0;
+	char	*str = NULL;
+
+	while (traveler && traveler->next)
+	{
+		if (traveler->next && traveler->next->type == space)
+			traveler = traveler->next;
+		add_after = traveler;
+		while (traveler && traveler->type != space && !operater_tokens(traveler))
+		{
+			if (traveler == shell->parser->noding)
+				join = 1;
+			else
+				join = 2;
+			//need to free str
+			str = ft_strjoin(str, traveler->value);
+			temp = traveler;
+			traveler = traveler->next;
+			popout_tokens(shell, temp);
+		}
+		if (join)
+		{
+			new = malloc(sizeof(t_noding));
+			new->next = traveler;
+			if (join == 1)
+				shell->parser->noding = new;
+			else
+				add_after->next = new;
+			join = 0;
+			new->shell = shell;
+			new->value = ft_strdup(str);
+			new->type = option;
+			if (str)
+			{
+				free(str);
+				str = NULL;
+			}
+		}
+		if (traveler)
+			traveler = traveler->next;
+	}
+}
+
+
 void	recieve_str(t_shell *shell, char *str)
 {
 	(void)shell;
@@ -703,6 +766,7 @@ void	recieve_str(t_shell *shell, char *str)
 	//expand variables
 	expand_vars(shell);
 	//join words and pop spaces
+	join_tokens(shell);
 	//assign redirection and destinations
 	she_asked_for_a_second_round(shell);
 	//assign commands
