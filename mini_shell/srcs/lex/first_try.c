@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/13 10:58:01 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/13 21:23:24 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -481,32 +481,53 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 	{
 		if (traveler->type == here_doc)
 		{
-			add_after = traveler;
 			if (traveler->next && traveler->next->type == space)
 				traveler = traveler->next;
 			traveler = traveler->next;
 			while (traveler && traveler->type != space && !operater_tokens(traveler))
 			{
+				add_after = traveler;
 				//need to free str
 				str = ft_strjoin(str, traveler->value);
 				// temp = traveler;
 				traveler->pop_out= 1;
 				traveler = traveler->next;
+				if (traveler && traveler->next && traveler->next->type != space && !operater_tokens(traveler->next))
+					add_after = add_after->next;
 				// popout_tokens(shell, temp);
 				//pop_node;
 			}
-			new = malloc(sizeof(t_noding));
-			if (!traveler)
-				new->next = NULL;
-			else
-				new->next = traveler;
-			add_after->next = new;
-			new->shell = shell;
-			new->pop_out = 0;
-			new->value = ft_strdup(str);
-			new->type = delimiter;
 			if (str)
-				free(str);
+			{
+				new = malloc(sizeof(t_noding));
+				// if (!traveler || (traveler && traveler->next))
+				// 	new->next = NULL;
+				// else if (traveler && traveler->next)
+				// 	new->next = traveler->next;
+				// if (traveler)
+				// 	traveler->next = new;
+				// else
+				// 	shell->parser->noding = new;
+				if (traveler)
+					new->next = traveler->next;
+				else
+					new->next = NULL;
+				add_after->next = new;
+				// add_after->next = new;
+				new->shell = shell;
+				new->pop_out = 0;
+				if (str)
+					new->value = ft_strdup(str);
+				else
+				{
+					add_after->type = invalid;
+					new->value = NULL;
+				}
+				new->type = delimiter;
+				if (str)
+					free(str);
+				
+			}
 		}
 		//addnode here
 		if (traveler && traveler->next)
@@ -687,7 +708,7 @@ void	quotes(t_shell *shell)
 	}
 }
 
-void	join_tokens(t_shell *shell)
+void	 join_tokens(t_shell *shell)
 {
 	t_noding	*traveler = shell->parser->noding;
 	// t_noding	*temp;
@@ -700,29 +721,36 @@ void	join_tokens(t_shell *shell)
 	{
 		if (traveler->next && traveler->next->type == space)
 			traveler = traveler->next;
-		add_after = traveler;
 		while (traveler && traveler->type != space && !operater_tokens(traveler))
 		{
-			if (traveler == shell->parser->noding)
-				join = 1;
-			else
-				join = 2;
+			join = 1;
+			add_after = traveler;
+			// if (traveler == shell->parser->noding)
+			// 	join = 1;
+			// else
+			// 	join = 2;
 			//need to free str
 			str = ft_strjoin(str, traveler->value);
 			// temp = traveler;
 			traveler->pop_out = 1;
 			traveler = traveler->next;
+			if (traveler && traveler->next && traveler->next->type != space && !operater_tokens(traveler->next))
+					add_after = add_after->next;
 			// popout_tokens(shell, temp);
 		}
 		if (join)
 		{
 			new = malloc(sizeof(t_noding));
-			new->next = traveler;
-			new->pop_out = 0;
-			if (join == 1)
-				shell->parser->noding = new;
+			if (traveler)
+				new->next = traveler->next;
 			else
-				add_after->next = new;
+				new->next = NULL;
+			add_after->next = new;
+			new->pop_out = 0;
+			// if (join == 1)
+			// 	shell->parser->noding = new;
+			// else
+			// 	add_after->next = new;
 			join = 0;
 			new->shell = shell;
 			new->value = ft_strdup(str);
@@ -799,6 +827,7 @@ void	recieve_str(t_shell *shell, char *str)
 	//expand variables
 	expand_vars(shell);
 	//join words and pop spaces
+	test_pop_out(shell);
 	join_tokens(shell);
 	test_pop_out(shell);
 	//assign redirection and destinations
