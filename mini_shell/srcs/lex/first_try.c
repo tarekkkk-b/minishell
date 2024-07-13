@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/13 21:23:24 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/13 23:26:37 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -723,6 +723,7 @@ void	 join_tokens(t_shell *shell)
 			traveler = traveler->next;
 		while (traveler && traveler->type != space && !operater_tokens(traveler))
 		{
+			
 			join = 1;
 			add_after = traveler;
 			// if (traveler == shell->parser->noding)
@@ -730,7 +731,8 @@ void	 join_tokens(t_shell *shell)
 			// else
 			// 	join = 2;
 			//need to free str
-			str = ft_strjoin(str, traveler->value);
+			if (!traveler->pop_out)
+				str = ft_strjoin(str, traveler->value);
 			// temp = traveler;
 			traveler->pop_out = 1;
 			traveler = traveler->next;
@@ -827,7 +829,7 @@ void	recieve_str(t_shell *shell, char *str)
 	//expand variables
 	expand_vars(shell);
 	//join words and pop spaces
-	test_pop_out(shell);
+	// test_pop_out(shell);
 	join_tokens(shell);
 	test_pop_out(shell);
 	//assign redirection and destinations
