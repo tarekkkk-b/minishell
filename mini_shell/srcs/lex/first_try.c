@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/12 22:08:26 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/13 10:58:01 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,6 +142,7 @@ int	assign_pipe(char *str, int index, t_shell *shell)
 	new = malloc(sizeof(t_noding));
 	new->next = NULL;
 	new->shell = shell;
+	new->pop_out = 0;
 	new->value = ft_strdup("|");
 	// if (!invalid_token(shell))
 	// 	new->type = pipes;
@@ -166,6 +167,7 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 	t_noding *new;
 	new = malloc(sizeof(t_noding));
 	new->next = NULL;
+	new->pop_out = 0;
 	new->shell = shell;
 	if (str[index + 1] == str[index])
 	{
@@ -235,6 +237,7 @@ int	assign_space(char *str, int index, t_shell *shell)
 	index--;
 	new = malloc(sizeof(t_noding));
 	new->next = NULL;
+	new->pop_out = 1;
 	new->shell = shell;
 	new->type = space;
 	new->value = ft_strdup(" ");
@@ -250,6 +253,7 @@ int	assign_word(char *str, int index, t_shell *shell)
 	new->next = NULL;
 	new->shell = shell;
 	new->type = option;
+	new->pop_out = 0;
 	int temp = index;
 	while (!delimeter_char(str[index + 1]))
 		index++;
@@ -308,6 +312,7 @@ int		assign_variable(char *str, int index, t_shell *shell)
 		// return ((void)printf("just a $\n"), index);
 	new = malloc(sizeof(t_noding));
 	new->next = NULL;
+	new->pop_out = 0;
 	new->shell = shell;
 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
 		new->type = option;
@@ -340,6 +345,7 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 	new->shell = shell;
 	new->next = NULL;
 	new->value = NULL;
+	new->pop_out = 0;
 	int temp = index;
 	int j = 0;
 	int counter = 0;
@@ -464,7 +470,7 @@ int		operater_tokens(t_noding *node)
 void	get_delimeter(t_shell *shell, t_noding *head)
 {
 	t_noding *traveler;
-	t_noding *temp;
+	// t_noding *temp;
 	t_noding *new;
 	t_noding *add_after = NULL;
 	char *str = NULL;
@@ -483,9 +489,10 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 			{
 				//need to free str
 				str = ft_strjoin(str, traveler->value);
-				temp = traveler;
+				// temp = traveler;
+				traveler->pop_out= 1;
 				traveler = traveler->next;
-				popout_tokens(shell, temp);
+				// popout_tokens(shell, temp);
 				//pop_node;
 			}
 			new = malloc(sizeof(t_noding));
@@ -495,6 +502,7 @@ void	get_delimeter(t_shell *shell, t_noding *head)
 				new->next = traveler;
 			add_after->next = new;
 			new->shell = shell;
+			new->pop_out = 0;
 			new->value = ft_strdup(str);
 			new->type = delimiter;
 			if (str)
@@ -538,6 +546,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 			new->next = add_after->next;
 			new->type = option;
 			new->value = NULL;
+			new->pop_out = 0;
 			// printf("condition 1:	");
 			copier = i;
 			while (suspect->value[i])
@@ -569,6 +578,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 		{
 			new = malloc(sizeof(t_noding));
 			new->shell = shell;
+			new->pop_out = 0;
 			new->type = variable;
 			new->next = add_after->next;
 			reset = i;
@@ -604,7 +614,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 void	expand_vars(t_shell *shell)
 {
 	t_noding 	*traveler;
-	t_noding 	*temp;
+	// t_noding 	*temp;
 	t_values	*env_traveler = NULL;
 	if (!shell || !shell->parser || !shell->parser->noding)
 		return ;
@@ -623,10 +633,11 @@ void	expand_vars(t_shell *shell)
 			free (str);
 			if (!env_traveler)
 			{
-				temp = traveler;
+				// temp = traveler;
 				// if (traveler->next)
+				traveler->pop_out = 1;
 				traveler = traveler->next;
-				popout_tokens(shell, temp);
+				// popout_tokens(shell, temp);
 			}
 			else
 			{
@@ -649,7 +660,7 @@ void	expand_vars(t_shell *shell)
 void	quotes(t_shell *shell)
 {
 	t_noding	*traveler;
-	t_noding	*temp;
+	// t_noding	*temp;
 
 	if (!shell || !shell->parser || !shell->parser->noding)
 		return ;
@@ -661,10 +672,11 @@ void	quotes(t_shell *shell)
 		{
 			if (check_qoutes(traveler))
 			{
-				temp = traveler;
+				// temp = traveler;
+				traveler->pop_out = 1;
 				traveler = divide_qoutes(shell, traveler);
 				traveler = traveler->next;
-				popout_tokens(shell, temp);
+				// popout_tokens(shell, temp);
 			}
 		}
 		if (traveler && traveler->next)
@@ -678,7 +690,7 @@ void	quotes(t_shell *shell)
 void	join_tokens(t_shell *shell)
 {
 	t_noding	*traveler = shell->parser->noding;
-	t_noding	*temp;
+	// t_noding	*temp;
 	t_noding	*new = NULL;
 	t_noding	*add_after = NULL;
 	int			join = 0;
@@ -697,14 +709,16 @@ void	join_tokens(t_shell *shell)
 				join = 2;
 			//need to free str
 			str = ft_strjoin(str, traveler->value);
-			temp = traveler;
+			// temp = traveler;
+			traveler->pop_out = 1;
 			traveler = traveler->next;
-			popout_tokens(shell, temp);
+			// popout_tokens(shell, temp);
 		}
 		if (join)
 		{
 			new = malloc(sizeof(t_noding));
 			new->next = traveler;
+			new->pop_out = 0;
 			if (join == 1)
 				shell->parser->noding = new;
 			else
@@ -720,6 +734,25 @@ void	join_tokens(t_shell *shell)
 			}
 		}
 		if (traveler)
+			traveler = traveler->next;
+	}
+}
+
+
+void	test_pop_out(t_shell	*shell)
+{
+	t_noding	*traveler;
+	t_noding	*temp;
+	traveler = shell->parser->noding;
+	while (traveler)
+	{
+		if (traveler->pop_out)
+		{
+			temp = traveler;
+			traveler = traveler->next;
+			popout_tokens(shell, temp);
+		}
+		if (traveler && !traveler->pop_out)
 			traveler = traveler->next;
 	}
 }
@@ -767,6 +800,7 @@ void	recieve_str(t_shell *shell, char *str)
 	expand_vars(shell);
 	//join words and pop spaces
 	join_tokens(shell);
+	test_pop_out(shell);
 	//assign redirection and destinations
 	she_asked_for_a_second_round(shell);
 	//assign commands
@@ -775,7 +809,7 @@ void	recieve_str(t_shell *shell, char *str)
 	test = shell->parser->noding;
 	while (test)
 	{
-		printf("%s		:		%s\n", test->value, types[test->type]);
+		printf("%s		:		%s	pop? <<%d>>\n", test->value, types[test->type], test->pop_out);
 		test = test->next;
 	}
 }
