@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/12 16:26:13 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/15 13:49:46 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,15 @@ int builtin_cd(t_shell *shell)
     // if(argument[i + 1] && strncmp(argument[i + 1], '-', 2) == 0)
     //     printf("%s\n", directory);
 
-    // if(update_pwd(shell, directory) == 1)
-    //     return (1);
+    if(update_pwd(shell, directory) == 1)
+    {
+        printf("doesnt work\n");
+        return (1);
+    }
+    else
+    {
+        printf("works\n");
+    }
     return (0);
 }
 
@@ -54,9 +61,9 @@ char    *get_directory(int args_count, t_shell *shell)
         dir = find_node_aarij(shell->environ->env, "HOME");
         if(dir == NULL)
             printf("HOME not set\n");
-            printf("exit code will be done once i figure out how exit works");
+            // printf("exit code will be done once i figure out how exit works");
     }
-    // else if(argument[i + 1] && strncmp(argument[i + 1], '-', 2) == 0)
+    // else if(argument[1] && strncmp(argument[1], '-', 2) == 0)
     // {
     //     dir = find_node_aarij(shell->environ->env, "OLDPWD")
     //     if(dir == NULL)
@@ -64,7 +71,7 @@ char    *get_directory(int args_count, t_shell *shell)
     //         printf("exit code will be done once i figure out how exit works");
     // }
     // else
-    //     dir == argument[i + 1];
+    //     dir == argument[1];
 
 
 
@@ -73,7 +80,6 @@ char    *get_directory(int args_count, t_shell *shell)
 // note to self
 
 
-    
     return (dir);
 }
 char	*find_node_aarij(t_values *temp, char *target_key)
@@ -92,34 +98,38 @@ char	*find_node_aarij(t_values *temp, char *target_key)
 	return (NULL);
 }
 
-// int update_pwd(t_shell *shell, char *directory)
-// {
-//     t_values *temp;
+int update_pwd(t_shell *shell, char *directory)
+{
+    t_values *temp;
+    t_values *temp2;
 
-// 	temp = locate_node(shell->environ->env, "PWD");
-//     // char str[PATH_MAX];
-//     if(temp)
-//     {
-//         if(change_nodeee(temp, directory) == 1)
-//         {
-//             printf("error");
-//             return (1);
-//         }
-//     }
-//     return (0);
-// }
+	temp = locate_node(shell->environ->env, "PWD");
+	temp2 = locate_node(shell->environ->env, "OLDPWD");
+    if(temp)
+    {
+        if(change_nodeee(temp2, temp->value) == 1)
+        {
+            printf("Not work \n");
+            return (1);   
+        }
+        if(change_nodeee(temp, directory) == 1)
+        {
+            printf("error\n");
+            return (1);
+        }
+    }
+    return (0);
+}
 
-//jst added a few e's so its diff
-
-// int change_nodeee(t_values *node, char *new)
-// {
-// 	free(node->value);
-// 	free(node->string);
-// 	node->value = ft_strdup(new);
-//     node->string = ft_strjoin2(node->key, "=", node->value);
-// 	if(node->string)
-//         return (0);
-//     else
-//         return (1);
+int change_nodeee(t_values *node, char *new)
+{
+	free(node->value);
+	free(node->string);
+	node->value = ft_strdup(new);
+    node->string = ft_strjoin2(node->key, "=", node->value);
+	if(node->string)
+        return (0);
+    else
+        return (1);
     
-// }
+}
