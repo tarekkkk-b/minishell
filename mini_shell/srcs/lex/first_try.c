@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/13 23:26:37 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:27:40 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static const char * const types[] = {
 	[append] = "APPEND",
 	[space] = "SPACE",
 	[variable] = "VARIABLE",
-	[dqoutes] = "QOUTES",
+	[dquotes] = "QOUTES",
 	[invalid] = "INVALID"
 };
 
@@ -72,26 +72,19 @@ int	invalid_token(t_shell *shell)
 {
 	if (!shell->parser->noding || !last_node(shell->parser->noding))
 		return (0);
-		// last_node(shell->parser->noding)->type == pipes
-	if (
-	last_node(shell->parser->noding)->type == inp_redir
+	if (last_node(shell->parser->noding)->type == inp_redir
 	|| last_node(shell->parser->noding)->type == opt_redir
 	|| last_node(shell->parser->noding)->type == append
 	|| last_node(shell->parser->noding)->type == here_doc)
-	{
 		return (1);
-	}	
 	else if (last_node(shell->parser->noding)->type == space)
 	{
 		if (!prev_node(shell, last_node(shell->parser->noding))
-		// || prev_node(shell, last_node(shell->parser->noding))->type == pipes
 		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
 		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
 		|| prev_node(shell, last_node(shell->parser->noding))->type == append
 		|| prev_node(shell, last_node(shell->parser->noding))->type == here_doc)
-		{
-			return (1);	
-		}
+			return (1);
 	}
 	return (0);
 }
@@ -288,7 +281,7 @@ int		valid_name(char character, int current, int first)
 {
 	if (current == first)
 	{
-		if (character >= '0' && character <= '9')
+		if ((character >= '0' && character <= '9') || (character == '$'))
 			return (2);
 		if (!(character >= 'a' && character <= 'z') 
 		&& !(character >= 'A' && character <= 'Z') && character != '_')
@@ -367,7 +360,7 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 		if (counter != 2)
 			new->type = invalid;
 		else
-			new->type = dqoutes;
+			new->type = dquotes;
 	}
 	else if (str[index] == '\'')
 	{
@@ -689,7 +682,7 @@ void	quotes(t_shell *shell)
 	//seperate qoutes needs to happen b4 variable expansion
 	while (traveler)
 	{
-		if (traveler->type == dqoutes)
+		if (traveler->type == dquotes)
 		{
 			if (check_qoutes(traveler))
 			{
@@ -827,11 +820,11 @@ void	recieve_str(t_shell *shell, char *str)
 	//separate quotes
 	quotes(shell);
 	//expand variables
-	expand_vars(shell);
+	// expand_vars(shell);
 	//join words and pop spaces
 	// test_pop_out(shell);
-	join_tokens(shell);
-	test_pop_out(shell);
+	// join_tokens(shell);
+	// test_pop_out(shell);
 	//assign redirection and destinations
 	she_asked_for_a_second_round(shell);
 	//assign commands

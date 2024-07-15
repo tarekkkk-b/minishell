@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/13 10:42:37 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/15 21:57:27 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,20 @@ typedef struct	s_environ
 
 typedef enum	s_tokens
 {
-	command,
-	option,
-	pipes,
-	inp_redir,
-	inp_file,
-	opt_redir,
-	opt_file,
-	here_doc,
-	delimiter,
-	append,
-	space,
-	variable,
-	dqoutes,
-	invalid
+	COMMAND,
+	ARG,
+	PIPES,
+	INP_REDIR,
+	INP_FILE,
+	OPT_REDIR,
+	OPT_FILE,
+	HERE_DOC,
+	DELIMITER,
+	APPEND,
+	SPACE,
+	VARIABLE,
+	DQUOTES,
+	INVALID
 }	t_tokens;
 
 typedef struct	s_noding
@@ -123,7 +123,24 @@ typedef struct s_readline
 	char	*str;
 }	t_readline;
 
-void		assign_nodes(char **env, t_shell *shell, t_values *node, int i);
+//			parsing			//
+
+void	parsing_hub(t_shell *shell, char *str);
+void	assignation(t_shell *shell, char *str);
+void	assign_pipe(t_shell *shell);
+int		assign_space(char *str, int index, t_shell *shell);
+void	assign_invalid(t_shell *shell, char *str, int index);
+int		assign_word(char *str, int index, t_shell *shell);
+void	assign_node(t_shell *shell, t_noding *new, t_tokens type, int popout);
+int		valid_name(char character, int current, int first);
+int		end_of_var(char *str, int start, int index);
+int		assign_variable(char *str, int index, t_shell *shell);
+int		assign_redirection(char *str, int index, t_shell *shell);
+int		assign_quotes(char *str, int index, t_shell *shell);
+
+//			others			//
+
+// void		assign_nodes(char **env, t_shell *shell, t_values *node, int i);
 char    	*ft_strjoin2(char *str1, char *str2, char *str3);
 char		*get_key(char *env_var);
 char		**arr(t_values *environ);
@@ -147,16 +164,16 @@ t_values	*locate_node(t_values *temp, char *target_key);
 
 //**	builtins	**//
 
-int builtin_check(t_readline rl, t_shell *shell);
-int builtin_env(t_environ *environ);
-int builtin_exit(t_readline rl);
-int	builtin_pwd(t_shell *shell);
-int builtin_echo(char *str);
-int builtin_cd(t_shell *shell);
+int 	builtin_check(t_readline rl, t_shell *shell);
+int 	builtin_env(t_environ *environ);
+int 	builtin_exit(t_readline rl);
+int		builtin_pwd(t_shell *shell);
+int 	builtin_echo(char *str);
+int 	builtin_cd(t_shell *shell);
 
-int update_pwd(t_shell *shell, char *directory);
+int 	update_pwd(t_shell *shell, char *directory);
 char    *get_directory(int args_count, t_shell *shell);
 char	*find_node_aarij(t_values *temp, char *target_key);
-int change_nodeee(t_values *node, char *new);
+int 	change_nodeee(t_values *node, char *new);
 
 #endif
