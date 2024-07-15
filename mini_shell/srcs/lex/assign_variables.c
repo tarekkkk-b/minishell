@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 18:16:19 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 01:25:19 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int		assign_variable(char *str, int index, t_shell *shell)
 		return (-1);
 	if (str[index + 1] == ' ' || str[index + 1] == '\t'
 		|| str[index + 1] == '\0')
-		assign_node(shell, new, OPTION, 0);
+		assign_node(shell, new, ARG, 0);
 	else
 		assign_node(shell, new, VARIABLE, 0);
 	temp = index;
@@ -70,6 +70,6 @@ int		assign_variable(char *str, int index, t_shell *shell)
 	while (temp++ < index)
 		new->value[j++] = str[temp];
 	new->value[j++] = '\0';
-	token_node(shell, new);
+	add_token(shell, new);
 	return(index);
 }

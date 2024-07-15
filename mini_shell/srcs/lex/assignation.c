@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assignation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 21:53:49 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 01:23:05 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 // 		assign_node(shell, new, INVALID, 0);
 // 	else
 // 		assign_node(shell, new, PIPES, 0);
-// 	token_node(shell, new);
+// 	add_token(shell, new);
 // }
 
 int	assign_space(char *str, int index, t_shell *shell)
@@ -40,7 +40,7 @@ int	assign_space(char *str, int index, t_shell *shell)
 		return (-1);
 	assign_node(shell, new, SPACE, 1);
 	new->value = ft_strdup(" ");
-	token_node(shell, new);
+	add_token(shell, new);
 	return (index);
 }
 
@@ -57,7 +57,7 @@ void	assign_invalid(t_shell *shell, char *str, int index)
 		return (free(new));
 	new->value[0] = str[index];
 	new->value[1] = '\0';
-	token_node(shell, new);
+	add_token(shell, new);
 }
 
 int	assign_word(char *str, int index, t_shell *shell)
@@ -80,6 +80,6 @@ int	assign_word(char *str, int index, t_shell *shell)
 	while (temp <= index)
 		new->value[j++] = str[temp++];
 	new->value[j] = '\0';
-	token_node(shell, new);
+	add_token(shell, new);
 	return (index);
 }

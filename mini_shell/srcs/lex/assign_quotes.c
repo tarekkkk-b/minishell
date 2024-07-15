@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:08 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 21:56:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 01:24:55 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,6 @@ int		assign_quotes(char *str, int index, t_shell *shell)
 		index = double_quotes(shell, new, str, index);
 	else if (str[index] == '\'')
 		index = single_quotes(shell, new, str, index);
-	token_node(shell, new);
+	add_token(shell, new);
 	return (index);
 }

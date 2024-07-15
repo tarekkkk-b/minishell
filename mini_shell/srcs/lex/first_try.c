@@ -3,67 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 17:27:40 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 01:39:43 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static const char * const types[] = {
-	[command] = "CMD",
-	[option] = "ARG",
-	[pipes] = "PIPE",
-	[inp_redir] = "INP_REDIR",
-	[inp_file] = "INP_FILE",
-	[opt_redir] = "OPT_REDIR",
-	[opt_file] = "OPT_FILE",
-	[here_doc] = "HEREDOC",
-	[delimiter] = "DELIMITER",
-	[append] = "APPEND",
-	[space] = "SPACE",
-	[variable] = "VARIABLE",
-	[dquotes] = "QOUTES",
-	[invalid] = "INVALID"
-};
+// static const char * const types[] = {
+// 	[command] = "CMD",
+// 	[option] = "ARG",
+// 	[pipes] = "PIPE",
+// 	[inp_redir] = "INP_REDIR",
+// 	[inp_file] = "INP_FILE",
+// 	[opt_redir] = "OPT_REDIR",
+// 	[opt_file] = "OPT_FILE",
+// 	[here_doc] = "HEREDOC",
+// 	[delimiter] = "DELIMITER",
+// 	[append] = "APPEND",
+// 	[space] = "SPACE",
+// 	[variable] = "VARIABLE",
+// 	[dquotes] = "QOUTES",
+// 	[invalid] = "INVALID"
+// };
 
 /// @brief gets the last node in a lis
-/// @param lst the head
-/// @return a pointer to the last node
-t_noding	*last_node(t_noding *lst)
-{
-	if (!lst)
-		return (NULL);
-	while (lst)
-	{
-		if (!lst->next)
-			return (lst);
-		lst = lst->next;
-	}
-	return (lst);
-}
+// /// @param lst the head
+// /// @return a pointer to the last node
+// t_noding	*last_node(t_noding *lst)
+// {
+// 	if (!lst)
+// 		return (NULL);
+// 	while (lst)
+// 	{
+// 		if (!lst->next)
+// 			return (lst);
+// 		lst = lst->next;
+// 	}
+// 	return (lst);
+// }
 
-/// @brief gets the node thats right before a partiular node
-/// @param shell 
-/// @param target the node u wanna find what behind it is
-/// @return the pointer to the node
-t_noding *prev_node(t_shell *shell, t_noding *target)
-{
-	t_noding	*traveler;
+// /// @brief gets the node thats right before a partiular node
+// /// @param shell 
+// /// @param target the node u wanna find what behind it is
+// /// @return the pointer to the node
+// t_noding *prev_node(t_shell *shell, t_noding *target)
+// {
+// 	t_noding	*traveler;
 	
-	traveler = NULL;
-	if (!shell->parser->noding || !target)
-		return (NULL);
-	if (shell->parser->noding)
-	{
-		traveler = shell->parser->noding;
-		while (traveler->next && traveler->next != target)
-			traveler = traveler->next;
-	}
-	return (traveler);
-}
+// 	traveler = NULL;
+// 	if (!shell->parser->noding || !target)
+// 		return (NULL);
+// 	if (shell->parser->noding)
+// 	{
+// 		traveler = shell->parser->noding;
+// 		while (traveler->next && traveler->next != target)
+// 			traveler = traveler->next;
+// 	}
+// 	return (traveler);
+// }
 
 /// @brief checks if the previous node was an operater
 /// @param shell 
@@ -110,104 +110,104 @@ int	invalid_chars(char c)
 }
 
 
-/// @brief adds a node to a linked list
-/// @param shell 
-/// @param  
-void	token_node(t_shell *shell, t_noding *new)
-{
-	t_noding	*temp;
+// /// @brief adds a node to a linked list
+// /// @param shell 
+// /// @param  
+// void	token_node(t_shell *shell, t_noding *new)
+// {
+// 	t_noding	*temp;
 
-	if (shell->parser->noding)
-	{
-		temp = last_node(shell->parser->noding);
-		temp->next = new;
-	}
-	else
-		shell->parser->noding = new;
-}
+// 	if (shell->parser->noding)
+// 	{
+// 		temp = last_node(shell->parser->noding);
+// 		temp->next = new;
+// 	}
+// 	else
+// 		shell->parser->noding = new;
+// }
 
-int	assign_pipe(char *str, int index, t_shell *shell)
-{
-	// (void)shell;
-	t_noding *new;
+// int	assign_pipe(char *str, int index, t_shell *shell)
+// {
+// 	// (void)shell;
+// 	t_noding *new;
 	
-	(void)str;
-	new = malloc(sizeof(t_noding));
-	new->next = NULL;
-	new->shell = shell;
-	new->pop_out = 0;
-	new->value = ft_strdup("|");
-	// if (!invalid_token(shell))
-	// 	new->type = pipes;
-	// if (!shell->parser->noding)
-	// 	new->type = invalid;
-	// else
-	// 	new->type = invalid;
+// 	(void)str;
+// 	new = malloc(sizeof(t_noding));
+// 	new->next = NULL;
+// 	new->shell = shell;
+// 	new->pop_out = 0;
+// 	new->value = ft_strdup("|");
+// 	// if (!invalid_token(shell))
+// 	// 	new->type = pipes;
+// 	// if (!shell->parser->noding)
+// 	// 	new->type = invalid;
+// 	// else
+// 	// 	new->type = invalid;
 
-	//had to manually check here for previous nodes if they were pipes
-	if (invalid_token(shell) || !shell->parser->noding || last_node(shell->parser->noding)->type == pipes
-	|| (last_node(shell->parser->noding)->type == space && prev_node(shell, last_node(shell->parser->noding))->type == pipes))
-		new->type = invalid;
-	else
-		new->type = pipes;
-	token_node(shell, new);
-	// printf("|	:	pipe\n");
-	return (index);
-}
+// 	//had to manually check here for previous nodes if they were pipes
+// 	if (invalid_token(shell) || !shell->parser->noding || last_node(shell->parser->noding)->type == pipes
+// 	|| (last_node(shell->parser->noding)->type == space && prev_node(shell, last_node(shell->parser->noding))->type == pipes))
+// 		new->type = invalid;
+// 	else
+// 		new->type = pipes;
+// 	token_node(shell, new);
+// 	// printf("|	:	pipe\n");
+// 	return (index);
+// }
 
-int	assign_redirection(char *str, int index, t_shell *shell)
-{
-	t_noding *new;
-	new = malloc(sizeof(t_noding));
-	new->next = NULL;
-	new->pop_out = 0;
-	new->shell = shell;
-	if (str[index + 1] == str[index])
-	{
-		if (str[index] == '>')
-		{
-			if (!invalid_token(shell))
-				new->type = append;
-			else
-				new->type = invalid;
-			new->value = ft_strdup(">>");
-			// printf(">>	:	append\n");
-		}
-		else if (str[index] == '<')
-		{
-			if (!invalid_token(shell))
-				new->type = here_doc;
-			else
-				new->type = invalid;
-			new->value = ft_strdup("<<");
-			// printf("<<	:	heredoc\n");
-		}
-		index++;
-	}
-	else if (str[index + 1] != str[index])
-	{
-		if (str[index] == '>')
-		{
-			if (!invalid_token(shell))
-				new->type = opt_redir;
-			else
-				new->type = invalid;
-			new->value = ft_strdup(">");
-			// printf(">	:	output redirection\n");
-		}
-		else if (str[index] == '<')
-		{	
-			if (!invalid_token(shell))
-				new->type = inp_redir;
-			else
-				new->type = invalid;
-			new->value = ft_strdup("<");
-			// printf("<	:	input redirection\n");	
-		}
-	}
-	token_node(shell, new);
-	return (index);
-}
+// int	assign_redirection(char *str, int index, t_shell *shell)
+// {
+// 	t_noding *new;
+// 	new = malloc(sizeof(t_noding));
+// 	new->next = NULL;
+// 	new->pop_out = 0;
+// 	new->shell = shell;
+// 	if (str[index + 1] == str[index])
+// 	{
+// 		if (str[index] == '>')
+// 		{
+// 			if (!invalid_token(shell))
+// 				new->type = append;
+// 			else
+// 				new->type = invalid;
+// 			new->value = ft_strdup(">>");
+// 			// printf(">>	:	append\n");
+// 		}
+// 		else if (str[index] == '<')
+// 		{
+// 			if (!invalid_token(shell))
+// 				new->type = here_doc;
+// 			else
+// 				new->type = invalid;
+// 			new->value = ft_strdup("<<");
+// 			// printf("<<	:	heredoc\n");
+// 		}
+// 		index++;
+// 	}
+// 	else if (str[index + 1] != str[index])
+// 	{
+// 		if (str[index] == '>')
+// 		{
+// 			if (!invalid_token(shell))
+// 				new->type = opt_redir;
+// 			else
+// 				new->type = invalid;
+// 			new->value = ft_strdup(">");
+// 			// printf(">	:	output redirection\n");
+// 		}
+// 		else if (str[index] == '<')
+// 		{	
+// 			if (!invalid_token(shell))
+// 				new->type = inp_redir;
+// 			else
+// 				new->type = invalid;
+// 			new->value = ft_strdup("<");
+// 			// printf("<	:	input redirection\n");	
+// 		}
+// 	}
+// 	token_node(shell, new);
+// 	return (index);
+// }
 
 int	delimeter_char(char character)
 {
@@ -220,50 +220,50 @@ int	delimeter_char(char character)
 	return (0);
 }
 
-int	assign_space(char *str, int index, t_shell *shell)
-{
-	// (void)shell;
-	t_noding	*new;
-	// int temp = index;
-	while ((str[index] == ' ' || str[index] == '\t') && str[index] != '\0')
-		index++;
-	index--;
-	new = malloc(sizeof(t_noding));
-	new->next = NULL;
-	new->pop_out = 1;
-	new->shell = shell;
-	new->type = space;
-	new->value = ft_strdup(" ");
-	token_node(shell, new);
-	// printf("we have (%d) spaces\n", index - temp + 1);
-	return (index);
-}
+// int	assign_space(char *str, int index, t_shell *shell)
+// {
+// 	// (void)shell;
+// 	t_noding	*new;
+// 	// int temp = index;
+// 	while ((str[index] == ' ' || str[index] == '\t') && str[index] != '\0')
+// 		index++;
+// 	index--;
+// 	new = malloc(sizeof(t_noding));
+// 	new->next = NULL;
+// 	new->pop_out = 1;
+// 	new->shell = shell;
+// 	new->type = space;
+// 	new->value = ft_strdup(" ");
+// 	token_node(shell, new);
+// 	// printf("we have (%d) spaces\n", index - temp + 1);
+// 	return (index);
+// }
 
-int	assign_word(char *str, int index, t_shell *shell)
-{
-	t_noding *new;
-	new = malloc(sizeof(t_noding));
-	new->next = NULL;
-	new->shell = shell;
-	new->type = option;
-	new->pop_out = 0;
-	int temp = index;
-	while (!delimeter_char(str[index + 1]))
-		index++;
-	int j = 0;
-	new->value = malloc(sizeof(char) * (index - temp + 2));
-	while (temp <= index)
-	{
-		new->value[j] = str[temp];
-		j++;
-		temp++;
-	}
-	new->value[j] = '\0';
-	j = 0;
-	token_node(shell, new);
-	// printf("this is a word : (%s)\n", new->value);
-	return (index);
-}
+// int	assign_word(char *str, int index, t_shell *shell)
+// {
+// 	t_noding *new;
+// 	new = malloc(sizeof(t_noding));
+// 	new->next = NULL;
+// 	new->shell = shell;
+// 	new->type = option;
+// 	new->pop_out = 0;
+// 	int temp = index;
+// 	while (!delimeter_char(str[index + 1]))
+// 		index++;
+// 	int j = 0;
+// 	new->value = malloc(sizeof(char) * (index - temp + 2));
+// 	while (temp <= index)
+// 	{
+// 		new->value[j] = str[temp];
+// 		j++;
+// 		temp++;
+// 	}
+// 	new->value[j] = '\0';
+// 	j = 0;
+// 	token_node(shell, new);
+// 	// printf("this is a word : (%s)\n", new->value);
+// 	return (index);
+// }
 
 int check_invalid(char *str, int i, t_shell *shell)
 {
@@ -277,117 +277,117 @@ int check_invalid(char *str, int i, t_shell *shell)
 	return (i);
 }
 
-int		valid_name(char character, int current, int first)
-{
-	if (current == first)
-	{
-		if ((character >= '0' && character <= '9') || (character == '$'))
-			return (2);
-		if (!(character >= 'a' && character <= 'z') 
-		&& !(character >= 'A' && character <= 'Z') && character != '_')
-			return (0);	
-	}
-	else
-	{	
-		if (!(character >= 'a' && character <= 'z') &&
-		!(character >= 'A' && character <= 'Z') && character != '_'
-		&& !(character >= '0' && character <= '9'))
-			return (0);
-	}
-	return (1);
-}
+// int		valid_name(char character, int current, int first)
+// {
+// 	if (current == first)
+// 	{
+// 		if ((character >= '0' && character <= '9') || (character == '$'))
+// 			return (2);
+// 		if (!(character >= 'a' && character <= 'z') 
+// 		&& !(character >= 'A' && character <= 'Z') && character != '_')
+// 			return (0);	
+// 	}
+// 	else
+// 	{	
+// 		if (!(character >= 'a' && character <= 'z') &&
+// 		!(character >= 'A' && character <= 'Z') && character != '_'
+// 		&& !(character >= '0' && character <= '9'))
+// 			return (0);
+// 	}
+// 	return (1);
+// }
 
-int		assign_variable(char *str, int index, t_shell *shell)
-{
-	t_noding *new;
-	int temp;
-	int	j = 0;
-		// return ((void)printf("just a $\n"), index);
-	new = malloc(sizeof(t_noding));
-	new->next = NULL;
-	new->pop_out = 0;
-	new->shell = shell;
-	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
-		new->type = option;
-	else
-		new->type = variable;
-	temp = index;
-	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
-	{
-		if (valid_name(str[index + 1], index + 1, temp + 1) == 2)
-		{
-			index++;
-			break ;
-		}
-		index++;
-	}
-	new->value = malloc(sizeof(char) * (index - temp + 3));
-	new->value[j++] = '$';
-	while (temp++ < index)
-		new->value[j++] = str[temp];
-	new->value[j++] = '\0';
-	token_node(shell, new);
-	// printf("this is a variable (%s)\n", variable);
-	return(index);
-}
+// int		assign_variable(char *str, int index, t_shell *shell)
+// {
+// 	t_noding *new;
+// 	int temp;
+// 	int	j = 0;
+// 		// return ((void)printf("just a $\n"), index);
+// 	new = malloc(sizeof(t_noding));
+// 	new->next = NULL;
+// 	new->pop_out = 0;
+// 	new->shell = shell;
+// 	if (str[index + 1] == ' ' || str[index + 1] == '\t' || str[index + 1] == '\0')
+// 		new->type = option;
+// 	else
+// 		new->type = variable;
+// 	temp = index;
+// 	while (str[index + 1] && valid_name(str[index + 1], index + 1, temp + 1))
+// 	{
+// 		if (valid_name(str[index + 1], index + 1, temp + 1) == 2)
+// 		{
+// 			index++;
+// 			break ;
+// 		}
+// 		index++;
+// 	}
+// 	new->value = malloc(sizeof(char) * (index - temp + 3));
+// 	new->value[j++] = '$';
+// 	while (temp++ < index)
+// 		new->value[j++] = str[temp];
+// 	new->value[j++] = '\0';
+// 	token_node(shell, new);
+// 	// printf("this is a variable (%s)\n", variable);
+// 	return(index);
+// }
 
-int		assign_quotes(char *str, int index, t_shell *shell)
-{
-	t_noding	*new;
-	new = malloc(sizeof(t_noding));
-	new->shell = shell;
-	new->next = NULL;
-	new->value = NULL;
-	new->pop_out = 0;
-	int temp = index;
-	int j = 0;
-	int counter = 0;
-	if (str[index] == '"')
-	{
-		counter += 1;
-		while (str[index + 1] && str[index + 1] != '"' && str[index])
-			index++;
-		if(str[index + 1] == '"')
-		{
-			temp++;
-			index++;
-			counter += 1;
-		}
-		new->value = malloc(sizeof(char) * (index - temp + 1));
-		while (temp < index)
-			new->value[j++] = str[temp++];
-		new->value[j] = '\0';
-		if (counter != 2)
-			new->type = invalid;
-		else
-			new->type = dquotes;
-	}
-	else if (str[index] == '\'')
-	{
-		counter += 1;
-		while (str[index + 1] && str[index + 1] != '\'' && str[index])
-			index++;
-		if(str[index + 1] == '\'')
-		{
-			index++;
-			counter += 1;
-			temp++;
-		}
-		new->value = malloc(sizeof(char) * (index - temp + 1));
-		while (temp < index)
-			new->value[j++] = str[temp++];
-		new->value[j] = '\0';
-		if (counter != 2)
-			new->type = invalid;
-		else
-			new->type = option;
-		//removed sqoutes from enum, sqoutes technically are just words
-		//also removed the sqoutes characters 
-	}
-	token_node(shell, new);
-	// printf("string	:	(%s)\n", new->value);
-	return (index);
-}
+// int		assign_quotes(char *str, int index, t_shell *shell)
+// {
+// 	t_noding	*new;
+// 	new = malloc(sizeof(t_noding));
+// 	new->shell = shell;
+// 	new->next = NULL;
+// 	new->value = NULL;
+// 	new->pop_out = 0;
+// 	int temp = index;
+// 	int j = 0;
+// 	int counter = 0;
+// 	if (str[index] == '"')
+// 	{
+// 		counter += 1;
+// 		while (str[index + 1] && str[index + 1] != '"' && str[index])
+// 			index++;
+// 		if(str[index + 1] == '"')
+// 		{
+// 			temp++;
+// 			index++;
+// 			counter += 1;
+// 		}
+// 		new->value = malloc(sizeof(char) * (index - temp + 1));
+// 		while (temp < index)
+// 			new->value[j++] = str[temp++];
+// 		new->value[j] = '\0';
+// 		if (counter != 2)
+// 			new->type = invalid;
+// 		else
+// 			new->type = dquotes;
+// 	}
+// 	else if (str[index] == '\'')
+// 	{
+// 		counter += 1;
+// 		while (str[index + 1] && str[index + 1] != '\'' && str[index])
+// 			index++;
+// 		if(str[index + 1] == '\'')
+// 		{
+// 			index++;
+// 			counter += 1;
+// 			temp++;
+// 		}
+// 		new->value = malloc(sizeof(char) * (index - temp + 1));
+// 		while (temp < index)
+// 			new->value[j++] = str[temp++];
+// 		new->value[j] = '\0';
+// 		if (counter != 2)
+// 			new->type = invalid;
+// 		else
+// 			new->type = option;
+// 		//removed sqoutes from enum, sqoutes technically are just words
+// 		//also removed the sqoutes characters 
+// 	}
+// 	token_node(shell, new);
+// 	// printf("string	:	(%s)\n", new->value);
+// 	return (index);
+// }
 
 
 void	test(t_noding *traveler, t_tokens actual_token)
@@ -426,28 +426,28 @@ void	she_asked_for_a_second_round(t_shell *shell)
 	}
 }
 
-void	popout_tokens(t_shell *shell, t_noding *token)
-{
-	t_noding *temp = NULL;
-	t_noding *bye;
+// void	popout_tokens(t_shell *shell, t_noding *token)
+// {
+// 	t_noding *temp = NULL;
+// 	t_noding *bye;
 
-	if (!shell || !token)
-		return ;
-	temp = shell->parser->noding;
-	if (token == shell->parser->noding)
-	{
-		shell->parser->noding = shell->parser->noding->next;
-		free (temp->value);
-		free(temp);
-		return ;
-	}
-	bye = token;
-	while (temp && temp->next && temp->next != bye)
-		temp = temp->next;
-	temp->next = bye->next;
-	free(bye->value);
-	free(bye);
-}
+// 	if (!shell || !token)
+// 		return ;
+// 	temp = shell->parser->noding;
+// 	if (token == shell->parser->noding)
+// 	{
+// 		shell->parser->noding = shell->parser->noding->next;
+// 		free (temp->value);
+// 		free(temp);
+// 		return ;
+// 	}
+// 	bye = token;
+// 	while (temp && temp->next && temp->next != bye)
+// 		temp = temp->next;
+// 	temp->next = bye->next;
+// 	free(bye->value);
+// 	free(bye);
+// }
 
 int		operater_tokens(t_noding *node)
 {
@@ -783,31 +783,31 @@ void	test_pop_out(t_shell	*shell)
 
 void	recieve_str(t_shell *shell, char *str)
 {
-	(void)shell;
-	int	i = 0;
-	shell->parser = NULL;
-	if (!str)
-		return ;
-	shell->parser = malloc(sizeof(t_parser));
-	shell->parser->noding = NULL;
-	while (str[i])
-	{
-		if (str[i] == '|')
-			i = assign_pipe(str, i, shell);
-		else if (str[i] == '>' || str[i] == '<')
-			i = assign_redirection(str, i, shell);
-		else if (str[i] == ' ' | str[i] == '\t')
-			i = assign_space(str, i, shell);
-		else if (str[i] == '$')
-			i = assign_variable(str, i, shell);
-		else if (str[i] == '"' || str[i] == '\'')
-			i = assign_quotes(str, i, shell);
-		else if (invalid_chars(str[i]) == 1)
-			printf("this is an invalid character : (%c)\n", str[i]);
-		else
-			i = assign_word(str, i, shell);
-		i++;
-	}
+	// (void)shell;
+	// int	i = 0;
+	// shell->parser = NULL;
+	// if (!str)
+	// 	return ;
+	// shell->parser = malloc(sizeof(t_parser));
+	// shell->parser->noding = NULL;
+	// while (str[i])
+	// {
+	// 	if (str[i] == '|')
+	// 		i = assign_pipe(str, i, shell);
+	// 	else if (str[i] == '>' || str[i] == '<')
+	// 		i = assign_redirection(str, i, shell);
+	// 	else if (str[i] == ' ' | str[i] == '\t')
+	// 		i = assign_space(str, i, shell);
+	// 	else if (str[i] == '$')
+	// 		i = assign_variable(str, i, shell);
+	// 	else if (str[i] == '"' || str[i] == '\'')
+	// 		i = assign_quotes(str, i, shell);
+	// 	else if (invalid_chars(str[i]) == 1)
+	// 		printf("this is an invalid character : (%c)\n", str[i]);
+	// 	else
+	// 		i = assign_word(str, i, shell);
+	// 	i++;
+	// }
 	//i think smth else should happen first
 	//we need to make sure that whatever comes after a heredoc is a delimeter
 	//regardless of the token, we need to join and expand accordingly tokenize

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 21:57:27 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 01:37:04 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,18 +125,22 @@ typedef struct s_readline
 
 //			parsing			//
 
-void	parsing_hub(t_shell *shell, char *str);
-void	assignation(t_shell *shell, char *str);
-void	assign_pipe(t_shell *shell);
-int		assign_space(char *str, int index, t_shell *shell);
-void	assign_invalid(t_shell *shell, char *str, int index);
-int		assign_word(char *str, int index, t_shell *shell);
-void	assign_node(t_shell *shell, t_noding *new, t_tokens type, int popout);
-int		valid_name(char character, int current, int first);
-int		end_of_var(char *str, int start, int index);
-int		assign_variable(char *str, int index, t_shell *shell);
-int		assign_redirection(char *str, int index, t_shell *shell);
-int		assign_quotes(char *str, int index, t_shell *shell);
+void		parsing_hub(t_shell *shell, char *str);
+void		assignation(t_shell *shell, char *str);
+void		assign_pipe(t_shell *shell);
+int			assign_space(char *str, int index, t_shell *shell);
+void		assign_invalid(t_shell *shell, char *str, int index);
+int			assign_word(char *str, int index, t_shell *shell);
+void		assign_node(t_shell *shell, t_noding *new, t_tokens type, int popout);
+int			valid_name(char character, int current, int first);
+int			end_of_var(char *str, int start, int index);
+int			assign_variable(char *str, int index, t_shell *shell);
+int			assign_redirection(char *str, int index, t_shell *shell);
+int			assign_quotes(char *str, int index, t_shell *shell);
+void		add_token(t_shell *shell, t_noding *new);
+void		popout_token(t_shell *shell, t_noding *token);
+t_noding	*prev_node(t_shell *shell, t_noding *target);
+t_noding	*last_node(t_noding *nodes);
 
 //			others			//
 

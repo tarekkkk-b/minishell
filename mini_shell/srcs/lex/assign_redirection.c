@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 21:38:08 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 01:24:21 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,6 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 	}
 	else if (str[index + 1] != str[index])
 		double_red(shell, new, str, index);
-	token_node(shell, new);
+	add_token(shell, new);
 	return (index);
 }
