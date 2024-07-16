@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:55:19 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 10:26:48 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:09:30 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 12:32:50 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 18:09:42 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 // 	[invalid] = "INVALID"
 // };
 
-/// @brief gets the last node in a lis
+// /// @brief gets the last node in a lis
 // /// @param lst the head
 // /// @return a pointer to the last node
 // t_noding	*last_node(t_noding *lst)
@@ -65,49 +65,50 @@
 // 	return (traveler);
 // }
 
-/// @brief checks if the previous node was an operater
-/// @param shell 
-/// @return true or false
-int	invalid_token(t_shell *shell)
-{
-	if (!shell->parser->noding || !last_node(shell->parser->noding))
-		return (0);
-	if (last_node(shell->parser->noding)->type == inp_redir
-	|| last_node(shell->parser->noding)->type == opt_redir
-	|| last_node(shell->parser->noding)->type == append
-	|| last_node(shell->parser->noding)->type == here_doc)
-		return (1);
-	else if (last_node(shell->parser->noding)->type == space)
-	{
-		if (!prev_node(shell, last_node(shell->parser->noding))
-		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
-		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
-		|| prev_node(shell, last_node(shell->parser->noding))->type == append
-		|| prev_node(shell, last_node(shell->parser->noding))->type == here_doc)
-			return (1);
-	}
-	return (0);
-}
+// /// @brief checks if the previous node was an operater
+// /// @param shell 
+// /// @return true or false
+// int	invalid_token(t_shell *shell)
+// {
+// 	if (!shell->parser->noding || !last_node(shell->parser->noding))
+// 		return (0);
+// 	if (last_node(shell->parser->noding)->type == inp_redir
+// 	|| last_node(shell->parser->noding)->type == opt_redir
+// 	|| last_node(shell->parser->noding)->type == append
+// 	|| last_node(shell->parser->noding)->type == here_doc)
+// 		return (1);
+// 	else if (last_node(shell->parser->noding)->type == space)
+// 	{
+// 		if (!prev_node(shell, last_node(shell->parser->noding))
+// 		|| prev_node(shell, last_node(shell->parser->noding))->type == inp_redir
+// 		|| prev_node(shell, last_node(shell->parser->noding))->type == opt_redir
+// 		|| prev_node(shell, last_node(shell->parser->noding))->type == append
+// 		|| prev_node(shell, last_node(shell->parser->noding))->type == here_doc)
+// 			return (1);
+// 	}
+// 	return (0);
+// }
+
 //this function^^ was checking for pipes too
 //had to remove that cuz operators could come after pipes
 
-int	invalid_chars(char c)
-{
-	char invalid[] = {'&',';','\\', '*', '(', ')'};
-	int i = 0;
-	int invalidcheck = 0;
-	int invalid_length = sizeof(invalid) / sizeof(invalid[0]);
-	while(i < invalid_length && invalidcheck != 1)
-	{
-		if(c != invalid[i])
-			i++;
-		else
-			invalidcheck = 1;
-	}
-	if(invalidcheck == 1)
-		return (1);
-	return (0);
-}
+// int	invalid_chars(char c)
+// {
+// 	char invalid[] = {'&',';','\\', '*', '(', ')'};
+// 	int i = 0;
+// 	int invalidcheck = 0;
+// 	int invalid_length = sizeof(invalid) / sizeof(invalid[0]);
+// 	while(i < invalid_length && invalidcheck != 1)
+// 	{
+// 		if(c != invalid[i])
+// 			i++;
+// 		else
+// 			invalidcheck = 1;
+// 	}
+// 	if(invalidcheck == 1)
+// 		return (1);
+// 	return (0);
+// }
 
 
 // /// @brief adds a node to a linked list
@@ -209,16 +210,16 @@ int	invalid_chars(char c)
 // 	return (index);
 // }
 
-int	delimeter_char(char character)
-{
-	if (character == '>' || character == '<' || character == ' '
-	|| character == '\t' || character == '\'' || character == '"'
-	|| character == '|' || character == '\0' || character == ';'
-	|| character == '\\' || character == ')' || character == '('
-	|| character == '$'|| character == '&' || character == '*')
-		return (1);
-	return (0);
-}
+// int	delimeter_char(char character)
+// {
+// 	if (character == '>' || character == '<' || character == ' '
+// 	|| character == '\t' || character == '\'' || character == '"'
+// 	|| character == '|' || character == '\0' || character == ';'
+// 	|| character == '\\' || character == ')' || character == '('
+// 	|| character == '$'|| character == '&' || character == '*')
+// 		return (1);
+// 	return (0);
+// }
 
 // int	assign_space(char *str, int index, t_shell *shell)
 // {
@@ -406,25 +407,25 @@ void	test(t_noding *traveler, t_tokens actual_token)
 }
 
 //very rough function that for now assigns the correct destination/source
-//of redirections, need to shorten it and do more things 
-void	she_asked_for_a_second_round(t_shell *shell)
-{
-	t_noding	*traveler;
-	if (!shell->parser || !shell->parser->noding)
-		return ;
-	traveler = shell->parser->noding;
-	while (traveler)
-	{
-		//i managed to make it shorter by creating this pattern as a function 
-		if (traveler->type == inp_redir)
-			test(traveler, inp_file);
-		else if (traveler->type == opt_redir || traveler->type == append)
-			test(traveler, opt_file);
-		else if (traveler->type == here_doc)
-			test(traveler, delimiter);
-		traveler = traveler->next;
-	}
-}
+// //of redirections, need to shorten it and do more things 
+// void	she_asked_for_a_second_round(t_shell *shell)
+// {
+// 	t_noding	*traveler;
+// 	if (!shell->parser || !shell->parser->noding)
+// 		return ;
+// 	traveler = shell->parser->noding;
+// 	while (traveler)
+// 	{
+// 		//i managed to make it shorter by creating this pattern as a function 
+// 		if (traveler->type == inp_redir)
+// 			test(traveler, inp_file);
+// 		else if (traveler->type == opt_redir || traveler->type == append)
+// 			test(traveler, opt_file);
+// 		else if (traveler->type == here_doc)
+// 			test(traveler, delimiter);
+// 		traveler = traveler->next;
+// 	}
+// }
 
 // void	popout_tokens(t_shell *shell, t_noding *token)
 // {
@@ -449,84 +450,84 @@ void	she_asked_for_a_second_round(t_shell *shell)
 // 	free(bye);
 // }
 
-int		operater_tokens(t_noding *node)
-{
-	if (!node)
-		return (-1);
-	if (node->type == invalid || node->type == pipes
-	|| node->type == inp_redir || node->type == opt_redir
-	|| node->type == here_doc || node->type == append)
-		return (1);
-	return (0);
-}
+// int		operater_tokens(t_noding *node)
+// {
+// 	if (!node)
+// 		return (-1);
+// 	if (node->type == invalid || node->type == pipes
+// 	|| node->type == inp_redir || node->type == opt_redir
+// 	|| node->type == here_doc || node->type == append)
+// 		return (1);
+// 	return (0);
+// }
 
-void	get_delimeter(t_shell *shell, t_noding *head)
-{
-	t_noding *traveler;
-	// t_noding *temp;
-	t_noding *new;
-	t_noding *add_after = NULL;
-	char *str = NULL;
+// void	get_delimeter(t_shell *shell, t_noding *head)
+// {
+// 	t_noding *traveler;
+// 	// t_noding *temp;
+// 	t_noding *new;
+// 	t_noding *add_after = NULL;
+// 	char *str = NULL;
 
-	traveler = head;
-	new = NULL;
-	while (traveler && traveler->next)
-	{
-		if (traveler->type == here_doc)
-		{
-			if (traveler->next && traveler->next->type == space)
-				traveler = traveler->next;
-			traveler = traveler->next;
-			while (traveler && traveler->type != space && !operater_tokens(traveler))
-			{
-				add_after = traveler;
-				//need to free str
-				str = ft_strjoin(str, traveler->value);
-				// temp = traveler;
-				traveler->pop_out= 1;
-				traveler = traveler->next;
-				if (traveler && traveler->next && traveler->next->type != space && !operater_tokens(traveler->next))
-					add_after = add_after->next;
-				// popout_tokens(shell, temp);
-				//pop_node;
-			}
-			if (str)
-			{
-				new = malloc(sizeof(t_noding));
-				// if (!traveler || (traveler && traveler->next))
-				// 	new->next = NULL;
-				// else if (traveler && traveler->next)
-				// 	new->next = traveler->next;
-				// if (traveler)
-				// 	traveler->next = new;
-				// else
-				// 	shell->parser->noding = new;
-				if (traveler)
-					new->next = traveler->next;
-				else
-					new->next = NULL;
-				add_after->next = new;
-				// add_after->next = new;
-				new->shell = shell;
-				new->pop_out = 0;
-				if (str)
-					new->value = ft_strdup(str);
-				else
-				{
-					add_after->type = invalid;
-					new->value = NULL;
-				}
-				new->type = delimiter;
-				if (str)
-					free(str);
+// 	traveler = head;
+// 	new = NULL;
+// 	while (traveler && traveler->next)
+// 	{
+// 		if (traveler->type == here_doc)
+// 		{
+// 			if (traveler->next && traveler->next->type == space)
+// 				traveler = traveler->next;
+// 			traveler = traveler->next;
+// 			while (traveler && traveler->type != space && !operater_tokens(traveler))
+// 			{
+// 				add_after = traveler;
+// 				//need to free str
+// 				str = ft_strjoin(str, traveler->value);
+// 				// temp = traveler;
+// 				traveler->pop_out= 1;
+// 				traveler = traveler->next;
+// 				if (traveler && traveler->next && traveler->next->type != space && !operater_tokens(traveler->next))
+// 					add_after = add_after->next;
+// 				// popout_tokens(shell, temp);
+// 				//pop_node;
+// 			}
+// 			if (str)
+// 			{
+// 				new = malloc(sizeof(t_noding));
+// 				// if (!traveler || (traveler && traveler->next))
+// 				// 	new->next = NULL;
+// 				// else if (traveler && traveler->next)
+// 				// 	new->next = traveler->next;
+// 				// if (traveler)
+// 				// 	traveler->next = new;
+// 				// else
+// 				// 	shell->parser->noding = new;
+// 				if (traveler)
+// 					new->next = traveler->next;
+// 				else
+// 					new->next = NULL;
+// 				add_after->next = new;
+// 				// add_after->next = new;
+// 				new->shell = shell;
+// 				new->pop_out = 0;
+// 				if (str)
+// 					new->value = ft_strdup(str);
+// 				else
+// 				{
+// 					add_after->type = invalid;
+// 					new->value = NULL;
+// 				}
+// 				new->type = delimiter;
+// 				if (str)
+// 					free(str);
 				
-			}
-		}
-		//addnode here
-		if (traveler && traveler->next)
-			traveler = traveler->next;
-	}
-}
+// 			}
+// 		}
+// 		//addnode here
+// 		if (traveler && traveler->next)
+// 			traveler = traveler->next;
+// 	}
+// }
 
 int		check_qoutes(t_noding *suspect)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hub.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 10:35:00 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:24:10 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,18 @@ void	assignation(t_shell *shell, char *str)
 void	parsing_hub(t_shell *shell, char *str)
 {
 	assignation(shell, str);
-	get_delimeter(shell, shell->parser->noding);
+	get_delimeter(shell);
 	quotes(shell);
 	expand_vars(shell);
 	join_tokens(shell);
 	test_pop_out(shell);
-	she_asked_for_a_second_round(shell);
+	assign_files(shell);
 	t_noding	*test;
 	test = shell->parser->noding;
 	while (test)
 	{
-		printf("%s		:		%s	pop? <<%d>>\n", test->value, types[test->type], test->pop_out);
+		printf("%s		:		%s	pop? <<%d>>\n",
+		test->value, types[test->type], test->pop_out);
 		test = test->next;
 	}
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   assign_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 10:28:46 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:42:26 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
+static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
 {
 	if (str[index] == '>')
 	{
@@ -32,10 +32,7 @@ static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
 	}
 }
 
-// isnt this supposed to be double red   ↑↑↑↑↑↑↑↑↑↑↑↑↑
-// and this is supposed to be single red ↓↓↓↓↓↓↓↓↓↓↓↓↓
-
-static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
+static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
 {
 	if (str[index] == '>')
 	{
@@ -62,11 +59,11 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 	new = malloc(sizeof(t_noding));
 	if (str[index + 1] == str[index])
 	{
-		single_red(shell, new, str, index);
+		double_red(shell, new, str, index);
 		index++;
 	}
 	else if (str[index + 1] != str[index])
-		double_red(shell, new, str, index);
+		single_red(shell, new, str, index);
 	add_token(shell, new);
 	return (index);
 }

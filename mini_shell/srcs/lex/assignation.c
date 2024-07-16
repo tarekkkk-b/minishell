@@ -3,30 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   assignation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 10:32:58 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 14:36:57 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// void	assign_pipe(t_shell *shell)
-// {
-// 	t_noding *new;
-//
-// 	new = malloc(sizeof(t_noding));
-// 	new->value = ft_strdup("|");
-// 	if (invalid_token(shell) || !shell->parser->noding
-// 	|| last_node(shell->parser->noding)->type == PIPES
-// 	|| (last_node(shell->parser->noding)->type == SPACE
-// 	&& prev_node(shell, last_node(shell->parser->noding))->type == PIPES))
-// 		assign_node(shell, new, INVALID, 0);
-// 	else
-// 		assign_node(shell, new, PIPES, 0);
-// 	add_token(shell, new);
-// }
+void	assign_pipe(t_shell *shell)
+{
+	t_noding	*new;
+	t_noding	*last_token;
+
+	last_token = last_node(shell->parser->noding);
+	new = malloc(sizeof(t_noding));
+	new->value = ft_strdup("|");
+	if (invalid_token(shell) || !shell->parser->noding
+		|| last_token->type == PIPES || (last_token->type == SPACE
+			&& prev_node(shell, last_token)->type == PIPES))
+		assign_node(shell, new, INVALID, 0);
+	else
+		assign_node(shell, new, PIPES, 0);
+	add_token(shell, new);
+}
 
 int	assign_space(char *str, int index, t_shell *shell)
 {
