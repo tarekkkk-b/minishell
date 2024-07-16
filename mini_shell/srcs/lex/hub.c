@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hub.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 21:53:12 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:35:00 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static const char * const types[] = {
 void	assignation(t_shell *shell, char *str)
 {
 	int	i;
-	
+
 	i = 0;
 	if (!str)
 		return ;
@@ -43,7 +43,7 @@ void	assignation(t_shell *shell, char *str)
 		if (str[i] == '|')
 			assign_pipe(shell);
 		else if (str[i] == '>' || str[i] == '<')
-			i = assign_redirection(str, i, shell); 
+			i = assign_redirection(str, i, shell);
 		else if (str[i] == ' ' | str[i] == '\t')
 			i = assign_space(str, i, shell);
 		else if (str[i] == '$')
@@ -66,7 +66,7 @@ void	parsing_hub(t_shell *shell, char *str)
 	join_tokens(shell);
 	test_pop_out(shell);
 	she_asked_for_a_second_round(shell);
-	t_noding *test;
+	t_noding	*test;
 	test = shell->parser->noding;
 	while (test)
 	{

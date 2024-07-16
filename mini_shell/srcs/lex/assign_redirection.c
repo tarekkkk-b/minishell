@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 01:24:21 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:28:46 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@ static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
 	}
 }
 
+// isnt this supposed to be double red   ↑↑↑↑↑↑↑↑↑↑↑↑↑
+// and this is supposed to be single red ↓↓↓↓↓↓↓↓↓↓↓↓↓
+
 static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
 {
 	if (str[index] == '>')
@@ -43,7 +46,7 @@ static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
 		new->value = ft_strdup(">");
 	}
 	else if (str[index] == '<')
-	{	
+	{
 		if (!invalid_token(shell))
 			assign_node(shell, new, INP_REDIR, 0);
 		else
@@ -54,7 +57,8 @@ static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
 
 int	assign_redirection(char *str, int index, t_shell *shell)
 {
-	t_noding *new;
+	t_noding	*new;
+
 	new = malloc(sizeof(t_noding));
 	if (str[index + 1] == str[index])
 	{

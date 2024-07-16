@@ -3,36 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   assign_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 01:25:19 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:32:24 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		valid_name(char character, int current, int first)
+int	valid_name(char character, int current, int first)
 {
 	if (current == first)
 	{
 		if ((character >= '0' && character <= '9') || (character == '$'))
 			return (2);
-		if (!(character >= 'a' && character <= 'z') 
-		&& !(character >= 'A' && character <= 'Z') && character != '_')
-			return (0);	
+		if (!(character >= 'a' && character <= 'z')
+			&& !(character >= 'A' && character <= 'Z') && character != '_')
+			return (0);
 	}
 	else
-	{	
-		if (!(character >= 'a' && character <= 'z') &&
-		!(character >= 'A' && character <= 'Z') && character != '_'
-		&& !(character >= '0' && character <= '9'))
+	{
+		if (!(character >= 'a' && character <= 'z')
+			&& !(character >= 'A' && character <= 'Z') && character != '_'
+			&& !(character >= '0' && character <= '9'))
 			return (0);
 	}
 	return (1);
 }
 
-int		end_of_var(char *str, int start, int index)
+int	end_of_var(char *str, int start, int index)
 {
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, start))
 	{
@@ -46,7 +46,7 @@ int		end_of_var(char *str, int start, int index)
 	return (index);
 }
 
-int		assign_variable(char *str, int index, t_shell *shell)
+int	assign_variable(char *str, int index, t_shell *shell)
 {
 	t_noding	*new;
 	int			temp;
@@ -71,5 +71,5 @@ int		assign_variable(char *str, int index, t_shell *shell)
 		new->value[j++] = str[temp];
 	new->value[j++] = '\0';
 	add_token(shell, new);
-	return(index);
+	return (index);
 }

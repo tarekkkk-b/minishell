@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/15 13:49:46 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 12:37:17 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 int builtin_cd(t_shell *shell)
 {
     char    *directory;
-    // also the one down here is argument count
+    // also the 1 down here is argument count
     directory = get_directory(1, shell);
     // so the parameter for get_directory is shell rn, that needa be changed to the first comment i wrote
     if(directory == NULL)

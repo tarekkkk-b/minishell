@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   assign_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:08 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 01:24:55 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:28:08 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		single_quotes(t_shell *shell, t_noding *new, char *str, int index)
+int	single_quotes(t_shell *shell, t_noding *new, char *str, int index)
 {
 	int	i;
 	int	temp;
@@ -23,7 +23,7 @@ int		single_quotes(t_shell *shell, t_noding *new, char *str, int index)
 	counter = 1;
 	while (str[index + 1] && str[index + 1] != '\'' && str[index])
 		index++;
-	if(str[index + 1] == '\'')
+	if (str[index + 1] == '\'')
 	{
 		temp++;
 		index++;
@@ -40,7 +40,7 @@ int		single_quotes(t_shell *shell, t_noding *new, char *str, int index)
 	return (index);
 }
 
-int		double_quotes(t_shell *shell, t_noding *new, char *str, int index)
+int	double_quotes(t_shell *shell, t_noding *new, char *str, int index)
 {
 	int	i;
 	int	temp;
@@ -51,7 +51,7 @@ int		double_quotes(t_shell *shell, t_noding *new, char *str, int index)
 	counter = 1;
 	while (str[index + 1] && str[index + 1] != '"' && str[index])
 		index++;
-	if(str[index + 1] == '"')
+	if (str[index + 1] == '"')
 	{
 		temp++;
 		index++;
@@ -68,7 +68,7 @@ int		double_quotes(t_shell *shell, t_noding *new, char *str, int index)
 	return (index);
 }
 
-int		assign_quotes(char *str, int index, t_shell *shell)
+int	assign_quotes(char *str, int index, t_shell *shell)
 {
 	t_noding	*new;
 

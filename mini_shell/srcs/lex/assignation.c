@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assignation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 01:23:05 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:32:58 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // void	assign_pipe(t_shell *shell)
 // {
 // 	t_noding *new;
-	
+//
 // 	new = malloc(sizeof(t_noding));
 // 	new->value = ft_strdup("|");
 // 	if (invalid_token(shell) || !shell->parser->noding
@@ -46,8 +46,8 @@ int	assign_space(char *str, int index, t_shell *shell)
 
 void	assign_invalid(t_shell *shell, char *str, int index)
 {
-	t_noding *new;
-	
+	t_noding	*new;
+
 	new = malloc(sizeof(t_noding));
 	if (!new)
 		return ;

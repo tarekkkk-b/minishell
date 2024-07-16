@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   node_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:55:19 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 01:36:18 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/16 10:26:48 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	popout_token(t_shell *shell, t_noding *token)
 t_noding	*prev_node(t_shell *shell, t_noding *target)
 {
 	t_noding	*traveler;
-	
+
 	traveler = NULL;
 	if (!shell->parser->noding || !target)
 		return (NULL);
