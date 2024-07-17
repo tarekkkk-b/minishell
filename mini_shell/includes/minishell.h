@@ -6,7 +6,7 @@
 /*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 01:37:04 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/16 21:35:49 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void		assign_invalid(t_shell *shell, char *str, int index);
 int			assign_word(char *str, int index, t_shell *shell);
 void		assign_node(t_shell *shell, t_noding *new, t_tokens type, int popout);
 int			valid_name(char character, int current, int first);
-int			end_of_var(char *str, int start, int index);
+int			end_of_var(char *str, int start, int index, int res);
 int			assign_variable(char *str, int index, t_shell *shell);
 int			assign_redirection(char *str, int index, t_shell *shell);
 int			assign_quotes(char *str, int index, t_shell *shell);

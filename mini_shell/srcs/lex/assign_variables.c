@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 10:32:24 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/16 21:35:09 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ int	valid_name(char character, int current, int first)
 	return (1);
 }
 
-int	end_of_var(char *str, int start, int index)
+int	end_of_var(char *str, int start, int index, int res)
 {
 	while (str[index + 1] && valid_name(str[index + 1], index + 1, start))
 	{
-		if (valid_name(str[index + 1], index + 1, start) == 2)
+		if (valid_name(str[index + 1], index + 1, start) == res)
 		{
 			index++;
 			break ;
@@ -62,7 +62,7 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	else
 		assign_node(shell, new, VARIABLE, 0);
 	temp = index;
-	index = end_of_var(str, temp + 1, index);
+	index = end_of_var(str, temp + 1, index, 2);
 	new->value = malloc(sizeof(char) * (index - temp + 3));
 	if (!new->value)
 		return (free(new), -1);

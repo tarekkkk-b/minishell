@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 18:09:42 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/16 21:21:36 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -391,20 +391,20 @@ int check_invalid(char *str, int i, t_shell *shell)
 // }
 
 
-void	test(t_noding *traveler, t_tokens actual_token)
-{
-	if (traveler->next && (traveler->next->type == option || traveler->next->type == actual_token))
-		traveler->next->type = actual_token;
-	else if (traveler->next && traveler->next->type == space)
-	{
-		if (traveler->next->next && (traveler->next->next->type == option || traveler->next->next->type == actual_token))
-			traveler->next->next->type = actual_token;
-		else
-			traveler->type = invalid;
-	}
-	else
-		traveler->type = invalid;
-}
+// void	test(t_noding *traveler, t_tokens actual_token)
+// {
+// 	if (traveler->next && (traveler->next->type == option || traveler->next->type == actual_token))
+// 		traveler->next->type = actual_token;
+// 	else if (traveler->next && traveler->next->type == space)
+// 	{
+// 		if (traveler->next->next && (traveler->next->next->type == option || traveler->next->next->type == actual_token))
+// 			traveler->next->next->type = actual_token;
+// 		else
+// 			traveler->type = invalid;
+// 	}
+// 	else
+// 		traveler->type = invalid;
+// }
 
 //very rough function that for now assigns the correct destination/source
 // //of redirections, need to shorten it and do more things 
@@ -529,102 +529,102 @@ void	test(t_noding *traveler, t_tokens actual_token)
 // 	}
 // }
 
-int		check_qoutes(t_noding *suspect)
-{
-	int i = 0;
-	while (suspect->value[i])
-	{
-		if (suspect->value[i] == '$')
-			if (suspect->value[i + 1] && valid_name(suspect->value[i + 1], i + 1, i + 1))
-				return (1);	
-		i++;
-	}
-	return (0);
-}
+// int		check_qoutes(t_noding *suspect)
+// {
+// 	int i = 0;
+// 	while (suspect->value[i])
+// 	{
+// 		if (suspect->value[i] == '$')
+// 			if (suspect->value[i + 1] && valid_name(suspect->value[i + 1], i + 1, i + 1))
+// 				return (1);	
+// 		i++;
+// 	}
+// 	return (0);
+// }
 
-t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
-{
-	int counter = 0;
-	int reset = 0;
-	int i = 0;
-	t_noding	*new = NULL;
-	t_noding	*add_after = suspect;
-	int copier = 0;
-	// printf("<<%d>>\n", suspect->next == NULL);
-	// char *str = NULL;
-	while (suspect->value[i])
-	{
-		if (suspect->value[i] != '$')
-		{
-			new = malloc(sizeof(t_noding));
-			new->shell = shell;
-			new->next = add_after->next;
-			new->type = option;
-			new->value = NULL;
-			new->pop_out = 0;
-			// printf("condition 1:	");
-			copier = i;
-			while (suspect->value[i])
-			{
-				if (suspect->value[i + 1] == '$')
-				{
-					if (valid_name(suspect->value[i + 2], i + 2, i + 1))
-					{				
-						i++;
-						break ;
-					}
-				}
-				// printf("%c", suspect->value[i]);
-				i++;
-			}
-			new->value = malloc(sizeof(char) * (i - copier + 1));
-			int j = 0;
-			while (copier < i)
-				new->value[j++] = suspect->value[copier++];
-			new->value[j++] = '\0';
-			// i--;
-			add_after->next = new;
-			// printf("\n((((%s))))\n\n\n", new->value);
-			// if (add_after->next)
-			add_after = add_after->next;
-		}
-		//remember to only take one number if its right after $
-		if(suspect->value[i] == '$')
-		{
-			new = malloc(sizeof(t_noding));
-			new->shell = shell;
-			new->pop_out = 0;
-			new->type = variable;
-			new->next = add_after->next;
-			reset = i;
-			// char *new_variable = NULL;
-			if (suspect->value[i + 1])
-				i++;
-			counter = 0;
-			while (suspect->value[i] && valid_name(suspect->value[i], i, reset))
-			{
-				if (valid_name(suspect->value[i], i, reset + 1) == 2)
-				{
-					i++;
-					break ;
-				}
-				i++;
-			}
-			new->value = malloc(sizeof(char) * (i - reset + 2));
-			while (reset < i)
-				new->value[counter++] = suspect->value[reset++];
-			new->value[counter++] = '\0';
-			// printf("condition 2:	%s\n\n\n", new_variable);
-			i--;
-			add_after->next = new;
-			add_after = add_after->next;
-		}
-		if (suspect->value[i])
-			i++;
-			// printf("<<%c>>\n\n", suspect->value[i]);
-	}
-	return (add_after);
-}
+// t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
+// {
+// 	int counter = 0;
+// 	int reset = 0;
+// 	int i = 0;
+// 	t_noding	*new = NULL;
+// 	t_noding	*add_after = suspect;
+// 	int copier = 0;
+// 	// printf("<<%d>>\n", suspect->next == NULL);
+// 	// char *str = NULL;
+// 	while (suspect->value[i])
+// 	{
+// 		if (suspect->value[i] != '$')
+// 		{
+// 			new = malloc(sizeof(t_noding));
+// 			new->shell = shell;
+// 			new->next = add_after->next;
+// 			new->type = option;
+// 			new->value = NULL;
+// 			new->pop_out = 0;
+// 			// printf("condition 1:	");
+// 			copier = i;
+// 			while (suspect->value[i])
+// 			{
+// 				if (suspect->value[i + 1] == '$')
+// 				{
+// 					if (valid_name(suspect->value[i + 2], i + 2, i + 1))
+// 					{				
+// 						i++;
+// 						break ;
+// 					}
+// 				}
+// 				// printf("%c", suspect->value[i]);
+// 				i++;
+// 			}
+// 			new->value = malloc(sizeof(char) * (i - copier + 1));
+// 			int j = 0;
+// 			while (copier < i)
+// 				new->value[j++] = suspect->value[copier++];
+// 			new->value[j++] = '\0';
+// 			// i--;
+// 			add_after->next = new;
+// 			// printf("\n((((%s))))\n\n\n", new->value);
+// 			// if (add_after->next)
+// 			add_after = add_after->next;
+// 		}
+// 		//remember to only take one number if its right after $
+// 		if(suspect->value[i] == '$')
+// 		{
+// 			new = malloc(sizeof(t_noding));
+// 			new->shell = shell;
+// 			new->pop_out = 0;
+// 			new->type = variable;
+// 			new->next = add_after->next;
+// 			reset = i;
+// 			// char *new_variable = NULL;
+// 			if (suspect->value[i + 1])
+// 				i++;
+// 			counter = 0;
+// 			while (suspect->value[i] && valid_name(suspect->value[i], i, reset))
+// 			{
+// 				if (valid_name(suspect->value[i], i, reset + 1) == 2)
+// 				{
+// 					i++;
+// 					break ;
+// 				}
+// 				i++;
+// 			}
+// 			new->value = malloc(sizeof(char) * (i - reset + 2));
+// 			while (reset < i)
+// 				new->value[counter++] = suspect->value[reset++];
+// 			new->value[counter++] = '\0';
+// 			// printf("condition 2:	%s\n\n\n", new_variable);
+// 			i--;
+// 			add_after->next = new;
+// 			add_after = add_after->next;
+// 		}
+// 		if (suspect->value[i])
+// 			i++;
+// 			// printf("<<%c>>\n\n", suspect->value[i]);
+// 	}
+// 	return (add_after);
+// }
 
 void	expand_vars(t_shell *shell)
 {
@@ -672,35 +672,35 @@ void	expand_vars(t_shell *shell)
 	}
 }
 
-void	quotes(t_shell *shell)
-{
-	t_noding	*traveler;
-	// t_noding	*temp;
+// void	quotes(t_shell *shell)
+// {
+// 	t_noding	*traveler;
+// 	// t_noding	*temp;
 
-	if (!shell || !shell->parser || !shell->parser->noding)
-		return ;
-	traveler = shell->parser->noding;
-	//seperate qoutes needs to happen b4 variable expansion
-	while (traveler)
-	{
-		if (traveler->type == dquotes)
-		{
-			if (check_qoutes(traveler))
-			{
-				// temp = traveler;
-				traveler->pop_out = 1;
-				traveler = divide_qoutes(shell, traveler);
-				traveler = traveler->next;
-				// popout_tokens(shell, temp);
-			}
-		}
-		if (traveler && traveler->next)
-			traveler = traveler->next;
-		else
-			break ;
-		// printf("(((%s)))\n", traveler->value);
-	}
-}
+// 	if (!shell || !shell->parser || !shell->parser->noding)
+// 		return ;
+// 	traveler = shell->parser->noding;
+// 	//seperate qoutes needs to happen b4 variable expansion
+// 	while (traveler)
+// 	{
+// 		if (traveler->type == dquotes)
+// 		{
+// 			if (check_qoutes(traveler))
+// 			{
+// 				// temp = traveler;
+// 				traveler->pop_out = 1;
+// 				traveler = divide_qoutes(shell, traveler);
+// 				traveler = traveler->next;
+// 				// popout_tokens(shell, temp);
+// 			}
+// 		}
+// 		if (traveler && traveler->next)
+// 			traveler = traveler->next;
+// 		else
+// 			break ;
+// 		// printf("(((%s)))\n", traveler->value);
+// 	}
+// }
 
 void	 join_tokens(t_shell *shell)
 {
@@ -782,8 +782,8 @@ void	test_pop_out(t_shell	*shell)
 }
 
 
-void	recieve_str(t_shell *shell, char *str)
-{
+// void	recieve_str(t_shell *shell, char *str)
+// {
 	// (void)shell;
 	// int	i = 0;
 	// shell->parser = NULL;
@@ -817,9 +817,9 @@ void	recieve_str(t_shell *shell, char *str)
 	//also i dont feel like working rn at all ill see what i can do tmrw.
 	//new order
 	//get delim
-	get_delimeter(shell, shell->parser->noding);
+	// get_delimeter(shell, shell->parser->noding);
 	//separate quotes
-	quotes(shell);
+	// quotes(shell);
 	//expand variables
 	// expand_vars(shell);
 	//join words and pop spaces
@@ -827,17 +827,17 @@ void	recieve_str(t_shell *shell, char *str)
 	// join_tokens(shell);
 	// test_pop_out(shell);
 	//assign redirection and destinations
-	she_asked_for_a_second_round(shell);
+	// she_asked_for_a_second_round(shell);
 	//assign commands
 	//create exec link list
-	t_noding *test;
-	test = shell->parser->noding;
-	while (test)
-	{
-		printf("%s		:		%s	pop? <<%d>>\n", test->value, types[test->type], test->pop_out);
-		test = test->next;
-	}
-}
+// 	t_noding *test;
+// 	test = shell->parser->noding;
+// 	while (test)
+// 	{
+// 		printf("%s		:		%s	pop? <<%d>>\n", test->value, types[test->type], test->pop_out);
+// 		test = test->next;
+// 	}
+// }
 
 // invalid chars are just chars we dont need to handle;
 // invalid variable name is just variable names that need to be valid
