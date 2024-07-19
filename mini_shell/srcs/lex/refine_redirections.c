@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 16:02:34 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:04:06 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,11 +90,9 @@ void	get_delimeter(t_shell *shell)
 {
 	t_noding	*traveler;
 	t_noding	*temp;
-	t_noding	*add_after;
 	char		*str;
 
 	traveler = shell->parser->noding;
-	add_after = NULL;
 	while (traveler && traveler->next)
 	{
 		if (traveler->type == HERE_DOC)

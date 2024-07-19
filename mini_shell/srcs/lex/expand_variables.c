@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:49:59 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 15:50:43 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 17:58:23 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ void	expand_vars(t_shell *shell)
 	while (traveler)
 	{
 		if (traveler->type == VARIABLE)
-		{
 			get_var(shell, traveler);
-		}
 		traveler = traveler->next;
 	}
 }

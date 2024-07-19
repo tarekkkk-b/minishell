@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/18 16:27:17 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 18:19:04 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	main(int ac, char **av, char **env)
 	{
 		signalhandler();
 		shell.environ->cwd = getcwd(NULL, 0);
-		rl.path = ft_strjoin(shell.environ->cwd, "> ");
-		rl.str = readline(rl.path);
+		rl.str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
 		if(!rl.str)
 			if(builtin_exit(rl))
 				return (1);
@@ -37,7 +36,6 @@ int	main(int ac, char **av, char **env)
 		if (rl.str[0] != '\0')
 			add_history(rl.str);
 		parsing_hub(&shell, rl.str);
-		free(rl.path);
 		free (rl.str);
 	}
 }

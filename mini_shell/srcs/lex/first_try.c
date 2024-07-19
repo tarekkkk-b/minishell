@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/17 13:53:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 16:33:16 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -689,7 +689,7 @@
 // 			{
 // 				// temp = traveler;
 // 				traveler->pop_out = 1;
-// 				traveler = divide_qoutes(shell, traveler);
+				// traveler = divide_qoutes(shell, traveler);
 // 				traveler = traveler->next;
 // 				// popout_tokens(shell, temp);
 // 			}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:08:39 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/15 13:47:38 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/19 16:48:40 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int builtin_exit(t_readline rl)
     write(0, "exit\n", 5);
 	    if(kill(getpid(), 0) == 0)
 	    {
-	    	free(rl.path);
+	    	// free(rl.path);
 	    	free(rl.str);
 	    	return(1);
 	    }
