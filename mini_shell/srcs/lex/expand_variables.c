@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:49:59 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 15:33:03 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:50:43 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	get_var(t_shell *shell, t_noding *traveler)
 		str[o++] = traveler->value[t++];
 	str[o++] = '\0';
 	env_traveler = locate_node(shell->environ->env, str);
+	free(str);
 	if (!env_traveler)
 		traveler->pop_out = 1;
 	else
