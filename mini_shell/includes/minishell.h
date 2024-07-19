@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/17 14:02:46 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 23:01:26 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,8 @@ void    handle_sigint(int sig);
 void 	rl_replace_line (const char * s, int c);
 int		just_test(t_readline rl);
 t_values	*locate_node(t_values *temp, char *target_key);
+
+void    	checker(t_shell *shell);
 
 
 //**	builtins	**//

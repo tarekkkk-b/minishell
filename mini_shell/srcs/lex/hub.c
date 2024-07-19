@@ -3,31 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   hub.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 20:42:17 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 23:41:50 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static const char * const types[] = {
-	[COMMAND] = "CMD",
-	[ARG] = "ARG",
-	[PIPES] = "PIPE",
-	[INP_REDIR] = "INP_REDIR",
-	[INP_FILE] = "INP_FILE",
-	[OPT_REDIR] = "OPT_REDIR",
-	[OPT_FILE] = "OPT_FILE",
-	[HERE_DOC] = "HEREDOC",
-	[DELIMITER] = "DELIMITER",
-	[APPEND] = "APPEND",
-	[SPACE] = "SPACE",
-	[VARIABLE] = "VARIABLE",
-	[DQUOTES] = "QUOTES",
-	[INVALID] = "INVALID"
-};
+// static const char * const types[] = {
+// 	[COMMAND] = "CMD",
+// 	[ARG] = "ARG",
+// 	[PIPES] = "PIPE",
+// 	[INP_REDIR] = "INP_REDIR",
+// 	[INP_FILE] = "INP_FILE",
+// 	[OPT_REDIR] = "OPT_REDIR",
+// 	[OPT_FILE] = "OPT_FILE",
+// 	[HERE_DOC] = "HEREDOC",
+// 	[DELIMITER] = "DELIMITER",
+// 	[APPEND] = "APPEND",
+// 	[SPACE] = "SPACE",
+// 	[VARIABLE] = "VARIABLE",
+// 	[DQUOTES] = "QUOTES",
+// 	[INVALID] = "INVALID"
+// };
+
+// dis is now in temp_file ^^^
 
 void	pop_extras(t_shell *shell)
 {
@@ -86,12 +88,5 @@ void	parsing_hub(t_shell *shell, char *str)
 	join_tokens(shell);
 	pop_extras(shell);
 	assign_files(shell);
-	t_noding	*test;
-	test = shell->parser->noding;
-	while (test)
-	{
-		printf("%s		:		%s	pop? <<%d>>\n",
-		test->value, types[test->type], test->pop_out);
-		test = test->next;
-	}
+	checker(shell);
 }
