@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:49:59 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/17 13:29:00 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:33:03 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,17 @@
 void	get_var(t_shell *shell, t_noding *traveler)
 {
 	t_values	*env_traveler;
+	char		*str;
+	int			t;
+	int			o;
 
-	env_traveler = locate_node(shell->environ->env, traveler->value);
+	t = 1;
+	o = 0;
+	str = malloc(sizeof(char) * (ft_strlen(traveler->value)));
+	while (traveler->value[t])
+		str[o++] = traveler->value[t++];
+	str[o++] = '\0';
+	env_traveler = locate_node(shell->environ->env, str);
 	if (!env_traveler)
 		traveler->pop_out = 1;
 	else
@@ -35,7 +44,9 @@ void	expand_vars(t_shell *shell)
 	while (traveler)
 	{
 		if (traveler->type == VARIABLE)
+		{
 			get_var(shell, traveler);
+		}
 		traveler = traveler->next;
 	}
 }

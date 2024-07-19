@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 15:23:10 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:25:34 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ void	assignation(t_shell *shell, char *str)
 void	parsing_hub(t_shell *shell, char *str)
 {
 	assignation(shell, str);
-	get_delimeter(shell);
-	quotes(shell);
+	// get_delimeter(shell);
+	// quotes(shell);
 	expand_vars(shell);
-	join_tokens(shell);
-	pop_extras(shell);
-	assign_files(shell);
+	// join_tokens(shell);
+	// pop_extras(shell);
+	// assign_files(shell);
 	t_noding	*test;
 	test = shell->parser->noding;
 	while (test)
