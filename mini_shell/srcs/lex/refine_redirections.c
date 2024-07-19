@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 18:20:47 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:24:19 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ void	assign_files(t_shell *shell)
 	}
 }
 
-char	*full_string(t_shell *shell, t_noding *traveler, t_noding *add_after)
+char	*full_string(t_noding *traveler, t_noding **add_after)
 {
 	char	*str;
 	char	*temp;
 
 	str = NULL;
 	temp = NULL;
-	add_after = traveler;
+	(*add_after) = traveler;
 	while (traveler && traveler->type != SPACE && !operater_tokens(traveler))
 	{
 		temp = ft_strjoin(str, traveler->value);
@@ -68,7 +68,7 @@ char	*full_string(t_shell *shell, t_noding *traveler, t_noding *add_after)
 		traveler = traveler->next;
 		if (traveler && traveler->next && traveler->next->type != SPACE
 			&& !operater_tokens(traveler->next))
-			add_after = add_after->next;
+			(*add_after) = (*add_after)->next;
 	}
 	return (str);
 }
@@ -107,7 +107,7 @@ void	get_delimeter(t_shell *shell)
 			if (traveler->next && traveler->next->type == SPACE)
 				traveler = traveler->next;
 			traveler = traveler->next;
-			str = full_string(shell, traveler, add_after);
+			str = full_string(traveler, &add_after);
 			if (str)
 				new_delim(shell, traveler, add_after, str);
 			else

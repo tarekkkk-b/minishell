@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 17:24:10 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/19 15:23:10 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,25 @@ static const char * const types[] = {
 	[INVALID] = "INVALID"
 };
 
+void	pop_extras(t_shell *shell)
+{
+	t_noding	*traveler;
+	t_noding	*temp;
+
+	traveler = shell->parser->noding;
+	while (traveler)
+	{
+		if (traveler->pop_out)
+		{
+			temp = traveler;
+			traveler = traveler->next;
+			popout_token(shell, temp);
+		}
+		if (traveler && !traveler->pop_out)
+			traveler = traveler->next;
+	}
+}
+
 void	assignation(t_shell *shell, char *str)
 {
 	int	i;
@@ -38,7 +57,7 @@ void	assignation(t_shell *shell, char *str)
 		return ;
 	shell->parser = malloc(sizeof(t_parser));
 	shell->parser->noding = NULL;
-	while (str[i++])
+	while (str[i])
 	{
 		if (str[i] == '|')
 			assign_pipe(shell);
@@ -54,6 +73,7 @@ void	assignation(t_shell *shell, char *str)
 			assign_invalid(shell, str, i);
 		else
 			i = assign_word(str, i, shell);
+		i++;
 	}
 }
 
@@ -64,7 +84,7 @@ void	parsing_hub(t_shell *shell, char *str)
 	quotes(shell);
 	expand_vars(shell);
 	join_tokens(shell);
-	test_pop_out(shell);
+	pop_extras(shell);
 	assign_files(shell);
 	t_noding	*test;
 	test = shell->parser->noding;

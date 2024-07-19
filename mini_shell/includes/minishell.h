@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 21:35:49 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/17 14:02:46 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,18 @@ void		add_token(t_shell *shell, t_noding *new);
 void		popout_token(t_shell *shell, t_noding *token);
 t_noding	*prev_node(t_shell *shell, t_noding *target);
 t_noding	*last_node(t_noding *nodes);
+int			invalid_token(t_shell *shell);
+int	operater_tokens(t_noding *node);
+int	delimeter_char(char character);
+int	invalid_chars(char c);
+void	add_token(t_shell *shell, t_noding *new);
+t_noding	*prev_node(t_shell *shell, t_noding *target);
+t_noding	*last_node(t_noding *nodes);
+void	get_delimeter(t_shell *shell);
+void	quotes(t_shell *shell);
+void	expand_vars(t_shell *shell);
+void	 join_tokens(t_shell *shell);
+void	assign_files(t_shell *shell);
 
 //			others			//
 

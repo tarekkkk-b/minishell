@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   first_try.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/22 21:48:04 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 21:21:36 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/17 13:53:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+// #include "../../includes/minishell.h"
 
 // static const char * const types[] = {
 // 	[command] = "CMD",
@@ -266,17 +266,17 @@
 // 	return (index);
 // }
 
-int check_invalid(char *str, int i, t_shell *shell)
-{
-	(void)shell;
-	i++;
-	if (str[i] != '_' && !(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A' && str[i] <= 'Z'))
-		return (-1);
-	while (str[i]&& (str[i] == '_' || (str[i] >= '0' && str[i] <= '9')
-	|| (str[i] >= 'a' & str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z')))
-		i++;
-	return (i);
-}
+// int check_invalid(char *str, int i, t_shell *shell)
+// {
+// 	(void)shell;
+// 	i++;
+// 	if (str[i] != '_' && !(str[i] >= 'a' && str[i] <= 'z') && !(str[i] >= 'A' && str[i] <= 'Z'))
+// 		return (-1);
+// 	while (str[i]&& (str[i] == '_' || (str[i] >= '0' && str[i] <= '9')
+// 	|| (str[i] >= 'a' & str[i] <= 'z') || (str[i] >= 'A' && str[i] <= 'Z')))
+// 		i++;
+// 	return (i);
+// }
 
 // int		valid_name(char character, int current, int first)
 // {
@@ -626,51 +626,51 @@ int check_invalid(char *str, int i, t_shell *shell)
 // 	return (add_after);
 // }
 
-void	expand_vars(t_shell *shell)
-{
-	t_noding 	*traveler;
-	// t_noding 	*temp;
-	t_values	*env_traveler = NULL;
-	if (!shell || !shell->parser || !shell->parser->noding)
-		return ;
-	traveler = shell->parser->noding;
-	while (traveler)
-	{
-		if (traveler->type == variable)
-		{
-			char *str = malloc(sizeof(char) * (ft_strlen(traveler->value) + 1));
-			int t = 1;
-			int o = 0;
-			while (traveler->value[t])
-				str[o++] = traveler->value[t++];
-			str[o++] = '\0';
-			env_traveler = locate_node(shell->environ->env, str);
-			free (str);
-			if (!env_traveler)
-			{
-				// temp = traveler;
-				// if (traveler->next)
-				traveler->pop_out = 1;
-				traveler = traveler->next;
-				// popout_tokens(shell, temp);
-			}
-			else
-			{
-				free(traveler->value);
-				// if (!env_traveler)
-				// 	traveler->value = ft_strdup("");
-				// else
-				traveler->value = ft_strdup(env_traveler->value);
-				// printf("%s\n", env_traveler->value);
-				traveler->type = option;
-			}
-		}
-		if (traveler && traveler->next)
-			traveler = traveler->next;
-		else
-			break ;
-	}
-}
+// void	expand_vars(t_shell *shell)
+// {
+// 	t_noding 	*traveler;
+// 	// t_noding 	*temp;
+// 	t_values	*env_traveler = NULL;
+// 	if (!shell || !shell->parser || !shell->parser->noding)
+// 		return ;
+// 	traveler = shell->parser->noding;
+// 	while (traveler)
+// 	{
+// 		if (traveler->type == variable)
+// 		{
+// 			char *str = malloc(sizeof(char) * (ft_strlen(traveler->value) + 1));
+// 			int t = 1;
+// 			int o = 0;
+// 			while (traveler->value[t])
+// 				str[o++] = traveler->value[t++];
+// 			str[o++] = '\0';
+// 			env_traveler = locate_node(shell->environ->env, str);
+// 			free (str);
+// 			if (!env_traveler)
+// 			{
+// 				// temp = traveler;
+// 				// if (traveler->next)
+// 				traveler->pop_out = 1;
+// 				traveler = traveler->next;
+// 				// popout_tokens(shell, temp);
+// 			}
+// 			else
+// 			{
+// 				free(traveler->value);
+// 				// if (!env_traveler)
+// 				// 	traveler->value = ft_strdup("");
+// 				// else
+// 				traveler->value = ft_strdup(env_traveler->value);
+// 				// printf("%s\n", env_traveler->value);
+// 				traveler->type = option;
+// 			}
+// 		}
+// 		if (traveler && traveler->next)
+// 			traveler = traveler->next;
+// 		else
+// 			break ;
+// 	}
+// }
 
 // void	quotes(t_shell *shell)
 // {
@@ -702,84 +702,84 @@ void	expand_vars(t_shell *shell)
 // 	}
 // }
 
-void	 join_tokens(t_shell *shell)
-{
-	t_noding	*traveler = shell->parser->noding;
-	// t_noding	*temp;
-	t_noding	*new = NULL;
-	t_noding	*add_after = NULL;
-	int			join = 0;
-	char	*str = NULL;
+// void	 join_tokens(t_shell *shell)
+// {
+// 	t_noding	*traveler = shell->parser->noding;
+// 	// t_noding	*temp;
+// 	t_noding	*new = NULL;
+// 	t_noding	*add_after = NULL;
+// 	int			join = 0;
+// 	char	*str = NULL;
 
-	while (traveler && traveler->next)
-	{
-		if (traveler->next && traveler->next->type == space)
-			traveler = traveler->next;
-		while (traveler && traveler->type != space && !operater_tokens(traveler))
-		{
+// 	while (traveler && traveler->next)
+// 	{
+// 		if (traveler->next && traveler->next->type == space)
+// 			traveler = traveler->next;
+// 		while (traveler && traveler->type != space && !operater_tokens(traveler))
+// 		{
 			
-			join = 1;
-			add_after = traveler;
-			// if (traveler == shell->parser->noding)
-			// 	join = 1;
-			// else
-			// 	join = 2;
-			//need to free str
-			if (!traveler->pop_out)
-				str = ft_strjoin(str, traveler->value);
-			// temp = traveler;
-			traveler->pop_out = 1;
-			traveler = traveler->next;
-			if (traveler && traveler->next && traveler->next->type != space && !operater_tokens(traveler->next))
-					add_after = add_after->next;
-			// popout_tokens(shell, temp);
-		}
-		if (join)
-		{
-			new = malloc(sizeof(t_noding));
-			if (traveler)
-				new->next = traveler->next;
-			else
-				new->next = NULL;
-			add_after->next = new;
-			new->pop_out = 0;
-			// if (join == 1)
-			// 	shell->parser->noding = new;
-			// else
-			// 	add_after->next = new;
-			join = 0;
-			new->shell = shell;
-			new->value = ft_strdup(str);
-			new->type = option;
-			if (str)
-			{
-				free(str);
-				str = NULL;
-			}
-		}
-		if (traveler)
-			traveler = traveler->next;
-	}
-}
+// 			join = 1;
+// 			add_after = traveler;
+// 			// if (traveler == shell->parser->noding)
+// 			// 	join = 1;
+// 			// else
+// 			// 	join = 2;
+// 			//need to free str
+// 			if (!traveler->pop_out)
+// 				str = ft_strjoin(str, traveler->value);
+// 			// temp = traveler;
+// 			traveler->pop_out = 1;
+// 			traveler = traveler->next;
+// 			if (traveler && traveler->next && traveler->next->type != space && !operater_tokens(traveler->next))
+// 					add_after = add_after->next;
+// 			// popout_tokens(shell, temp);
+// 		}
+// 		if (join)
+// 		{
+// 			new = malloc(sizeof(t_noding));
+// 			if (traveler)
+// 				new->next = traveler->next;
+// 			else
+// 				new->next = NULL;
+// 			add_after->next = new;
+// 			new->pop_out = 0;
+// 			// if (join == 1)
+// 			// 	shell->parser->noding = new;
+// 			// else
+// 			// 	add_after->next = new;
+// 			join = 0;
+// 			new->shell = shell;
+// 			new->value = ft_strdup(str);
+// 			new->type = option;
+// 			if (str)
+// 			{
+// 				free(str);
+// 				str = NULL;
+// 			}
+// 		}
+// 		if (traveler)
+// 			traveler = traveler->next;
+// 	}
+// }
 
 
-void	test_pop_out(t_shell	*shell)
-{
-	t_noding	*traveler;
-	t_noding	*temp;
-	traveler = shell->parser->noding;
-	while (traveler)
-	{
-		if (traveler->pop_out)
-		{
-			temp = traveler;
-			traveler = traveler->next;
-			popout_tokens(shell, temp);
-		}
-		if (traveler && !traveler->pop_out)
-			traveler = traveler->next;
-	}
-}
+// void	test_pop_out(t_shell	*shell)
+// {
+// 	t_noding	*traveler;
+// 	t_noding	*temp;
+// 	traveler = shell->parser->noding;
+// 	while (traveler)
+// 	{
+// 		if (traveler->pop_out)
+// 		{
+// 			temp = traveler;
+// 			traveler = traveler->next;
+// 			popout_tokens(shell, temp);
+// 		}
+// 		if (traveler && !traveler->pop_out)
+// 			traveler = traveler->next;
+// 	}
+// }
 
 
 // void	recieve_str(t_shell *shell, char *str)

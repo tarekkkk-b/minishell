@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/15 17:01:00 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:27:17 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ int	main(int ac, char **av, char **env)
 			if(builtin_exit(rl))
 				return (1);
 		// just adding this here to test :)
-		if(builtin_check(rl, &shell) == 1)
-			return (1);
+		// if(builtin_check(rl, &shell) == 1)
+		// 	return (1);
 		if (rl.str[0] != '\0')
 			add_history(rl.str);
-		recieve_str(&shell, rl.str);
+		parsing_hub(&shell, rl.str);
 		free(rl.path);
 		free (rl.str);
 	}

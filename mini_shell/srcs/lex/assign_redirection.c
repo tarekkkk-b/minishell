@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 17:42:26 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:29:24 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
 	if (str[index] == '>')
 	{
 		if (!invalid_token(shell))
-			new->type = APPEND;
+			assign_node(shell, new, APPEND, 0);
 		else
-			new->type = INVALID;
+			assign_node(shell, new, INVALID, 0);
 		new->value = ft_strdup(">>");
 	}
 	else if (str[index] == '<')
 	{
 		if (!invalid_token(shell))
-			new->type = HERE_DOC;
+			assign_node(shell, new, HERE_DOC, 0);
 		else
-			new->type = INVALID;
+			assign_node(shell, new, INVALID, 0);
 		new->value = ft_strdup("<<");
 	}
 }

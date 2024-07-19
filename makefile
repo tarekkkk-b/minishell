@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/15 09:17:20 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/07/17 13:56:24 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -100,7 +100,19 @@ ENV			=	$(SRCSPATH)/environ
 
 
 SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c \
-				$(UTILS)/freestuff.c $(LEX)/first_try.c $(SIG)/exit.c $(BUILT)/env.c \
+				$(UTILS)/freestuff.c \
+				$(LEX)/assign_quotes.c \
+				$(LEX)/assign_redirection.c \
+				$(LEX)/assign_variables.c \
+				$(LEX)/assignation.c \
+				$(LEX)/checks.c \
+				$(LEX)/expand_variables.c \
+				$(LEX)/handle_quotes.c \
+				$(LEX)/hub.c \
+				$(LEX)/join_tokens.c \
+				$(LEX)/node_utils.c \
+				$(LEX)/refine_redirections.c \
+				$(SIG)/exit.c $(BUILT)/env.c \
 				$(BUILT)/exit.c $(BUILT)/builtin_check.c $(BUILT)/pwd.c $(BUILT)/echo.c \
 				$(BUILT)/cd.c
 
