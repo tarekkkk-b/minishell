@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:47:06 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 13:21:16 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:41:32 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int	operater_tokens(t_noding *node)
 {
 	if (!node)
 		return (0);
-	if (node->type == INVALID || node->type == PIPES
-		|| node->type == INP_REDIR || node->type == OPT_REDIR
-		|| node->type == HERE_DOC || node->type == APPEND)
+	if (node->type == INVALID || node->type == INP_REDIR
+		|| node->type == OPT_REDIR || node->type == HERE_DOC
+		|| node->type == APPEND)
 		return (1);
 	return (0);
 }

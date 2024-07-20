@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 16:04:06 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:30:32 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	assign_files(t_shell *shell)
 			assign_file(traveler, INP_FILE);
 		else if (traveler->type == OPT_REDIR || traveler->type == APPEND)
 			assign_file(traveler, OPT_FILE);
-		// else if (traveler->type == HERE_DOC)
-		// 	assign_file(traveler, DELIMITER);
+		else if (traveler->type == HERE_DOC)
+			assign_file(traveler, DELIMITER);
 		traveler = traveler->next;
 	}
 }
