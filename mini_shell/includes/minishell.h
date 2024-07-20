@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 21:48:27 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef	struct	s_shell
 {
 	pid_t		child;
 	pid_t		lastpid;
+	char		*str;
 	t_environ	*environ;
 	t_parser	*parser;
 	t_exec		*exec;
@@ -115,17 +116,10 @@ typedef	struct	s_exec
 	struct s_exec	*next;
 }	t_exec;
 
-//		readline struct		//
-
-typedef struct s_readline
-{
-	char	*path;
-	char	*str;
-}	t_readline;
 
 //			parsing			//
 
-void		parsing_hub(t_shell *shell, char *str);
+int			parsing_hub(t_shell *shell, char *str);
 void		assignation(t_shell *shell, char *str);
 void		assign_pipe(t_shell *shell);
 int			assign_space(char *str, int index, t_shell *shell);
@@ -142,17 +136,17 @@ void		popout_token(t_shell *shell, t_noding *token);
 t_noding	*prev_node(t_shell *shell, t_noding *target);
 t_noding	*last_node(t_noding *nodes);
 int			invalid_token(t_shell *shell);
-int	operater_tokens(t_noding *node);
-int	delimeter_char(char character);
-int	invalid_chars(char c);
-void	add_token(t_shell *shell, t_noding *new);
+int			operater_tokens(t_noding *node);
+int			delimeter_char(char character);
+int			invalid_chars(char c);
+void		add_token(t_shell *shell, t_noding *new);
 t_noding	*prev_node(t_shell *shell, t_noding *target);
 t_noding	*last_node(t_noding *nodes);
-void	get_delimeter(t_shell *shell);
-void	quotes(t_shell *shell);
-void	expand_vars(t_shell *shell);
-void	 join_tokens(t_shell *shell);
-void	assign_files(t_shell *shell);
+void		get_delimeter(t_shell *shell);
+void		quotes(t_shell *shell);
+void		expand_vars(t_shell *shell);
+void		join_tokens(t_shell *shell);
+void		assign_files(t_shell *shell);
 
 //			others			//
 
@@ -174,17 +168,17 @@ void	recieve_str(t_shell *shell, char *str);
 int    signalhandler(void);
 void    handle_sigint(int sig);
 void 	rl_replace_line (const char * s, int c);
-int		just_test(t_readline rl);
+// int		just_test(t_readline rl);
 t_values	*locate_node(t_values *temp, char *target_key);
 
-void    	checker(t_shell *shell);
+int    	checker(t_shell *shell);
 
 
 //**	builtins	**//
 
-int 	builtin_check(t_readline rl, t_shell *shell);
+// int 	builtin_check(t_readline rl, t_shell *shell);
 int 	builtin_env(t_environ *environ);
-int 	builtin_exit(t_readline rl);
+// int 	builtin_exit(t_readline rl);
 int		builtin_pwd(t_shell *shell);
 int 	builtin_echo(char *str);
 int 	builtin_cd(t_shell *shell);

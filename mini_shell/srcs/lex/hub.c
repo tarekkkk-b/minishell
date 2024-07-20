@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 17:50:44 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 21:57:23 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,6 @@ void	assignation(t_shell *shell, char *str)
 	int	i;
 
 	i = 0;
-	if (!str)
-		return ;
 	shell->parser = malloc(sizeof(t_parser));
 	shell->parser->noding = NULL;
 	while (str[i])
@@ -72,14 +70,14 @@ void	assignation(t_shell *shell, char *str)
 		else if (str[i] == '"' || str[i] == '\'')
 			i = assign_quotes(str, i, shell);
 		else if (invalid_chars(str[i]) == 1)
-			assign_invalid(shell, str, i);
+			assign_invalid(shell, str, i); 
 		else
 			i = assign_word(str, i, shell);
 		i++;
 	}
 }
 
-void	parsing_hub(t_shell *shell, char *str)
+int	parsing_hub(t_shell *shell, char *str)
 {
 	assignation(shell, str);
 	get_delimeter(shell);
@@ -88,5 +86,5 @@ void	parsing_hub(t_shell *shell, char *str)
 	join_tokens(shell);
 	pop_extras(shell);
 	assign_files(shell);
-	checker(shell);
+	return (checker(shell));
 }
