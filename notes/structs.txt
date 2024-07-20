@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/15 10:17:17 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/17 16:56:02 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,7 @@ linked lists, ALOT, but its for our benefit.
 			here_doc,
 			delimiter,
 			append,
-			space,
+			SPACES,
 			variable,
 			invalid
 		}	t_tokens;

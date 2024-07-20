@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 22:48:01 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/20 16:39:00 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static const char * const types[] = {
 	[HERE_DOC] = "HEREDOC",
 	[DELIMITER] = "DELIMITER",
 	[APPEND] = "APPEND",
-	[SPACE] = "SPACE",
+	[SPACES] = "SPACES",
 	[VARIABLE] = "VARIABLE",
 	[DQUOTES] = "QUOTES",
 	[INVALID] = "INVALID"
@@ -46,13 +46,13 @@ void    checker(t_shell *shell)
     temp = shell->parser->noding;
     while (temp)
 	{
-		printf("%s		:		%s	pop? <<%d>>\n",
-		temp->value, types[temp->type], temp->pop_out);
-        // if(temp->type == INVALID)
-		// {
-        //     printf("Syntax error at:                '%s'\n", temp->value);	
-		// 	break ;
-		// }
+		printf("%s		:		%s\n",
+		temp->value, types[temp->type]);
+        if(temp->type == INVALID)
+		{
+            printf("Syntax error at:                '%s'\n", temp->value);	
+			break ;
+		}
 		temp = temp->next;
 	}
 }

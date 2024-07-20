@@ -12,7 +12,7 @@ when we write code, we can read it right, compiler cant cuz its too complex, so 
 so first we do tokenization.
 so it splits up for example " echo hello world" into "echo" "hello" "world". thats tokenization.
 also known as lexical analysis, which is conducted by the lexer
-so basically lexer is like split? i guess? it just delimits using space and tab?
+so basically lexer is like split? i guess? it just delimits using SPACES and tab?
 
 
 after that, tokens are passed into a "tree" called the syntax tree, its passed into it by the parser

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 16:30:32 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	assign_file(t_noding *traveler, t_tokens actual_token)
 	if (traveler->next && (traveler->next->type == ARG
 			|| traveler->next->type == actual_token))
 		traveler->next->type = actual_token;
-	else if (traveler->next && traveler->next->type == SPACE)
+	else if (traveler->next && traveler->next->type == SPACES)
 	{
 		if (traveler->next->next && (traveler->next->next->type == ARG
 				|| traveler->next->next->type == actual_token))
@@ -55,7 +55,7 @@ char	*full_string(t_noding *traveler)
 
 	str = NULL;
 	temp = NULL;
-	while (traveler && traveler->type != SPACE && !operater_tokens(traveler))
+	while (traveler && traveler->type != SPACES && !operater_tokens(traveler))
 	{
 		temp = ft_strjoin(str, traveler->value);
 		if (str)
@@ -98,13 +98,13 @@ void	get_delimeter(t_shell *shell)
 		if (traveler->type == HERE_DOC)
 		{
 			temp = traveler;
-			if (traveler->next && traveler->next->type == SPACE)
+			if (traveler->next && traveler->next->type == SPACES)
 				traveler = traveler->next;
 			traveler = traveler->next;
 			str = full_string(traveler);
 			if (str)
 			{
-				if (temp->next && temp->next->type == SPACE)
+				if (temp->next && temp->next->type == SPACES)
 					new_delim(shell, traveler, temp->next, str);
 				else	
 					new_delim(shell, traveler, temp, str);

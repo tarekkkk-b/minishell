@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:47:06 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 16:41:32 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	invalid_token(t_shell *shell)
 	last_token = last_node(shell->parser->noding);
 	if (operater_tokens(last_token))
 		return (1);
-	else if (last_token->type == SPACE)
+	else if (last_token->type == SPACES)
 		if (!prev_node(shell, last_token)
 			|| operater_tokens(prev_node(shell, last_token)))
 			return (1);

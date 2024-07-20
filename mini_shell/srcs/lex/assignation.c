@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 16:41:16 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	assign_pipe(t_shell *shell)
 	new = malloc(sizeof(t_noding));
 	new->value = ft_strdup("|");
 	if (invalid_token(shell) || !shell->parser->noding
-		|| last_token->type == PIPES || (last_token->type == SPACE
+		|| last_token->type == PIPES || (last_token->type == SPACES
 			&& prev_node(shell, last_token)->type == PIPES))
 		assign_node(shell, new, INVALID, 0);
 	else
@@ -39,7 +39,7 @@ int	assign_space(char *str, int index, t_shell *shell)
 	new = malloc(sizeof(t_noding));
 	if (!new)
 		return (-1);
-	assign_node(shell, new, SPACE, 1);
+	assign_node(shell, new, SPACES, 1);
 	new->value = ft_strdup(" ");
 	add_token(shell, new);
 	return (index);

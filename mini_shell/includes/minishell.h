@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 23:01:26 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <stdio.h>
 # include <signal.h>
 # include <string.h>
-# include <sys/syslimits.h>
+// # include <sys/syslimits.h>
 // useful header ^^^
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -79,7 +79,7 @@ typedef enum	s_tokens
 	HERE_DOC,
 	DELIMITER,
 	APPEND,
-	SPACE,
+	SPACES,
 	VARIABLE,
 	DQUOTES,
 	INVALID

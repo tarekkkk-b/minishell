@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:31:17 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 16:42:38 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char *loop(t_noding **traveler, t_noding **add_after)
 	char	*str;
 
 	str = NULL;
-	while ((*traveler) && (*traveler)->type != SPACE
+	while ((*traveler) && (*traveler)->type != SPACES
 			&& !operater_tokens((*traveler)) && (*traveler)->type != PIPES)
 	{
 		(*add_after) = (*traveler);

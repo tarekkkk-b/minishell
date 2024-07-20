@@ -6,7 +6,7 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/12 10:45:35 by tabadawi          #+#    #+#              #
-#    Updated: 2024/06/17 16:48:25 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -123,10 +123,10 @@ work.
 				//if word
 					//gather full
 					//set word
-				//if space
-					//check if prev was space
+				//if SPACES
+					//check if prev was SPACES
 						//if yes -> ignore
-							//else store space (once only)
+							//else store SPACES (once only)
 
 
 	//EXECUTION SECTION

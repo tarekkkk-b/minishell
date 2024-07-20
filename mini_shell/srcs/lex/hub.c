@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 16:43:26 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/20 17:50:44 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 // 	[HERE_DOC] = "HEREDOC",
 // 	[DELIMITER] = "DELIMITER",
 // 	[APPEND] = "APPEND",
-// 	[SPACE] = "SPACE",
+// 	[SPACES] = "SPACES",
 // 	[VARIABLE] = "VARIABLE",
 // 	[DQUOTES] = "QUOTES",
 // 	[INVALID] = "INVALID"
@@ -65,7 +65,7 @@ void	assignation(t_shell *shell, char *str)
 			assign_pipe(shell);
 		else if (str[i] == '>' || str[i] == '<')
 			i = assign_redirection(str, i, shell);
-		else if (str[i] == ' ' | str[i] == '\t')
+		else if (str[i] == ' ' || str[i] == '\t')
 			i = assign_space(str, i, shell);
 		else if (str[i] == '$')
 			i = assign_variable(str, i, shell);
