@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 21:57:23 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	assignation(t_shell *shell, char *str)
 	int	i;
 
 	i = 0;
-	shell->parser = malloc(sizeof(t_parser));
+	shell->parser = ft_malloc(sizeof(t_parser));
 	shell->parser->noding = NULL;
 	while (str[i])
 	{

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:31:17 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char *loop(t_noding **traveler, t_noding **add_after)
 	{
 		(*add_after) = (*traveler);
 		if (!(*traveler)->pop_out)
-			str = ft_strjoin(str, (*traveler)->value);
+			str = ft_strjoin(str, (*traveler)->value, 1);
 		(*traveler)->pop_out = 1;
 		(*traveler) = (*traveler)->next;
 	}
@@ -34,7 +34,7 @@ void	new_token(t_shell *shell, t_noding **traveler, t_noding **pre, char *str)
 	t_noding	*new;
 
 	(void)traveler;
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	assign_node(shell, new, ARG, 0);
 	if ((*pre))
 		new->next = (*pre)->next;

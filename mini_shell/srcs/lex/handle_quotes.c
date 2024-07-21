@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:09:10 by tarekkkk          #+#    #+#             */
-/*   Updated: 2024/07/19 20:09:11 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	new_word(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 	t_noding	*new;
 	int			copier;
 
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return (-1);
 	assign_node(shell, new, ARG, 0);
@@ -49,7 +49,7 @@ int	new_word(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 		}
 		i++;
 	}
-	new->value = malloc(sizeof(char) * (i - copier + 1));
+	new->value = ft_malloc(sizeof(char) * (i - copier + 1));
 	int j = 0;
 	while (copier < i)
 		new->value[j++] = suspect->value[copier++];
@@ -65,7 +65,7 @@ int	new_var(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 	int			reset;
 	int			copier;
 
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	assign_node(shell, new, VARIABLE, 0);
 	new->next = (*add_after)->next;
 	reset = i;
@@ -73,7 +73,7 @@ int	new_var(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 		i++;
 	copier = 0;
 	i = end_of_var(suspect->value, i, reset, 2);
-	new->value = malloc(sizeof(char) * (i - reset + 2));
+	new->value = ft_malloc(sizeof(char) * (i - reset + 2));
 	while (reset <= i)
 		new->value[copier++] = suspect->value[reset++];
 	new->value[copier] = '\0';

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 22:06:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	assign_pipe(t_shell *shell)
 	t_noding	*last_token;
 
 	last_token = last_node(shell->parser->noding);
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	new->value = ft_strdup("|");
 	if (invalid_token(shell) || !shell->parser->noding
 		|| last_token->type == PIPES || (last_token->type == SPACES
@@ -36,7 +36,7 @@ int	assign_space(char *str, int index, t_shell *shell)
 	while ((str[index] == ' ' || str[index] == '\t') && str[index] != '\0')
 		index++;
 	index--;
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return (-1);
 	assign_node(shell, new, SPACES, 1);
@@ -49,11 +49,11 @@ void	assign_invalid(t_shell *shell, char *str, int index)
 {
 	t_noding	*new;
 
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return ;
 	assign_node(shell, new, INVALID, 0);
-	new->value = malloc(sizeof(char) * 2);
+	new->value = ft_malloc(sizeof(char) * 2);
 	if (!new->value)
 		return (free(new));
 	new->value[0] = str[index];
@@ -69,13 +69,13 @@ int	assign_word(char *str, int index, t_shell *shell)
 
 	j = 0;
 	temp = index;
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return (-1);
 	assign_node(shell, new, ARG, 0);
 	while (!delimeter_char(str[index + 1]))
 		index++;
-	new->value = malloc(sizeof(char) * (index - temp + 2));
+	new->value = ft_malloc(sizeof(char) * (index - temp + 2));
 	if (!new->value)
 		return (free(new), -1);
 	while (temp <= index)

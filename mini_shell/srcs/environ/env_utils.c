@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 18:22:55 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*get_key(char *env_var)
 	int i = 0;
 	while (env_var[i] && env_var[i] != '=')
 		i++;
-	char *key = malloc(sizeof(char) * (i + 1));
+	char *key = ft_malloc(sizeof(char) * (i + 1));
 	i = 0;
 	while (env_var[i] && env_var[i] != '=')
 	{
@@ -105,7 +105,7 @@ void	custom_node(t_shell *shell, char *key, char *value)
 	if (!(!locate_node(shell->environ->env, key)))
 		return ;
 	t_values	*node;
-	node = malloc(sizeof(t_values));
+	node = ft_malloc(sizeof(t_values));
 	node->key = ft_strdup(key);
 	node->value = ft_strdup(value);
 	node->string = ft_strjoin2(node->key, "=", node->value);
@@ -118,11 +118,10 @@ void	create_env(char **env, t_shell *shell)
 {
 	int i = -1;
 	char	*str;
-	shell->environ = malloc(sizeof(t_environ));
+	shell->environ = ft_malloc(sizeof(t_environ));
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = ft_strdup(shell->environ->owd);
-	// shell->environ->cwd = getcwd(NULL, 0);
 	shell->environ->exit = 0;
 	while (env[++i])
 	{
@@ -151,7 +150,7 @@ char	**arr(t_values *environ)
 		temp = temp->next;
 		i++;
 	}
-	env = malloc(sizeof(char *) * (i + 1));
+	env = ft_malloc(sizeof(char *) * (i + 1));
 	temp = environ;
 	i = 0;
 	while (temp)

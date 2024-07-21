@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 19:51:34 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	int			j;
 
 	j = 0;
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return (-1);
 	if (str[index + 1] == ' ' || str[index + 1] == '\t'
@@ -63,7 +63,7 @@ int	assign_variable(char *str, int index, t_shell *shell)
 		assign_node(shell, new, VARIABLE, 0);
 	temp = index;
 	index = end_of_var(str, temp + 1, index, 2);
-	new->value = malloc(sizeof(char) * (index - temp + 3));
+	new->value = ft_malloc(sizeof(char) * (index - temp + 3));
 	if (!new->value)
 		return (free(new), -1);
 	new->value[j++] = '$';

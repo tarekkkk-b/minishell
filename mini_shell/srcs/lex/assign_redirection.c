@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/18 16:29:24 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 {
 	t_noding	*new;
 
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (str[index + 1] == str[index])
 	{
 		double_red(shell, new, str, index);

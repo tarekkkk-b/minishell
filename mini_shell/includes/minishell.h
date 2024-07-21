@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 21:48:27 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:16:48 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ void 	rl_replace_line (const char * s, int c);
 t_values	*locate_node(t_values *temp, char *target_key);
 
 int    	checker(t_shell *shell);
+void	*ft_malloc(size_t size);
 
 
 //**	builtins	**//

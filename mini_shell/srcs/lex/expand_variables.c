@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:49:59 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/19 17:58:23 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	get_var(t_shell *shell, t_noding *traveler)
 
 	t = 1;
 	o = 0;
-	str = malloc(sizeof(char) * (ft_strlen(traveler->value)));
+	str = ft_malloc(sizeof(char) * (ft_strlen(traveler->value)));
 	while (traveler->value[t])
 		str[o++] = traveler->value[t++];
 	str[o++] = '\0';

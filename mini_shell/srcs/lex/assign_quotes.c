@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:08 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 10:28:08 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	single_quotes(t_shell *shell, t_noding *new, char *str, int index)
 		index++;
 		counter += 1;
 	}
-	new->value = malloc(sizeof(char) * (index - temp + 1));
+	new->value = ft_malloc(sizeof(char) * (index - temp + 1));
 	while (temp < index)
 		new->value[i++] = str[temp++];
 	new->value[i++] = '\0';
@@ -57,7 +57,7 @@ int	double_quotes(t_shell *shell, t_noding *new, char *str, int index)
 		index++;
 		counter += 1;
 	}
-	new->value = malloc(sizeof(char) * (index - temp + 1));
+	new->value = ft_malloc(sizeof(char) * (index - temp + 1));
 	while (temp < index)
 		new->value[i++] = str[temp++];
 	new->value[i++] = '\0';
@@ -72,7 +72,7 @@ int	assign_quotes(char *str, int index, t_shell *shell)
 {
 	t_noding	*new;
 
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return (-1);
 	if (str[index] == '"')

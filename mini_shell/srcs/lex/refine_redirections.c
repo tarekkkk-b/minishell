@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 17:50:21 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,18 +51,11 @@ void	assign_files(t_shell *shell)
 char	*full_string(t_noding *traveler)
 {
 	char	*str;
-	char	*temp;
 
 	str = NULL;
-	temp = NULL;
 	while (traveler && traveler->type != SPACES && !operater_tokens(traveler))
 	{
-		temp = ft_strjoin(str, traveler->value);
-		if (str)
-			free(str);
-		str = ft_strdup(temp);
-		if (temp)
-			free(temp);
+		str = ft_strjoin(str, traveler->value, 1);
 		traveler->pop_out = 1;
 		traveler = traveler->next;
 	}
@@ -73,7 +66,7 @@ void	new_delim(t_shell *shell, t_noding *traveler, t_noding *pre, char *str)
 {
 	t_noding	*new;
 
-	new = malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding));
 	if (!new)
 		return ;
 	assign_node(shell, new, DELIMITER, 0);
