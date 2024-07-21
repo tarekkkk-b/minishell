@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   temp_file.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 22:48:01 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/20 22:01:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 11:40:17 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,30 @@ int    checker(t_shell *shell)
 	}
 	return (1);
 }
+
+
+void	*ft_malloc(size_t size)
+{
+	void	*ptr;
+	ptr = malloc(size);
+	if(!ptr)
+		return (NULL);
+		// major fweeing function in place of return null, that takes an exit code
+	else
+		return(ptr);
+}
+
+void	ft_free(void **ptr)
+{
+	if(ptr == NULL || *ptr == NULL)
+		return ;
+	free(*ptr);
+	*ptr = NULL;
+}
+
+// fake int main
+// {
+// 	int* a = (int*)ft_malloc(sizeof(int) * 10);
+//	a = {0};
+// 	ft_free((void**)&a);
+// }

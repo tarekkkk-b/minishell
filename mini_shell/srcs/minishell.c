@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/20 22:07:06 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 11:04:43 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	main(int ac, char **av, char **env)
 		if (parsing_hub(&shell, shell.str))
 			printf("tokenization succesful!\n");
 		else
-			printf("tokenization failed!\n");
+			printf("tokenization failed successfully!\n");
 		free_tokenization(&shell);
 		free (shell.str);
 	}

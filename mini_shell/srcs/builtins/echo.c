@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:51:43 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/15 15:25:53 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 11:03:42 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 // TAREK NO DONT SAY THAT WAT TE HELL
 // bye
 
-// int builtin_echo(char *str)
+// int builtin_echo(char **argv)
 // {
 //     int flag = 0;
 //     int i = 1;
