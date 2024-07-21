@@ -6,54 +6,17 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:40:31 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_env(t_shell *shell)
+void	initializer(t_shell *shell)
 {
-	t_values	*tempe;
-	t_values	*tempe2;
-
-	if (shell->environ->env)
-	{
-		tempe = shell->environ->env;
-		while (tempe)
-		{
-			tempe2 = tempe->next;
-			free (tempe->value);
-			ft_free((void **)&tempe->key);
-			ft_free((void **)&tempe->string);
-			free (tempe);
-			tempe = tempe2;
-		}
-		ft_free((void **)&shell->environ->cwd);
-		shell->environ->cwd = NULL;
-		ft_free((void **)&shell->environ->owd);
-		shell->environ->owd = NULL;
-		ft_free((void **)&shell->environ);
-	}
-}
-
-void	free_tokenization(t_shell *shell)
-{
-	t_noding	*temp;
-	t_noding	*temp2;
-
-	if (shell->parser->noding)
-	{
-		temp = shell->parser->noding;
-		while (temp)
-		{
-			temp2 = temp->next;
-			free (temp->value);
-			free (temp);
-			temp = temp2;
-		}
-	}
-	free (shell->parser);
+	shell->environ = NULL;
+	shell->exec = NULL;
+	shell->parser = NULL;
 }
 
 void	minishell(t_shell *shell)
@@ -63,7 +26,7 @@ void	minishell(t_shell *shell)
 		signalhandler();
 		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = getcwd(NULL, 0);
-		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
+		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂 𝓼𝓱𝓮𝓵𝓵 > ");
 		if(!shell->str)
 			break ;
 		if (shell->str[0] != '\0')
@@ -85,8 +48,9 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	if (ac != 1)
 		return (-1);
+	initializer(&shell);
 	printf("\e[1;1H\e[2J");
 	create_env(env, &shell);
 	minishell(&shell);
-	free_env(&shell);
+	mass_free(&shell);
 }

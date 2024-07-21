@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 17:55:03 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	create_env(char **env, t_shell *shell)
 	int i = -1;
 	char	*str;
 	shell->environ = ft_malloc(sizeof(t_environ));
+	shell->environ->path = NULL;
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = ft_strdup(shell->environ->owd);

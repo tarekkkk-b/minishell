@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:09:44 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	if (!new)
 		return (-1);
 	if (str[index + 1] == ' ' || str[index + 1] == '\t'
-		|| str[index + 1] == '\0')
+		|| str[index + 1] == '\0'
+		|| !valid_name(str[index + 1], index + 1, index + 1))
 		assign_node(shell, new, ARG, 0);
 	else
 		assign_node(shell, new, VARIABLE, 0);

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:23:13 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:44:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int			get_arrlen(char **arr);
 void		custom_node(t_shell *shell, char *key, char *value);
 void		adjust_lvl(t_shell *shell);
 void		popout(t_shell	*shell, char *target);
-void		free_values(t_values *env);
+// void		free_values(t_values *env);
 // void    free_node(t_values *node);
 // void    free_list(t_values *head);
 void	recieve_str(t_shell *shell, char *str);
@@ -174,6 +174,9 @@ t_values	*locate_node(t_values *temp, char *target_key);
 int    	checker(t_shell *shell);
 void	*ft_malloc(size_t size);
 void	ft_free(void **ptr);
+void	free_env(t_shell *shell);
+void	free_tokenization(t_shell *shell);
+void    mass_free(t_shell *shell);
 
 
 //**	builtins	**//

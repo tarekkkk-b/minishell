@@ -6,13 +6,13 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:25:20 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
+static int	double_red(t_shell *shell, t_noding *new, char *str, int index)
 {
 	if (str[index] == '>')
 	{
@@ -30,9 +30,11 @@ static void	double_red(t_shell *shell, t_noding *new, char *str, int index)
 			assign_node(shell, new, INVALID, 0);
 		new->value = ft_strdup("<<");
 	}
+	index++;
+	return (index);
 }
 
-static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
+static int	single_red(t_shell *shell, t_noding *new, char *str, int index)
 {
 	if (str[index] == '>')
 	{
@@ -40,7 +42,13 @@ static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
 			assign_node(shell, new, OPT_REDIR, 0);
 		else
 			assign_node(shell, new, INVALID, 0);
-		new->value = ft_strdup(">");
+		if (str[index + 1] && str[index + 1] == '|')
+		{
+			new->value = ft_strdup(">|");
+			index++;
+		}
+		else
+			new->value = ft_strdup(">");
 	}
 	else if (str[index] == '<')
 	{
@@ -50,6 +58,7 @@ static void	single_red(t_shell *shell, t_noding *new, char *str, int index)
 			assign_node(shell, new, INVALID, 0);
 		new->value = ft_strdup("<");
 	}
+	return (index);
 }
 
 int	assign_redirection(char *str, int index, t_shell *shell)
@@ -57,13 +66,10 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 	t_noding	*new;
 
 	new = ft_malloc(sizeof(t_noding));
-	if (str[index + 1] == str[index])
-	{
-		double_red(shell, new, str, index);
-		index++;
-	}
+	if (str[index + 1] && str[index + 1] == str[index])
+		index = double_red(shell, new, str, index);
 	else if (str[index + 1] != str[index])
-		single_red(shell, new, str, index);
+		index = single_red(shell, new, str, index);
 	add_token(shell, new);
 	return (index);
 }

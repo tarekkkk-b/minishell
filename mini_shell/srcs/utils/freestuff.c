@@ -6,48 +6,55 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 21:45:21 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    free_values(t_values *env)
+void    free_env(t_shell *shell)
 {
     t_values *temp;
 
-    while(env != NULL)
+    while(shell->environ->env != NULL)
     {
-        temp = env;
-        env = env->next;
+        temp = shell->environ->env;
+        shell->environ->env = shell->environ->env->next;
         ft_free((void **)&temp->key);
         ft_free((void **)&temp->value);
         ft_free((void **)&temp->string);
         ft_free((void **)&temp);
     }
+	ft_free((void **)&shell->environ->cwd);
+	ft_free((void **)&shell->environ->owd);
+	ft_free((void **)&shell->environ);
 }
 
-// void    free_list(t_values *head)
-// {
-//     t_values    *temp;
+void    mass_free(t_shell *shell)
+{
+    if (shell->environ)
+		if (shell->environ->env)
+			free_env(shell);
+    if (shell->parser)
+        if (shell->parser->noding)
+            free_tokenization(shell);
+}
 
-//     if (head)
-//     {
-//         while (head)
-//         {
-//             temp = head->next;
-//             free_node(head);
-//             head = temp;
-//         }
-//     }
-// }
+void	free_tokenization(t_shell *shell)
+{
+	t_noding	*temp;
+	t_noding	*temp2;
 
-// void    free_node(t_values *node)
-// {
-//     if (node)
-//     {
-//         ft_free((void **)&node->key);
-//         ft_free((void **)&node->value);
-//         ft_free((void **)&node->string);
-//     }
-// }
+	if (shell->parser->noding)
+	{
+		temp = shell->parser->noding;
+		while (temp)
+		{
+			temp2 = temp->next;
+			ft_free((void **)&temp->value);
+			ft_free((void **)&temp);
+			temp = temp2;
+		}
+	}
+	ft_free((void **)&shell->parser);
+}
