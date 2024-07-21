@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:31:17 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	new_token(t_shell *shell, t_noding **traveler, t_noding **pre, char *str)
 	(*pre)->next = new;
 	new->value = ft_strdup(str);
 	if (str)
-		free(str);
+		ft_free((void **)&str);
 }
 
 void	 join_tokens(t_shell *shell)

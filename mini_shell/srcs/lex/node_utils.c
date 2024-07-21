@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:55:19 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/16 17:09:30 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void	popout_token(t_shell *shell, t_noding *token)
 	if (token == shell->parser->noding)
 	{
 		shell->parser->noding = shell->parser->noding->next;
-		return (free(temp->value), free(temp));
+		return (ft_free((void **)&temp->value), ft_free((void **)&temp));
 	}
 	bye = token;
 	while (temp && temp->next && temp->next != bye)
 		temp = temp->next;
 	temp->next = bye->next;
-	return (free(bye->value), free(bye));
+	return (ft_free((void **)&bye->value), ft_free((void **)&bye));
 }
 
 t_noding	*prev_node(t_shell *shell, t_noding *target)

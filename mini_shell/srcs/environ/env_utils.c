@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 21:22:40 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	addnode(t_environ *environ, t_values *node)
 
 void	change_node(t_values *node, char *new)
 {
-	free(node->value);
-	free(node->string);
+	ft_free((void **)&node->value);
+	ft_free((void **)&node->string);
 	node->value = ft_strdup(new);
 	node->string = ft_strjoin2(node->key, "=", node->value);
 }
@@ -97,7 +97,7 @@ void	adjust_lvl(t_shell *shell)
 	shell->environ->shlvl = tempp + 1;
 	char *str = ft_itoa(shell->environ->shlvl);
 	change_node(temp, str);
-	free(str);	
+	ft_free((void **)&str);	
 }
 
 void	custom_node(t_shell *shell, char *key, char *value)
@@ -127,7 +127,7 @@ void	create_env(char **env, t_shell *shell)
 	{
 		str = get_key(env[i]);
 		custom_node(shell, str, getenv(str));
-		free(str);
+		ft_free((void **)&str);
 	}
 	adjust_lvl(shell);
 }
@@ -182,8 +182,8 @@ void	popout(t_shell	*shell, char *target)
 			temp1 = temp1->next;
 		temp1->next = tnode->next;
 	}
-	free(tnode->key);
-	free(tnode->value);
-	free(tnode->string);
+	ft_free((void **)&tnode->key);
+	ft_free((void **)&tnode->value);
+	ft_free((void **)&tnode->string);
 	free (tnode);
 }

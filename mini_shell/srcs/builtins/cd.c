@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/16 12:37:17 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ int update_pwd(t_shell *shell, char *directory)
 
 int change_nodeee(t_values *node, char *new)
 {
-	free(node->value);
-	free(node->string);
+	ft_free((void **)&node->value);
+	ft_free((void **)&node->string);
 	node->value = ft_strdup(new);
     node->string = ft_strjoin2(node->key, "=", node->value);
 	if(node->string)

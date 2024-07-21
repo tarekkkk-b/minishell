@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	assign_invalid(t_shell *shell, char *str, int index)
 	assign_node(shell, new, INVALID, 0);
 	new->value = ft_malloc(sizeof(char) * 2);
 	if (!new->value)
-		return (free(new));
+		return (ft_free((void **)&new));
 	new->value[0] = str[index];
 	new->value[1] = '\0';
 	add_token(shell, new);
@@ -77,7 +77,7 @@ int	assign_word(char *str, int index, t_shell *shell)
 		index++;
 	new->value = ft_malloc(sizeof(char) * (index - temp + 2));
 	if (!new->value)
-		return (free(new), -1);
+		return (ft_free((void **)&new), -1);
 	while (temp <= index)
 		new->value[j++] = str[temp++];
 	new->value[j] = '\0';

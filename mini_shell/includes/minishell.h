@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:16:48 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:23:13 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,6 +173,7 @@ t_values	*locate_node(t_values *temp, char *target_key);
 
 int    	checker(t_shell *shell);
 void	*ft_malloc(size_t size);
+void	ft_free(void **ptr);
 
 
 //**	builtins	**//

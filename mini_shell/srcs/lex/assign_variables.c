@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	index = end_of_var(str, temp + 1, index, 2);
 	new->value = ft_malloc(sizeof(char) * (index - temp + 3));
 	if (!new->value)
-		return (free(new), -1);
+		return (ft_free((void **)&new), -1);
 	new->value[j++] = '$';
 	while (temp++ < index)
 		new->value[j++] = str[temp];

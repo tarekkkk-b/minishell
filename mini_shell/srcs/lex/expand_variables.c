@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:49:59 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ void	get_var(t_shell *shell, t_noding *traveler)
 		str[o++] = traveler->value[t++];
 	str[o++] = '\0';
 	env_traveler = locate_node(shell->environ->env, str);
-	free(str);
+	ft_free((void **)&str);
 	if (!env_traveler)
 		traveler->pop_out = 1;
 	else
 	{
-		free(traveler->value);
+		ft_free((void **)&traveler->value);
 		traveler->value = ft_strdup(env_traveler->value);
 		traveler->type = ARG;
 	}

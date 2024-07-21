@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 13:46:13 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void	free_env(t_shell *shell)
 		{
 			tempe2 = tempe->next;
 			free (tempe->value);
-			free(tempe->key);
-			free(tempe->string);
+			ft_free((void **)&tempe->key);
+			ft_free((void **)&tempe->string);
 			free (tempe);
 			tempe = tempe2;
 		}
-		free(shell->environ->cwd);
+		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = NULL;
-		free(shell->environ->owd);
+		ft_free((void **)&shell->environ->owd);
 		shell->environ->owd = NULL;
-		free(shell->environ);
+		ft_free((void **)&shell->environ);
 	}
 }
 
@@ -61,7 +61,7 @@ void	minishell(t_shell *shell)
 	while (1)
 	{
 		signalhandler();
-		free(shell->environ->cwd);
+		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = getcwd(NULL, 0);
 		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
 		if(!shell->str)

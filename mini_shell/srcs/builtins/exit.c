@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:08:39 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/21 13:42:47 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ int	is_num(char *str)
 //     write(0, "exit\n", 5);
 // 	if(kill(getpid(), SIGKILL) == 0)
 // 	{
-// 		// free(rl.path);
-// 		free(rl.str);
+// 		// ft_free((void **)&rl.path);
+// 		ft_free((void **)&rl.str);
 // 		return(1);
 // 	}
 // 	return (1);

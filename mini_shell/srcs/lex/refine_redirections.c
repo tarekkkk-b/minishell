@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	new_delim(t_shell *shell, t_noding *traveler, t_noding *pre, char *str)
 		new->next = NULL;
 	pre->next = new;
 	new->value = ft_strdup(str);
-	free(str);
+	ft_free((void **)&str);
 }
 
 void	get_delimeter(t_shell *shell)
