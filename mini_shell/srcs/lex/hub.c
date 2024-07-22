@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   hub.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 13:57:44 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 17:57:06 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:02:17 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	assignation(t_shell *shell, char *str)
 	int	i;
 
 	i = 0;
-	shell->parser = ft_malloc(sizeof(t_parser));
+	shell->parser = ft_malloc(sizeof(t_parser), shell);
+	shell->parser->pipe_count = 0;
 	shell->parser->noding = NULL;
 	while (str[i])
 	{
@@ -70,7 +71,7 @@ void	assignation(t_shell *shell, char *str)
 		else if (str[i] == '"' || str[i] == '\'')
 			i = assign_quotes(str, i, shell);
 		else if (invalid_chars(str[i]) == 1)
-			assign_invalid(shell, str, i); 
+			assign_invalid(shell, str, i);
 		else
 			i = assign_word(str, i, shell);
 		i++;

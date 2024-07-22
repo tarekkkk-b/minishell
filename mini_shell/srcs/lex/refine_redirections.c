@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   refine_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:48:07 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	new_delim(t_shell *shell, t_noding *traveler, t_noding *pre, char *str)
 {
 	t_noding	*new;
 
-	new = ft_malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding), shell);
 	if (!new)
 		return ;
 	assign_node(shell, new, DELIMITER, 0);
@@ -95,13 +95,10 @@ void	get_delimeter(t_shell *shell)
 				traveler = traveler->next;
 			traveler = traveler->next;
 			str = full_string(traveler);
-			if (str)
-			{
-				if (temp->next && temp->next->type == SPACES)
-					new_delim(shell, traveler, temp->next, str);
-				else	
-					new_delim(shell, traveler, temp, str);
-			}
+			if (str && temp->next && temp->next->type == SPACES)
+				new_delim(shell, traveler, temp->next, str);
+			else if (str && !(temp->next && temp->next->type == SPACES))
+				new_delim(shell, traveler, temp, str);
 			else
 				temp->type = INVALID;
 		}

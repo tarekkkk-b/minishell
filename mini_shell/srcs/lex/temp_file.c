@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 22:48:01 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/21 11:40:17 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/22 16:06:01 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,44 +31,46 @@ static const char * const types[] = {
 
 // just copied dis over ^^
 
-
-int    checker(t_shell *shell)
+int	checker(t_shell *shell)
 {
-    t_noding	*last;
+	t_noding	*last;
 	t_noding	*temp;
-	
+
 	last = last_node(shell->parser->noding);
-    if (last)
-        if (last->type == PIPES)
-            last->type = INVALID;
-    temp = shell->parser->noding;
-    while (temp)
+	if (last)
+		if (last->type == PIPES)
+			last->type = INVALID;
+	temp = shell->parser->noding;
+	while (temp)
 	{
-		printf("%s		:		%s	<<<pop? == %d>>>\n", temp->value, types[temp->type], temp->pop_out);
-        if(temp->type == INVALID)
+		printf("%s		:		%s	<<<pop? == %d>>>\n", temp->value,
+			types[temp->type], temp->pop_out);
+		if (temp->type == INVALID)
 		{
-        	return ((void)printf("Syntax error at:	'%s'\n", temp->value), 0);
+			return ((void)printf("Syntax error at:	'%s'\n", temp->value), 0);
 		}
 		temp = temp->next;
 	}
+	printf("\n\n<<PIPING AARIJ COUNT: %d>>\n\n", shell->parser->pipe_count);
 	return (1);
 }
 
-
-void	*ft_malloc(size_t size)
+// major fweeing function in place of return null, 
+// that takes an exit code
+void	*ft_malloc(size_t size, t_shell *shell)
 {
 	void	*ptr;
+
 	ptr = malloc(size);
-	if(!ptr)
-		return (NULL);
-		// major fweeing function in place of return null, that takes an exit code
-	else
-		return(ptr);
+	if (ptr)
+		return (ptr);
+	mass_free(shell, 1);
+	return (NULL);
 }
 
 void	ft_free(void **ptr)
 {
-	if(ptr == NULL || *ptr == NULL)
+	if (ptr == NULL || *ptr == NULL)
 		return ;
 	free(*ptr);
 	*ptr = NULL;

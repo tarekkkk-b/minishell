@@ -3,41 +3,42 @@
 /*                                                        :::      ::::::::   */
 /*   freestuff.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/21 21:45:21 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:05:37 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    free_env(t_shell *shell)
+void	free_env(t_shell *shell)
 {
-    t_values *temp;
+	t_values	*temp;
 
-    while(shell->environ->env != NULL)
-    {
-        temp = shell->environ->env;
-        shell->environ->env = shell->environ->env->next;
-        ft_free((void **)&temp->key);
-        ft_free((void **)&temp->value);
-        ft_free((void **)&temp->string);
-        ft_free((void **)&temp);
-    }
+	while (shell->environ->env != NULL)
+	{
+		temp = shell->environ->env;
+		shell->environ->env = shell->environ->env->next;
+		ft_free((void **)&temp->key);
+		ft_free((void **)&temp->value);
+		ft_free((void **)&temp->string);
+		ft_free((void **)&temp);
+	}
 	ft_free((void **)&shell->environ->cwd);
 	ft_free((void **)&shell->environ->owd);
 	ft_free((void **)&shell->environ);
 }
 
-void    mass_free(t_shell *shell)
+void	mass_free(t_shell *shell, int exit_code)
 {
-    if (shell->environ)
+	if (shell->environ)
 		if (shell->environ->env)
 			free_env(shell);
-    if (shell->parser)
-        if (shell->parser->noding)
-            free_tokenization(shell);
+	if (shell->parser)
+		if (shell->parser->noding)
+			free_tokenization(shell);
+	exit(exit_code);
 }
 
 void	free_tokenization(t_shell *shell)

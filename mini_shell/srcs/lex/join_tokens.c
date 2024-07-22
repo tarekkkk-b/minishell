@@ -3,22 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   join_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 13:31:17 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:47:55 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char *loop(t_noding **traveler, t_noding **add_after)
+char	*loop(t_noding **traveler, t_noding **add_after)
 {
 	char	*str;
 
 	str = NULL;
 	while ((*traveler) && (*traveler)->type != SPACES
-			&& !operater_tokens((*traveler)) && (*traveler)->type != PIPES)
+		&& !operater_tokens((*traveler)) && (*traveler)->type != PIPES)
 	{
 		(*add_after) = (*traveler);
 		if (!(*traveler)->pop_out)
@@ -29,12 +29,13 @@ char *loop(t_noding **traveler, t_noding **add_after)
 	return (str);
 }
 
-void	new_token(t_shell *shell, t_noding **traveler, t_noding **pre, char *str)
+void	new_token(t_shell *shell, t_noding **traveler,
+				t_noding **pre, char *str)
 {
 	t_noding	*new;
 
 	(void)traveler;
-	new = ft_malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding), shell);
 	assign_node(shell, new, ARG, 0);
 	if ((*pre))
 		new->next = (*pre)->next;
@@ -46,12 +47,14 @@ void	new_token(t_shell *shell, t_noding **traveler, t_noding **pre, char *str)
 		ft_free((void **)&str);
 }
 
-void	 join_tokens(t_shell *shell)
+void	join_tokens(t_shell *shell)
 {
-	t_noding	*traveler = shell->parser->noding;
-	t_noding	*add_after = NULL;
+	t_noding	*traveler;
+	t_noding	*add_after;
 	char		*str;
 
+	traveler = shell->parser->noding;
+	add_after = NULL;
 	while (traveler)
 	{
 		str = loop(&traveler, &add_after);

@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   lst_size.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/07 12:32:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/22 09:37:51 by ahaarij          ###   ########.fr       */
+/*   Created: 2024/07/22 13:10:08 by ahaarij           #+#    #+#             */
+/*   Updated: 2024/07/22 13:10:23 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	builtin_env(t_environ *environ)
+int	ft_lstsizee(t_values *lst)
 {
-	t_values	*current;
+	int	i;
 
-	if (environ == NULL)
+	i = 0;
+	while (lst)
 	{
-		printf("Wat\n");
-		return (1);
+		lst = lst->next;
+		i++;
 	}
-	current = environ->env;
-	while (current)
-	{
-		if (current->key && current->value)
-			printf("%s=%s\n", current->key, current->value);
-		current = current->next;
-	}
-	return (0);
+	return (i);
 }

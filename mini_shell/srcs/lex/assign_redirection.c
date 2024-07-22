@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 21:25:20 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:45:28 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	assign_redirection(char *str, int index, t_shell *shell)
 {
 	t_noding	*new;
 
-	new = ft_malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding), shell);
 	if (str[index + 1] && str[index + 1] == str[index])
 		index = double_red(shell, new, str, index);
 	else if (str[index + 1] != str[index])

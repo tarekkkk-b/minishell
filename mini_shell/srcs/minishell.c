@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 21:40:31 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:05:00 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	minishell(t_shell *shell)
 		signalhandler();
 		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = getcwd(NULL, 0);
-		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂 𝓼𝓱𝓮𝓵𝓵 > ");
-		if(!shell->str)
+		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
+		if (!shell->str)
 			break ;
 		if (shell->str[0] != '\0')
 			add_history(shell->str);
@@ -52,5 +52,5 @@ int	main(int ac, char **av, char **env)
 	printf("\e[1;1H\e[2J");
 	create_env(env, &shell);
 	minishell(&shell);
-	mass_free(&shell);
+	mass_free(&shell, shell.environ->exit);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 21:09:44 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 16:05:47 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	assign_variable(char *str, int index, t_shell *shell)
 	int			j;
 
 	j = 0;
-	new = ft_malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding), shell);
 	if (!new)
 		return (-1);
 	if (str[index + 1] == ' ' || str[index + 1] == '\t'
@@ -64,7 +64,7 @@ int	assign_variable(char *str, int index, t_shell *shell)
 		assign_node(shell, new, VARIABLE, 0);
 	temp = index;
 	index = end_of_var(str, temp + 1, index, 2);
-	new->value = ft_malloc(sizeof(char) * (index - temp + 3));
+	new->value = ft_malloc(sizeof(char) * (index - temp + 3), shell);
 	if (!new->value)
 		return (ft_free((void **)&new), -1);
 	new->value[j++] = '$';

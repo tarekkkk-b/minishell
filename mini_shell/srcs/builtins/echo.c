@@ -6,25 +6,17 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:51:43 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/21 11:03:42 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/22 09:58:37 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// so you have everything split into args right, we just need to parse wherever its stored into this amd boom
-// i texted u to ask but ur not here, so im just gonna finish for now, hehe finish... 🤤🤤
-// also once i know about the args, the builtin checker will not need the strncmp like it does rn, ill be able to make it perfect.
-// thanks
-// im gonna go out for dinner w my family byee :D
-// later but still bye
-// ni
-// what the hell tarek why would you write te n word
-// because im racist and my name is tarek badawi i also ave a dog named togo hes racist too
-// im tarek and im saying te n word look
-// ni-
-// TAREK NO DONT SAY THAT WAT TE HELL
-// bye
+// so you have everything split into args right, 
+// we just need to parse wherever its stored into this amd boom
+// i texted u to ask but ur not here, so im just gonna finish for now
+// also once i know about the args, 
+// the builtin checker will not need the strncmp like it does rn
 
 // int builtin_echo(char **argv)
 // {

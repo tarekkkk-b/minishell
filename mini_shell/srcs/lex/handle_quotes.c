@@ -3,24 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   handle_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:09:10 by tarekkkk          #+#    #+#             */
-/*   Updated: 2024/07/21 14:15:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/22 15:47:14 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int		check_qoutes(t_noding *suspect)
+int	check_qoutes(t_noding *suspect)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (suspect->value[i])
 	{
 		if (suspect->value[i] == '$')
 			if (suspect->value[i + 1]
 				&& valid_name(suspect->value[i + 1], i + 1, i + 1))
-				return (1);	
+				return (1);
 		i++;
 	}
 	return (0);
@@ -30,27 +32,21 @@ int	new_word(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 {
 	t_noding	*new;
 	int			copier;
+	int			j;
 
-	new = ft_malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding), shell);
 	if (!new)
 		return (-1);
 	assign_node(shell, new, ARG, 0);
 	new->next = (*add_after)->next;
 	copier = i;
-	while (suspect->value[i])
-	{	
-		if (suspect->value[i + 1] == '$')
-		{
-			if (valid_name(suspect->value[i + 2], i + 2, i + 1))
-			{				
-				i++;
-				break ;
-			}
-		}
-		i++;
-	}
-	new->value = ft_malloc(sizeof(char) * (i - copier + 1));
-	int j = 0;
+	i--;
+	while (suspect->value[++i])
+		if (suspect->value[i + 1] == '$'
+			&& (valid_name(suspect->value[i + 2], i + 2, i + 1)) && i++)
+			break ;
+	new->value = ft_malloc(sizeof(char) * (i - copier + 1), shell);
+	j = 0;
 	while (copier < i)
 		new->value[j++] = suspect->value[copier++];
 	new->value[j++] = '\0';
@@ -65,7 +61,7 @@ int	new_var(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 	int			reset;
 	int			copier;
 
-	new = ft_malloc(sizeof(t_noding));
+	new = ft_malloc(sizeof(t_noding), shell);
 	assign_node(shell, new, VARIABLE, 0);
 	new->next = (*add_after)->next;
 	reset = i;
@@ -73,7 +69,7 @@ int	new_var(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 		i++;
 	copier = 0;
 	i = end_of_var(suspect->value, i, reset, 2);
-	new->value = ft_malloc(sizeof(char) * (i - reset + 2));
+	new->value = ft_malloc(sizeof(char) * (i - reset + 2), shell);
 	while (reset <= i)
 		new->value[copier++] = suspect->value[reset++];
 	new->value[copier] = '\0';
@@ -93,7 +89,7 @@ t_noding	*divide_qoutes(t_shell *shell, t_noding *suspect)
 	{
 		if (suspect->value[i] != '$')
 			i = new_word(shell, suspect, &add_after, i);
-		if(suspect->value[i] == '$')
+		if (suspect->value[i] == '$')
 			i = new_var(shell, suspect, &add_after, i);
 		if (suspect->value[i])
 			i++;

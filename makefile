@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/21 21:36:00 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/07/22 13:11:00 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -99,7 +99,12 @@ UTILS		=	$(SRCSPATH)/utils
 ENV			=	$(SRCSPATH)/environ
 
 
-SRCS		=	$(SRCSPATH)/minishell.c $(UTILS)/ft_strjoin2.c $(ENV)/env_utils.c \
+SRCS		=	$(SRCSPATH)/minishell.c \
+				$(ENV)/env_utils.c \
+				$(ENV)/env_utils2.c \
+				$(ENV)/popout.c \
+				$(ENV)/lst_size.c \
+				$(UTILS)/ft_strjoin2.c \
 				$(UTILS)/freestuff.c \
 				$(LEX)/assign_quotes.c \
 				$(LEX)/assign_redirection.c \
@@ -123,7 +128,7 @@ OBJS		=	$(SRCS:.c=.o)
 all		:	$(NAME)
 			@echo ""
 			@echo "$$HEADER"
-			@echo "$(YELLOW)Created: $(words $(OBJS)) object file(s) for minishell or 𝓯𝓻𝓮𝓪𝓴𝔂shell"
+			@echo "$(YELLOW)Created: $(words $(OBJS)) object file(s) for minishell or 𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵"
 			@echo "$(YELLOW)Created: $(NAME)$(RESET)"
 
 
