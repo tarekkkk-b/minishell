@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:04:18 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/22 19:12:20 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_shell
 	char		*str;
 	t_environ	*environ;
 	t_parser	*parser;
-	t_exec		*exec;
+	t_exec		**exec;
 }	t_shell;
 
 //		env structs		//
@@ -102,17 +102,24 @@ typedef struct s_parser
 
 //		exec struct		//
 
+typedef	struct s_counter
+{
+	int		commands;
+	int		inp_files;
+	int		opt_files;
+}	t_counter;
+
+
 typedef struct s_exec
 {
 	int				*fd;
-	int				redirections;
 	char			**cmd;
-	char			**files;
+	char			**opt_files;
+	int				**opt_flags;
+	char			**inp_files;
+	int				**inp_flags;
 	char			*cmdpath;
-	char			*src;
-	char			*final_destination;
 	t_shell			*shell;
-	struct s_exec	*next;
 }	t_exec;
 
 //			parsing			//
@@ -130,8 +137,7 @@ int			operater_tokens(t_noding *node);
 int			delimeter_char(char character);
 int			invalid_chars(char c);
 void		assignation(t_shell *shell, char *str);
-void		assign_node(t_shell *shell, t_noding *new,
-				t_tokens type, int popout);
+void		assign_node(t_shell *shell, t_noding *new, t_tokens type, int popout);
 void		assign_pipe(t_shell *shell);
 void		assign_invalid(t_shell *shell, char *str, int index);
 void		add_token(t_shell *shell, t_noding *new);
