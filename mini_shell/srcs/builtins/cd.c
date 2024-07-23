@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 12:14:23 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:46:07 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	*get_directory(int args_count, t_shell *shell, int i)
 	    dir = find_node_aarij(shell->environ->env, "OLDPWD");
 	    if(dir == NULL)
 	        printf("OLDPWD not set");
-	        printf("exit code will be done once i figure out how exit works");
+	        // printf("exit code will be done once i figure out how exit works");
 	}
 	else
 	    dir = shell->exec[i]->cmd[1];

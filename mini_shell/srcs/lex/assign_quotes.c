@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:08 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 15:45:21 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/23 14:12:34 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/23 11:55:09 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/23 15:53:35 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void	setup_exec_struct(t_shell *shell)
 		inp_file = 0;
 		traveler2 = traveler;
 		count_items(shell, traveler2, shell->counter[i]);
-		shell->exec[i]->inp_files = ft_malloc((sizeof(char *) * (shell->counter[i]->inp_files + 1)), shell);
 		shell->exec[i]->cmd = ft_malloc((sizeof(char *) * (shell->counter[i]->commands + 1)), shell);
+		shell->exec[i]->inp_files = ft_malloc((sizeof(char *) * (shell->counter[i]->inp_files + 1)), shell);
 		shell->exec[i]->inp_flags = ft_malloc((sizeof(int) * (shell->counter[i]->inp_files + 1)), shell);
 		shell->exec[i]->opt_files = ft_malloc((sizeof(char *) * (shell->counter[i]->opt_files + 1)), shell);
 		shell->exec[i]->opt_flags = ft_malloc((sizeof(int) * (shell->counter[i]->opt_files + 1)), shell);
@@ -117,40 +117,107 @@ void	setup_exec_struct(t_shell *shell)
 }
 
 
-// void	printf_exec(t_shell *shell)
-// {
-// 	int i = 0;
-// 	int j = 0;
-// 	while (shell->exec[i])
-// 	{
-// 		printf("set no. %d\n", i + 1);
-// 		j = 0;
-// 		printf("commands: ");
-// 		while (shell->exec[i]->cmd[j])
-// 		{
-// 			printf("<<%s>> ", shell->exec[i]->cmd[j]);
-// 			j++;		
-// 		}
-// 		printf("\n\n");
-// 		j = 0;
-// 		printf("inp files: ");
-// 		while (shell->exec[i]->inp_files[j])
-// 		{
-// 			printf("<<%s>> ", shell->exec[i]->inp_files[j]);
-// 			j++;		
-// 		}
-// 		printf("\n\n");
-// 		j = 0;
-// 		printf("opt files: ");
-// 		while (shell->exec[i]->opt_files[j])
-// 		{
-// 			printf("<<%s>> ", shell->exec[i]->opt_files[j]);
-// 			j++;		
-// 		}
-// 		printf("\n\n");
-// 		i++;
-// 	}
-// }
+void	printf_exec(t_shell *shell)
+{
+	int i = 0;
+	int j = 0;
+	while (shell->exec[i])
+	{
+		printf("set no. %d\n", i + 1);
+		j = 0;
+		printf("commands: ");
+		while (shell->exec[i]->cmd[j])
+		{
+			printf("<<%s>> ", shell->exec[i]->cmd[j]);
+			j++;		
+		}
+		printf("\n\n");
+		j = 0;
+		printf("inp files: ");
+		while (shell->exec[i]->inp_files[j])
+		{
+			printf("<<%s>> ", shell->exec[i]->inp_files[j]);
+			j++;		
+		}
+		printf("\n");
+		j = 0;
+		printf("inp types: ");
+		while (j < shell->counter[i]->inp_files)
+		{
+			printf("<<%d>> ", shell->exec[i]->inp_flags[j]);
+			j++;		
+		}
+		printf("\n\n");
+		j = 0;
+		printf("opt files: ");
+		while (shell->exec[i]->opt_files[j])
+		{
+			printf("<<%s>> ", shell->exec[i]->opt_files[j]);
+			j++;		
+		}
+		j = 0;
+		printf("\n");
+		printf("opt types: ");
+		while (j < shell->counter[i]->opt_files)
+		{
+			printf("<<%d>> ", shell->exec[i]->opt_flags[j]);
+			j++;		
+		}
+		printf("\n\n");
+		i++;
+	}
+}
+
+char	**set_up_path(t_shell *shell)
+{
+	t_values	*locate;
+
+	char	**path;
+	locate = locate_node(shell->environ->env, "PATH");
+	if (!locate)
+		return (NULL);
+	path = ft_split(locate->value, ':');
+	path[0] = ft_strtrim(path[0], "PATH=");
+	return (path);
+}
+
+void	execution(t_shell *shell, int index)
+{
+	int i = 0;
+	
+	shell->environ->environment = arr(shell->environ->env, shell);
+	shell->environ->path = set_up_path(shell);
+	if (!access(shell->exec[index]->cmd[0], X_OK | F_OK))
+		execve(shell->exec[index]->cmd[0], shell->exec[index]->cmd, shell->environ->environment);
+	if (shell->environ->path)
+	{
+		while (shell->environ->path[i])
+		{
+			shell->exec[index]->cmdpath = ft_strjoin2(shell->environ->path[i], "/", shell->exec[index]->cmd[0]); 
+			if (!access(shell->exec[index]->cmdpath, X_OK | F_OK))
+				execve(shell->exec[index]->cmdpath, shell->exec[index]->cmd, shell->environ->environment);
+			ft_free((void **)&shell->exec[index]->cmdpath);
+			i++;
+		}
+		ft_putstr_fd(shell->exec[index]->cmd[0], 1);
+		ft_putstr_fd(": command not found\n", 1);
+		mass_free(shell, 127);
+		exit(127);
+	}
+	exit(127);
+}
+
+void	exec_loop(t_shell *shell)
+{
+	int i = 0;
+	while(shell->exec[i])
+	{
+		shell->child = fork();
+		if (!shell->child)
+			execution(shell, i);
+		i++;
+	}
+}
 
 void	minishell(t_shell *shell)
 {
@@ -162,17 +229,17 @@ void	minishell(t_shell *shell)
 		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
 		if (!shell->str)
 			break ;
+		if (strcmp(shell->str, "") == 0)
+			continue ;
 		if (shell->str[0] != '\0')
 			add_history(shell->str);
 		if (parsing_hub(shell, shell->str))
 		{
 			setup_exec_struct(shell);
 			// printf_exec(shell);
-			// printf("tokenization succesful!\n");
+			// builtin_check(shell) == 1;
+			exec_loop(shell);
 		}
-		else
-			printf("tokenization failed successfully!\n");
-		builtin_check(shell);
 		free_tokenization(shell);
 		free (shell->str);
 	}

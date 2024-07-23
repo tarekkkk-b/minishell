@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 13:24:24 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/23 15:22:33 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	builtin_check(t_shell *shell)
 {
 	int i = 0;
 	int args_c = 0;
+	if (!shell || !shell->exec)
+		return (-1);
 	while(shell->exec[i])
 	{
 		args_c = args_count(shell, i);
