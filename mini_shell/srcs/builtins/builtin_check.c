@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 12:03:53 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:24:24 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	args_count(t_shell *shell, int index)
 int	builtin_check(t_shell *shell)
 {
 	int i = 0;
-	int args_c;
+	int args_c = 0;
 	while(shell->exec[i])
 	{
 		args_c = args_count(shell, i);
@@ -33,6 +33,10 @@ int	builtin_check(t_shell *shell)
 			builtin_pwd(shell);
 		if (ft_strncmp(shell->exec[i]->cmd[0], "cd", 3) == 0)
 			builtin_cd(shell, i, args_c);
+		if(ft_strncmp(shell->exec[i]->cmd[0], "echo", 5) == 0)
+			builtin_echo(shell, i);
+		if(ft_strncmp(shell->exec[i]->cmd[0], "exit", 5) == 0)
+			builtin_exit(shell, args_c, i);
 		i++;
 	}
 	return (0);

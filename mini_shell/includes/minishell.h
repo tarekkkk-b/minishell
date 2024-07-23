@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/23 12:04:58 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/23 13:00:19 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,13 +190,14 @@ t_values	*locate_node(t_values *temp, char *target_key);
 
 int			builtin_check(t_shell *shell);
 int			builtin_env(t_environ *environ);
-// int			builtin_exit(t_readline rl);
+int			builtin_exit(t_shell *shell, int argc, int index);
 int			builtin_pwd(t_shell *shell);
-int			builtin_echo(char *str);
+int			builtin_echo(t_shell *shell, int index);
 int			builtin_cd(t_shell *shell, int i, int args);
 int			update_pwd(t_shell *shell, char *directory);
 int			change_nodeee(t_values *node, char *new);
 char		*get_directory(int args_count, t_shell *shell, int i);
 char		*find_node_aarij(t_values *temp, char *target_key);
+int			is_num(char *str);
 
 #endif
