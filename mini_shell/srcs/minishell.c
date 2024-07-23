@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 20:01:05 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/23 11:55:09 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,22 @@ void	initializer(t_shell *shell)
 	shell->environ = NULL;
 	shell->exec = NULL;
 	shell->parser = NULL;
+	shell->counter = NULL;
 }
 
 void	count_items(t_shell *shell, t_noding *traveler, t_counter *counter)
 {
+	(void)shell;
 	counter->commands = 0;
 	counter->inp_files = 0;
 	counter->opt_files = 0;
 	while (traveler && traveler->type != PIPES)
 	{
-		if (traveler->type == ARGS)
+		if (traveler->type == ARG)
 			counter->commands++;
 		if (traveler->type == OPT_FILE)
 			counter->opt_files++;
-		if (traveler->type == INP_FILE)
+		if (traveler->type == INP_FILE || traveler->type == DELIMITER)
 			counter->inp_files++;
 		traveler = traveler->next;
 	}
@@ -48,27 +50,28 @@ void	setup_exec_struct(t_shell *shell)
 {
 	t_noding	*traveler;
 	t_noding	*traveler2;
-	t_counter	*counter;
 
 	int i = 0;
 	int	command = 0;
 	int opt_file = 0;
 	int inp_file = 0;
-	counter = ft_malloc(sizeof(t_counter));
-	shell->exec = ft_malloc((sizeof(t_exec *) * shell->parser->noding + 2));
+	shell->counter = ft_malloc((sizeof(t_counter *) * (shell->parser->pipe_count + 2)), shell);
+	shell->exec = ft_malloc((sizeof(t_exec *) * (shell->parser->pipe_count + 2)), shell);
 	traveler = shell->parser->noding;
 	while (traveler)
 	{
+		shell->counter[i] = ft_malloc(sizeof(t_counter), shell);
+		shell->exec[i] = ft_malloc(sizeof(t_exec), shell);
 		command = 0;
 		opt_file = 0;
 		inp_file = 0;
 		traveler2 = traveler;
-		count_items(shell, traveler2, counter);
-		shell->exec[i]->inp_files = ft_malloc((sizeof(char *) * counter->inp_files + 1));
-		shell->exec[i]->cmd = ft_malloc((sizeof(char *) * counter->commands + 1));
-		shell->exec[i]->inp_flags = ft_malloc((sizeof(int *) * counter->inp_files + 1));
-		shell->exec[i]->opt_files = ft_malloc((sizeof(char *) * counter->opt_files + 1));
-		shell->exec[i]->opt_flags = ft_malloc((sizeof(int *) * counter->opt_files + 1));
+		count_items(shell, traveler2, shell->counter[i]);
+		shell->exec[i]->inp_files = ft_malloc((sizeof(char *) * (shell->counter[i]->inp_files + 1)), shell);
+		shell->exec[i]->cmd = ft_malloc((sizeof(char *) * (shell->counter[i]->commands + 1)), shell);
+		shell->exec[i]->inp_flags = ft_malloc((sizeof(int) * (shell->counter[i]->inp_files + 1)), shell);
+		shell->exec[i]->opt_files = ft_malloc((sizeof(char *) * (shell->counter[i]->opt_files + 1)), shell);
+		shell->exec[i]->opt_flags = ft_malloc((sizeof(int) * (shell->counter[i]->opt_files + 1)), shell);
 		while (traveler && traveler->type != PIPES)
 		{
 			if (traveler->type == ARG)
@@ -102,12 +105,52 @@ void	setup_exec_struct(t_shell *shell)
 			}
 			traveler = traveler->next;
 		}
-		ft_free((void **)&counter);
+		shell->exec[i]->cmd[command] = NULL;
+		shell->exec[i]->opt_files[opt_file] = NULL;
+		shell->exec[i]->inp_files[inp_file] = NULL;
 		i++;
 		if (traveler)
 			traveler = traveler->next;
 	}
+	shell->exec[i] = NULL;
+	shell->counter[i] = NULL;
 }
+
+
+// void	printf_exec(t_shell *shell)
+// {
+// 	int i = 0;
+// 	int j = 0;
+// 	while (shell->exec[i])
+// 	{
+// 		printf("set no. %d\n", i + 1);
+// 		j = 0;
+// 		printf("commands: ");
+// 		while (shell->exec[i]->cmd[j])
+// 		{
+// 			printf("<<%s>> ", shell->exec[i]->cmd[j]);
+// 			j++;		
+// 		}
+// 		printf("\n\n");
+// 		j = 0;
+// 		printf("inp files: ");
+// 		while (shell->exec[i]->inp_files[j])
+// 		{
+// 			printf("<<%s>> ", shell->exec[i]->inp_files[j]);
+// 			j++;		
+// 		}
+// 		printf("\n\n");
+// 		j = 0;
+// 		printf("opt files: ");
+// 		while (shell->exec[i]->opt_files[j])
+// 		{
+// 			printf("<<%s>> ", shell->exec[i]->opt_files[j]);
+// 			j++;		
+// 		}
+// 		printf("\n\n");
+// 		i++;
+// 	}
+// }
 
 void	minishell(t_shell *shell)
 {
@@ -124,10 +167,12 @@ void	minishell(t_shell *shell)
 		if (parsing_hub(shell, shell->str))
 		{
 			setup_exec_struct(shell);
-			printf("tokenization succesful!\n");
+			// printf_exec(shell);
+			// printf("tokenization succesful!\n");
 		}
 		else
 			printf("tokenization failed successfully!\n");
+		builtin_check(shell);
 		free_tokenization(shell);
 		free (shell->str);
 	}

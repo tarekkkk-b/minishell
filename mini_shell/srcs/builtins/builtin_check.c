@@ -3,25 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/22 09:36:36 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/23 12:03:53 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+static int	args_count(t_shell *shell, int index)
+{
+	int i = 0;
+	while (shell->exec[index]->cmd[i])
+		i++;
+	return i;	
+}
+
 int	builtin_check(t_shell *shell)
 {
-	if (ft_strncmp(shell->str, "env", 3) == 0)
-		builtin_env(shell->environ);
-	if (ft_strncmp(shell->str, "pwd", 4) == 0)
-		builtin_pwd(shell);
-	if (ft_strncmp(shell->str, "cd", 3) == 0)
-		builtin_cd(shell);
+	int i = 0;
+	int args_c;
+	while(shell->exec[i])
+	{
+		args_c = args_count(shell, i);
+		if (ft_strncmp(shell->exec[i]->cmd[0], "env", 4) == 0)
+			builtin_env(shell->environ);
+		if (ft_strncmp(shell->exec[i]->cmd[0], "pwd", 4) == 0)
+			builtin_pwd(shell);
+		if (ft_strncmp(shell->exec[i]->cmd[0], "cd", 3) == 0)
+			builtin_cd(shell, i, args_c);
+		i++;
+	}
 	return (0);
 }
+
 
 // int	builtin_check(t_shell *shell)
 // {

@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/22 13:11:00 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/07/23 10:45:02 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
-# CFLAGS		+=	-fsanitize=address -g3
+CFLAGS		+=	-fsanitize=address -g3
 
 # the following flagsg are to be used on 42 computers
 RLFLAGS		=	-lreadline -lhistory

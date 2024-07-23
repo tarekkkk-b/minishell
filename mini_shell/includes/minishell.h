@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 19:12:20 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/23 12:04:58 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 typedef struct s_environ	t_environ;
 typedef struct s_exec		t_exec;
 typedef struct s_parser		t_parser;
+typedef	struct s_counter	t_counter;
 
 //		shell struct		//
 typedef struct s_shell
@@ -41,6 +42,7 @@ typedef struct s_shell
 	t_environ	*environ;
 	t_parser	*parser;
 	t_exec		**exec;
+	t_counter	**counter;
 }	t_shell;
 
 //		env structs		//
@@ -115,9 +117,9 @@ typedef struct s_exec
 	int				*fd;
 	char			**cmd;
 	char			**opt_files;
-	int				**opt_flags;
+	int				*opt_flags;
 	char			**inp_files;
-	int				**inp_flags;
+	int				*inp_flags;
 	char			*cmdpath;
 	t_shell			*shell;
 }	t_exec;
@@ -191,10 +193,10 @@ int			builtin_env(t_environ *environ);
 // int			builtin_exit(t_readline rl);
 int			builtin_pwd(t_shell *shell);
 int			builtin_echo(char *str);
-int			builtin_cd(t_shell *shell);
+int			builtin_cd(t_shell *shell, int i, int args);
 int			update_pwd(t_shell *shell, char *directory);
 int			change_nodeee(t_values *node, char *new);
-char		*get_directory(int args_count, t_shell *shell);
+char		*get_directory(int args_count, t_shell *shell, int i);
 char		*find_node_aarij(t_values *temp, char *target_key);
 
 #endif
