@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/24 13:26:06 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/24 21:36:55 by tarekkkk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,14 +207,68 @@ void	execution(t_shell *shell, int index)
 	exit(127);
 }
 
+void	child_dup(t_shell *shell, int index)
+{
+	int	fd_in;
+	int	fd_out;
+	close(shell->fd[0]);
+	shell->fd[0] = -1;
+	if (shell->exec[index]->inp_files)
+	{
+		fd_in = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files)], O_RDONLY);
+		dup2(fd_in, STDIN_FILENO);
+		close(fd_in);
+		fd_in = -1;
+	}
+	else
+	{
+		if (index != 0)
+		{
+			dup2(shell->fd[1], STDIN_FILENO);
+			close(shell->fd[1]);
+			shell->fd[1] = -1;
+		}
+	}
+	if (shell->exec[index]->opt_files)
+	{
+		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files)])
+			fd_out = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files)], O_WRONLY | O_CREAT | O_APPEND)
+		else
+			fd_out = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files)], O_WRONLY | O_CREAT | O_TRUNC)
+		close(fd_out);
+		fd_out = -1;
+	}
+	else
+	{
+		if (shell->exec[index + 1])
+		{
+			dup2(shell->fd)
+		}
+	}
+}
+
+void	parent_dup(t_shell *shell, int index)
+{
+	close(shell->fd[1]);
+	shell->fd[1] = -1;
+	dup2(shell->fd[0], STDIN_FILENO);
+	close(shell->fd[0]);
+	shell->fd[0] = -1;
+}
+
 void	exec_loop(t_shell *shell)
 {
 	int i = 0;
 	while(shell->exec[i])
 	{
+		pipe(shell->fd);
 		shell->child = fork();
 		if (!shell->child)
+		{
+			child_dup(shell, i);
 			execution(shell, i);
+		}
+		parent_dup(shell, i);
 		shell->lastpid = shell->child;
 		i++;
 	}
