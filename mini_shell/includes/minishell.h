@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/23 14:49:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/24 19:11:29 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,5 +200,11 @@ int			change_nodeee(t_values *node, char *new);
 char		*get_directory(int args_count, t_shell *shell, int i);
 char		*find_node_aarij(t_values *temp, char *target_key);
 int			is_num(char *str);
+
+
+int 		export(int argc, t_shell *shell, int i);
+int			count_values(t_values *env);
+void		sort_it_out(char **arr, int n, int i, int j);
+void		printArray(char **arr, int n, t_shell *shell);
 
 #endif

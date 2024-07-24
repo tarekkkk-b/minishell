@@ -3,28 +3,28 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/23 15:47:14 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/07/24 18:00:02 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra
-# CFLAGS		+=	-fsanitize=address -g3
+CFLAGS		+=	-fsanitize=address -g3
 
 # the following flagsg are to be used on 42 computers
-RLFLAGS		=	-lreadline -lhistory
-RLDIR		=	-L/opt/vagrant/embedded/lib
-RLINC		=	-I/opt/vagrant/embedded/include/readline/readline.h
+# RLFLAGS		=	-lreadline -lhistory
+# RLDIR		=	-L/opt/vagrant/embedded/lib
+# RLINC		=	-I/opt/vagrant/embedded/include/readline/readline.h
 
 
 # and the following flags are to be used on personal computers
-# RLDIR += -L/usr/local/opt/readline/lib
-# RLINC += -I/usr/local/opt/readline/include
-# RLFLAGS = -lreadline -lhistory
+RLDIR += -L/usr/local/opt/readline/lib
+RLINC += -I/usr/local/opt/readline/include
+RLFLAGS = -lreadline -lhistory
 
 
 GREY		= $'\x1b[30m
@@ -106,6 +106,7 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(ENV)/lst_size.c \
 				$(UTILS)/ft_strjoin2.c \
 				$(UTILS)/freestuff.c \
+				$(UTILS)/export_utils.c \
 				$(LEX)/assign_quotes.c \
 				$(LEX)/assign_redirection.c \
 				$(LEX)/assign_variables.c \
@@ -119,8 +120,12 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(LEX)/refine_redirections.c \
 				$(LEX)/temp_file.c \
 				$(SIG)/exit.c $(BUILT)/env.c \
-				$(BUILT)/exit.c $(BUILT)/builtin_check.c $(BUILT)/pwd.c $(BUILT)/echo.c \
-				$(BUILT)/cd.c
+				$(BUILT)/exit.c \
+				$(BUILT)/builtin_check.c \
+				$(BUILT)/pwd.c \
+				$(BUILT)/echo.c \
+				$(BUILT)/cd.c \
+				$(BUILT)/export.c \
 
 
 OBJS		=	$(SRCS:.c=.o)

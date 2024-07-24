@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/24 13:27:20 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/24 18:11:56 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	builtin_check(t_shell *shell)
 			return ((void)builtin_echo(shell, i), 1);
 		if(ft_strncmp(shell->exec[i]->cmd[0], "exit", 5) == 0)
 			return ((void)builtin_exit(shell, args_c, i), 1);
+		if(ft_strncmp(shell->exec[i]->cmd[0], "export", 5) == 0)
+			return ((void)export(args_c, shell, i), 1);		
 		i++;
 	}
 	return (0);
