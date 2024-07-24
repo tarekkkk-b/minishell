@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 15:22:33 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:27:20 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,15 +30,15 @@ int	builtin_check(t_shell *shell)
 	{
 		args_c = args_count(shell, i);
 		if (ft_strncmp(shell->exec[i]->cmd[0], "env", 4) == 0)
-			builtin_env(shell->environ);
+			return ((void)builtin_env(shell->environ), 1);
 		if (ft_strncmp(shell->exec[i]->cmd[0], "pwd", 4) == 0)
-			builtin_pwd(shell);
+			return ((void)builtin_pwd(shell), 1);
 		if (ft_strncmp(shell->exec[i]->cmd[0], "cd", 3) == 0)
-			builtin_cd(shell, i, args_c);
+			return ((void)builtin_cd(shell, i, args_c), 1);
 		if(ft_strncmp(shell->exec[i]->cmd[0], "echo", 5) == 0)
-			builtin_echo(shell, i);
+			return ((void)builtin_echo(shell, i), 1);
 		if(ft_strncmp(shell->exec[i]->cmd[0], "exit", 5) == 0)
-			builtin_exit(shell, args_c, i);
+			return ((void)builtin_exit(shell, args_c, i), 1);
 		i++;
 	}
 	return (0);

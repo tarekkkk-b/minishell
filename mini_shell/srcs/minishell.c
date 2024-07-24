@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/23 15:53:35 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/24 13:26:06 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,21 @@ void	exec_loop(t_shell *shell)
 		shell->child = fork();
 		if (!shell->child)
 			execution(shell, i);
+		shell->lastpid = shell->child;
 		i++;
+	}
+}
+
+void	waiting(t_shell *shell)
+{
+	pid_t	id = 0;
+	int 	temp;
+
+	while(id != -1)
+	{
+		id = wait(&temp);
+		if (id == shell->lastpid)
+			shell->environ->exit = WEXITSTATUS(temp);
 	}
 }
 
@@ -237,9 +251,10 @@ void	minishell(t_shell *shell)
 		{
 			setup_exec_struct(shell);
 			// printf_exec(shell);
-			// builtin_check(shell) == 1;
-			exec_loop(shell);
+			if (!builtin_check(shell))
+				exec_loop(shell);
 		}
+		waiting(shell);
 		free_tokenization(shell);
 		free (shell->str);
 	}
