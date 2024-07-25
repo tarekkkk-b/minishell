@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/25 12:27:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:25:57 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

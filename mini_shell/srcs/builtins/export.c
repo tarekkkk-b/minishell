@@ -6,13 +6,13 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/24 19:28:30 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/25 14:17:14 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	check_invalid(char *str)
+int	check_invalid(char *str)
 {
 	int i = 0;
 	if(str[i] == '\0')

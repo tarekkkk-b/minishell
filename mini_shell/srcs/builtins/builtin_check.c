@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/24 18:11:56 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/25 14:21:59 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ int	builtin_check(t_shell *shell)
 		if(ft_strncmp(shell->exec[i]->cmd[0], "exit", 5) == 0)
 			return ((void)builtin_exit(shell, args_c, i), 1);
 		if(ft_strncmp(shell->exec[i]->cmd[0], "export", 5) == 0)
-			return ((void)export(args_c, shell, i), 1);		
+			return ((void)export(args_c, shell, i), 1);
+		if(ft_strncmp(shell->exec[i]->cmd[0], "unset", 6) == 0)
+			return ((void)builtin_unset(shell, args_c, i), 1);
 		i++;
 	}
 	return (0);

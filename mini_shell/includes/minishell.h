@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/24 19:55:45 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/25 14:22:18 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,7 @@ int			builtin_exit(t_shell *shell, int argc, int index);
 int			builtin_pwd(t_shell *shell);
 int			builtin_echo(t_shell *shell, int index);
 int			builtin_cd(t_shell *shell, int i, int args);
+int			builtin_unset(t_shell *shell, int argc, int i);
 int			update_pwd(t_shell *shell, char *directory);
 int			change_nodeee(t_values *node, char *new);
 char		*get_directory(int args_count, t_shell *shell, int i);
@@ -207,5 +208,6 @@ int 		export(int argc, t_shell *shell, int i);
 int			count_values(t_values *env);
 void		sort_it_out(char **arr, int n, int i, int j);
 void		printArray(char **arr, int n, t_shell *shell);
+int			check_invalid(char *str);
 
 #endif

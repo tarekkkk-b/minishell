@@ -6,7 +6,7 @@
 #    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/24 18:00:02 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/07/25 14:22:41 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -126,6 +126,7 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(BUILT)/echo.c \
 				$(BUILT)/cd.c \
 				$(BUILT)/export.c \
+				$(BUILT)/unset.c \
 
 
 OBJS		=	$(SRCS:.c=.o)
