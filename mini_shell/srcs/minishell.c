@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tarekkkk <tarekkkk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/24 21:36:55 by tarekkkk         ###   ########.fr       */
+/*   Updated: 2024/07/25 12:27:25 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,9 +210,11 @@ void	execution(t_shell *shell, int index)
 void	child_dup(t_shell *shell, int index)
 {
 	int	fd_in;
-	int	fd_out;
-	close(shell->fd[0]);
-	shell->fd[0] = -1;
+	if (shell->fd[0] != -1)
+	{
+		close(shell->fd[0]);
+		shell->fd[0] = -1;
+	}
 	if (shell->exec[index]->inp_files)
 	{
 		fd_in = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files)], O_RDONLY);
@@ -229,6 +231,22 @@ void	child_dup(t_shell *shell, int index)
 			shell->fd[1] = -1;
 		}
 	}
+	if (shell->fd[1] != -1)
+	{
+		close(shell->fd[1]);
+		shell->fd[1] = -1;
+	}
+}
+
+void	parent_dup(t_shell *shell, int index)
+{
+	int	fd_out;
+
+	if (shell->fd[1] != -1)
+	{
+		close(shell->fd[1]);
+		shell->fd[1] = -1;
+	}
 	if (shell->exec[index]->opt_files)
 	{
 		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files)])
@@ -239,21 +257,12 @@ void	child_dup(t_shell *shell, int index)
 		fd_out = -1;
 	}
 	else
+		dup2(shell->fd[0], STDIN_FILENO);
+	if (shell->fd[0] != -1)
 	{
-		if (shell->exec[index + 1])
-		{
-			dup2(shell->fd)
-		}
+		close(shell->fd[0]);
+		shell->fd[0] = -1;
 	}
-}
-
-void	parent_dup(t_shell *shell, int index)
-{
-	close(shell->fd[1]);
-	shell->fd[1] = -1;
-	dup2(shell->fd[0], STDIN_FILENO);
-	close(shell->fd[0]);
-	shell->fd[0] = -1;
 }
 
 void	exec_loop(t_shell *shell)
