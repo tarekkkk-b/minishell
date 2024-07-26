@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/26 19:52:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/26 21:22:02 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,11 +223,11 @@ void	inp_dup(t_shell *shell, int index, int temp_fd)
 	{
 		printf("command number: %d	reading from pipe rather than STDIN\n", index + 1);
 		dup2(temp_fd, STDIN_FILENO);
-		if (shell->exec[index]->fd[WRITE_PIPE] != -1)
-		{
-			close(shell->exec[index]->fd[WRITE_PIPE]);
-			shell->exec[index]->fd[WRITE_PIPE] = -1;
-		}
+		// if (shell->exec[index]->fd[WRITE_PIPE] != -1)
+		// {
+		// 	close(shell->exec[index]->fd[WRITE_PIPE]);
+		// 	shell->exec[index]->fd[WRITE_PIPE] = -1;
+		// }
 	}
 	else
 		printf("command number: %d	reading from STDIN\n", index + 1);
@@ -269,7 +269,6 @@ void	opt_dup(t_shell *shell, int index)
 	{
 		printf("command number: %d	writing to pipe rather than STDOUT\n", index + 1);
 		dup2(shell->exec[index]->fd[WRITE_PIPE], STDOUT_FILENO);
-		// fprintf(stderr, "im command:	%s\n", shell->exec[index]->cmd[0]);
 		if (shell->exec[index]->fd[READ_PIPE] != -1)
 		{	
 			close(shell->exec[index]->fd[READ_PIPE]);
@@ -284,7 +283,7 @@ void	opt_dup(t_shell *shell, int index)
 		shell->exec[index]->fd[WRITE_PIPE] = -1;
 	}
 }
-
+ 
 void	exec_loop(t_shell *shell)
 {
 	int i = 0;
@@ -298,11 +297,14 @@ void	exec_loop(t_shell *shell)
 		if (!shell->child)
 		{
 			inp_dup(shell, i, fd);
+			close(fd);
 			opt_dup(shell, i);
+			// fd = dup(shell->exec[i]->fd[READ_PIPE]);
 			execution(shell, i);
 		}
 		fd = dup(shell->exec[i]->fd[READ_PIPE]);
-		// close (shell->exec[i]->fd[READ_PIPE]);
+		// close (fd);
+		close (shell->exec[i]->fd[READ_PIPE]);
 		close (shell->exec[i]->fd[WRITE_PIPE]);
 		shell->lastpid = shell->child;
 		i++;
