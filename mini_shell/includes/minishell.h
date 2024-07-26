@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/25 14:22:18 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/26 19:15:08 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <signal.h>
 # include <string.h>
 # include <fcntl.h>
+# include <sys/wait.h>
 // # include <sys/syslimits.h>
 // useful header ^^^
 # include <readline/history.h>
@@ -34,10 +35,13 @@ typedef struct s_exec		t_exec;
 typedef struct s_parser		t_parser;
 typedef	struct s_counter	t_counter;
 
+# define	READ_PIPE	0
+# define	WRITE_PIPE	1
+
 //		shell struct		//
 typedef struct s_shell
 {
-	int			*fd;
+	int			fd[2];
 	pid_t		child;
 	pid_t		lastpid;
 	char		*str;
@@ -117,6 +121,7 @@ typedef	struct s_counter
 
 typedef struct s_exec
 {
+	int				fd[2];
 	char			**cmd;
 	char			**opt_files;
 	int				*opt_flags;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/25 14:25:57 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/26 19:52:25 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,80 +207,107 @@ void	execution(t_shell *shell, int index)
 	exit(127);
 }
 
-void	child_dup(t_shell *shell, int index)
+void	inp_dup(t_shell *shell, int index, int temp_fd)
 {
-	int	fd_in;
-	if (shell->fd[0] != -1)
+	int	fd;
+
+	if (shell->exec[index]->inp_files && shell->exec[index]->inp_files[0])
 	{
-		close(shell->fd[0]);
-		shell->fd[0] = -1;
+		printf("command number: %d	reading from file\n", index + 1);
+		fd = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files) - 1], O_RDONLY);
+		dup2(fd, STDIN_FILENO);
+		close(fd);
+		fd = -1;
 	}
-	if (shell->exec[index]->inp_files)
+	else if (index != 0)
 	{
-		fd_in = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files)], O_RDONLY);
-		dup2(fd_in, STDIN_FILENO);
-		close(fd_in);
-		fd_in = -1;
-	}
-	else
-	{
-		if (index != 0)
+		printf("command number: %d	reading from pipe rather than STDIN\n", index + 1);
+		dup2(temp_fd, STDIN_FILENO);
+		if (shell->exec[index]->fd[WRITE_PIPE] != -1)
 		{
-			dup2(shell->fd[1], STDIN_FILENO);
-			close(shell->fd[1]);
-			shell->fd[1] = -1;
+			close(shell->exec[index]->fd[WRITE_PIPE]);
+			shell->exec[index]->fd[WRITE_PIPE] = -1;
 		}
 	}
-	if (shell->fd[1] != -1)
-	{
-		close(shell->fd[1]);
-		shell->fd[1] = -1;
+	else
+		printf("command number: %d	reading from STDIN\n", index + 1);
+	if (shell->exec[index]->fd[READ_PIPE] != -1)
+	{	
+		close(shell->exec[index]->fd[READ_PIPE]);
+		shell->exec[index]->fd[READ_PIPE] = -1;
 	}
 }
 
-void	parent_dup(t_shell *shell, int index)
+void	opt_dup(t_shell *shell, int index)
 {
-	int	fd_out;
+	int	fd;
 
-	if (shell->fd[1] != -1)
+	fd = -1;
+	if (shell->exec[index]->opt_files && shell->exec[index]->opt_files[0])
 	{
-		close(shell->fd[1]);
-		shell->fd[1] = -1;
+		fprintf(stderr, "target file name:	%s\n", shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1]);
+		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1] == 1)
+		{
+			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
+			if (fd == -1)
+				fprintf(stderr, "womp womp\n");
+			fprintf(stderr, "do i even open1\n");
+		}
+		else if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1] == 0)
+		{
+			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			if (fd == -1)
+				fprintf(stderr, "womp womp\n");
+			fprintf(stderr, "do i even open2\n");
+		}
+		dup2(fd, STDOUT_FILENO);
+		close (fd);
+		fd = -1;
+		fprintf(stderr, "command number: %d	writing to file\n", index + 1);
 	}
-	if (shell->exec[index]->opt_files)
+	else if (shell->exec[index + 1])
 	{
-		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files)])
-			fd_out = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files)], O_WRONLY | O_CREAT | O_APPEND)
-		else
-			fd_out = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files)], O_WRONLY | O_CREAT | O_TRUNC)
-		close(fd_out);
-		fd_out = -1;
+		printf("command number: %d	writing to pipe rather than STDOUT\n", index + 1);
+		dup2(shell->exec[index]->fd[WRITE_PIPE], STDOUT_FILENO);
+		// fprintf(stderr, "im command:	%s\n", shell->exec[index]->cmd[0]);
+		if (shell->exec[index]->fd[READ_PIPE] != -1)
+		{	
+			close(shell->exec[index]->fd[READ_PIPE]);
+			shell->exec[index]->fd[READ_PIPE] = -1;
+		}
 	}
 	else
-		dup2(shell->fd[0], STDIN_FILENO);
-	if (shell->fd[0] != -1)
+		printf("command number: %d	writing to STDOUT\n", index + 1);
+	if (shell->exec[index]->fd[WRITE_PIPE] != -1)
 	{
-		close(shell->fd[0]);
-		shell->fd[0] = -1;
+		close(shell->exec[index]->fd[WRITE_PIPE]);
+		shell->exec[index]->fd[WRITE_PIPE] = -1;
 	}
 }
 
 void	exec_loop(t_shell *shell)
 {
 	int i = 0;
+	int	fd = -1;
+
 	while(shell->exec[i])
 	{
-		pipe(shell->fd);
+		if (shell->exec[i + 1])
+			pipe(shell->exec[i]->fd);
 		shell->child = fork();
 		if (!shell->child)
 		{
-			child_dup(shell, i);
+			inp_dup(shell, i, fd);
+			opt_dup(shell, i);
 			execution(shell, i);
 		}
-		parent_dup(shell, i);
+		fd = dup(shell->exec[i]->fd[READ_PIPE]);
+		// close (shell->exec[i]->fd[READ_PIPE]);
+		close (shell->exec[i]->fd[WRITE_PIPE]);
 		shell->lastpid = shell->child;
 		i++;
 	}
+	close (fd);
 }
 
 void	waiting(t_shell *shell)

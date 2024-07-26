@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 15:46:07 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/25 16:53:57 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,10 +92,13 @@ int	update_pwd(t_shell *shell, char *directory)
 	temp2 = locate_node(shell->environ->env, "OLDPWD");
 	if (temp)
 	{
-		if (change_nodeee(temp2, temp->value) == 1)
-		{
-			printf("Not work \n");
-			return (1);
+		if (temp2)
+		{	
+			if (change_nodeee(temp2, temp->value) == 1)
+			{
+				printf("Not work \n");
+				return (1);
+			}
 		}
 		if (change_nodeee(temp, directory) == 1)
 		{
