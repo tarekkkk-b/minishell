@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/26 19:15:08 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:12:22 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef	struct s_counter	t_counter;
 //		shell struct		//
 typedef struct s_shell
 {
-	int			fd[2];
+	int			fd;
 	pid_t		child;
 	pid_t		lastpid;
 	char		*str;
@@ -214,5 +214,6 @@ int			count_values(t_values *env);
 void		sort_it_out(char **arr, int n, int i, int j);
 void		printArray(char **arr, int n, t_shell *shell);
 int			check_invalid(char *str);
+void	ft_close(t_shell *shell, int *fd);
 
 #endif

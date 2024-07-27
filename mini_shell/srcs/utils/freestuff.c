@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freestuff.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/22 16:05:37 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/27 20:13:14 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	mass_free(t_shell *shell, int exit_code)
 	if (shell->parser)
 		if (shell->parser->noding)
 			free_tokenization(shell);
+	ft_close(shell, &shell->fd);
 	exit(exit_code);
 }
 

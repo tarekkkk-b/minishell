@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/26 21:22:02 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/27 20:14:47 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	initializer(t_shell *shell)
 	shell->exec = NULL;
 	shell->parser = NULL;
 	shell->counter = NULL;
+	shell->fd = -1;
 }
 
 void	count_items(t_shell *shell, t_noding *traveler, t_counter *counter)
@@ -62,6 +63,8 @@ void	setup_exec_struct(t_shell *shell)
 	{
 		shell->counter[i] = ft_malloc(sizeof(t_counter), shell);
 		shell->exec[i] = ft_malloc(sizeof(t_exec), shell);
+		shell->exec[i]->fd[0] = -1;
+		shell->exec[i]->fd[1] = -1;
 		command = 0;
 		opt_file = 0;
 		inp_file = 0;
@@ -207,36 +210,29 @@ void	execution(t_shell *shell, int index)
 	exit(127);
 }
 
+void	ft_close(t_shell *shell, int *fd)
+{
+	if ((*fd) >= 0)
+		if (close(*fd) == -1)
+			mass_free(shell, 1);
+	(*fd) = -1;
+}
+
 void	inp_dup(t_shell *shell, int index, int temp_fd)
 {
 	int	fd;
 
 	if (shell->exec[index]->inp_files && shell->exec[index]->inp_files[0])
 	{
-		printf("command number: %d	reading from file\n", index + 1);
 		fd = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files) - 1], O_RDONLY);
 		dup2(fd, STDIN_FILENO);
-		close(fd);
-		fd = -1;
+		ft_close(shell, &fd);
 	}
 	else if (index != 0)
-	{
-		printf("command number: %d	reading from pipe rather than STDIN\n", index + 1);
 		dup2(temp_fd, STDIN_FILENO);
-		// if (shell->exec[index]->fd[WRITE_PIPE] != -1)
-		// {
-		// 	close(shell->exec[index]->fd[WRITE_PIPE]);
-		// 	shell->exec[index]->fd[WRITE_PIPE] = -1;
-		// }
-	}
-	else
-		printf("command number: %d	reading from STDIN\n", index + 1);
-	if (shell->exec[index]->fd[READ_PIPE] != -1)
-	{	
-		close(shell->exec[index]->fd[READ_PIPE]);
-		shell->exec[index]->fd[READ_PIPE] = -1;
-	}
+	ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
 }
+
 
 void	opt_dup(t_shell *shell, int index)
 {
@@ -245,71 +241,41 @@ void	opt_dup(t_shell *shell, int index)
 	fd = -1;
 	if (shell->exec[index]->opt_files && shell->exec[index]->opt_files[0])
 	{
-		fprintf(stderr, "target file name:	%s\n", shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1]);
 		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1] == 1)
-		{
 			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-			if (fd == -1)
-				fprintf(stderr, "womp womp\n");
-			fprintf(stderr, "do i even open1\n");
-		}
 		else if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1] == 0)
-		{
 			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-			if (fd == -1)
-				fprintf(stderr, "womp womp\n");
-			fprintf(stderr, "do i even open2\n");
-		}
 		dup2(fd, STDOUT_FILENO);
-		close (fd);
-		fd = -1;
-		fprintf(stderr, "command number: %d	writing to file\n", index + 1);
+		ft_close(shell, &fd);
 	}
 	else if (shell->exec[index + 1])
-	{
-		printf("command number: %d	writing to pipe rather than STDOUT\n", index + 1);
 		dup2(shell->exec[index]->fd[WRITE_PIPE], STDOUT_FILENO);
-		if (shell->exec[index]->fd[READ_PIPE] != -1)
-		{	
-			close(shell->exec[index]->fd[READ_PIPE]);
-			shell->exec[index]->fd[READ_PIPE] = -1;
-		}
-	}
-	else
-		printf("command number: %d	writing to STDOUT\n", index + 1);
-	if (shell->exec[index]->fd[WRITE_PIPE] != -1)
-	{
-		close(shell->exec[index]->fd[WRITE_PIPE]);
-		shell->exec[index]->fd[WRITE_PIPE] = -1;
-	}
+	ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
 }
  
 void	exec_loop(t_shell *shell)
 {
-	int i = 0;
-	int	fd = -1;
+	int	i;
 
+	i = 0;
 	while(shell->exec[i])
 	{
-		if (shell->exec[i + 1])
-			pipe(shell->exec[i]->fd);
+		pipe(shell->exec[i]->fd);
 		shell->child = fork();
 		if (!shell->child)
 		{
-			inp_dup(shell, i, fd);
-			close(fd);
+			inp_dup(shell, i, shell->fd);
+			ft_close(shell, &shell->fd);
 			opt_dup(shell, i);
-			// fd = dup(shell->exec[i]->fd[READ_PIPE]);
 			execution(shell, i);
 		}
-		fd = dup(shell->exec[i]->fd[READ_PIPE]);
-		// close (fd);
-		close (shell->exec[i]->fd[READ_PIPE]);
-		close (shell->exec[i]->fd[WRITE_PIPE]);
+		shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
+		ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+		ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 		shell->lastpid = shell->child;
 		i++;
 	}
-	close (fd);
+	ft_close(shell, &shell->fd);
 }
 
 void	waiting(t_shell *shell)
