@@ -1,0 +1,12 @@
+# variable expansion in heredoc
+# signals need to work in all aspects
+# builtins being forked correctly
+# exit code saved correctly
+# $?
+# check inp files
+# create out files
+
+# protections
+
+# overall cleanup memory
+# overall cleanup norm

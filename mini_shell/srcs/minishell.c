@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/28 20:13:39 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:57:27 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	initializer(t_shell *shell)
 	shell->parser = NULL;
 	shell->counter = NULL;
 	shell->fd = -1;
+	shell->lastpid = -1;
 }
 
 void	count_items(t_shell *shell, t_noding *traveler, t_counter *counter)
@@ -227,7 +228,7 @@ void	inp_dup(t_shell *shell, int index, int temp_fd)
 	if (shell->exec[index]->inp_files && shell->exec[index]->inp_files[0])
 	{
 		if (shell->exec[index]->inp_flags[get_arrlen(shell->exec[index]->inp_files) - 1] == 1)
-			fd = open("/Users/tabadawi/Desktop/minishell/mini_shell/includes/.here_i_doc", O_RDONLY);
+			fd = open("/tmp/.here_i_doc", O_RDONLY);
 		else if (shell->exec[index]->inp_flags[get_arrlen(shell->exec[index]->inp_files) - 1] == 0)
 			fd = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files) - 1], O_RDONLY);
 		dup2(fd, STDIN_FILENO);
@@ -288,7 +289,7 @@ void	collect_heredoc(t_shell *shell, int index)
 	{
 		if (shell->exec[index]->inp_flags[i])
 		{
-			shell->exec[index]->heredoc_fd = open("/Users/tabadawi/Desktop/minishell/mini_shell/includes/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
+			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
 			str = readline("> ");
 			while (str && (ft_strcmp(str, shell->exec[index]->inp_files[i]) != 0))
 			{
@@ -327,6 +328,8 @@ void	exec_loop(t_shell *shell)
 		if (!shell->child)
 		{
 			collect_heredoc(shell, i);
+			ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+			ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 			exit (0);
 		}
 		waiting(shell);	
