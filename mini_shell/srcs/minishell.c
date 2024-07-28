@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/27 20:14:47 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/28 20:13:39 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	setup_exec_struct(t_shell *shell)
 		shell->exec[i] = ft_malloc(sizeof(t_exec), shell);
 		shell->exec[i]->fd[0] = -1;
 		shell->exec[i]->fd[1] = -1;
+		shell->exec[i]->heredoc_fd = -1;
 		command = 0;
 		opt_file = 0;
 		inp_file = 0;
@@ -222,9 +223,13 @@ void	inp_dup(t_shell *shell, int index, int temp_fd)
 {
 	int	fd;
 
+	fd = -1;
 	if (shell->exec[index]->inp_files && shell->exec[index]->inp_files[0])
 	{
-		fd = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files) - 1], O_RDONLY);
+		if (shell->exec[index]->inp_flags[get_arrlen(shell->exec[index]->inp_files) - 1] == 1)
+			fd = open("/Users/tabadawi/Desktop/minishell/mini_shell/includes/.here_i_doc", O_RDONLY);
+		else if (shell->exec[index]->inp_flags[get_arrlen(shell->exec[index]->inp_files) - 1] == 0)
+			fd = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files) - 1], O_RDONLY);
 		dup2(fd, STDIN_FILENO);
 		ft_close(shell, &fd);
 	}
@@ -241,9 +246,9 @@ void	opt_dup(t_shell *shell, int index)
 	fd = -1;
 	if (shell->exec[index]->opt_files && shell->exec[index]->opt_files[0])
 	{
-		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1] == 1)
+		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1])
 			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1] == 0)
+		else if (!shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1])
 			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		dup2(fd, STDOUT_FILENO);
 		ft_close(shell, &fd);
@@ -252,30 +257,49 @@ void	opt_dup(t_shell *shell, int index)
 		dup2(shell->exec[index]->fd[WRITE_PIPE], STDOUT_FILENO);
 	ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
 }
- 
-void	exec_loop(t_shell *shell)
+
+int	ft_strcmp(char *str1, char *str2)
 {
 	int	i;
 
-	i = 0;
-	while(shell->exec[i])
+	if (!str1 || !str2)
+		return (1);
+	i = -1;
+	if (ft_strlen(str1) == ft_strlen(str2))
 	{
-		pipe(shell->exec[i]->fd);
-		shell->child = fork();
-		if (!shell->child)
-		{
-			inp_dup(shell, i, shell->fd);
-			ft_close(shell, &shell->fd);
-			opt_dup(shell, i);
-			execution(shell, i);
-		}
-		shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
-		ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-		ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-		shell->lastpid = shell->child;
-		i++;
+		while (str1[++i])
+			if (str1[i] != str2[i])
+				return (1);
 	}
-	ft_close(shell, &shell->fd);
+	else
+		return (1);
+	return (0);
+}
+
+void	collect_heredoc(t_shell *shell, int index)
+{
+	int		i;
+	char	*str;
+
+	i = -1;
+	if (!shell->exec[index]->inp_files || !shell->exec[index]->inp_files[0])
+		return ;
+	while (shell->exec[index]->inp_files[++i])
+	{
+		if (shell->exec[index]->inp_flags[i])
+		{
+			shell->exec[index]->heredoc_fd = open("/Users/tabadawi/Desktop/minishell/mini_shell/includes/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
+			str = readline("> ");
+			while (str && (ft_strcmp(str, shell->exec[index]->inp_files[i]) != 0))
+			{
+				str = ft_strjoin(str, "\n", 1);
+				ft_putstr_fd(str, shell->exec[index]->heredoc_fd);
+				ft_free((void **)&str);
+				str = readline("> ");
+			}
+			ft_close(shell, &shell->exec[index]->heredoc_fd);
+		}
+	}
 }
 
 void	waiting(t_shell *shell)
@@ -290,15 +314,56 @@ void	waiting(t_shell *shell)
 			shell->environ->exit = WEXITSTATUS(temp);
 	}
 }
+ 
+void	exec_loop(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while(shell->exec[i])
+	{
+		pipe(shell->exec[i]->fd);
+		shell->child = fork();
+		if (!shell->child)
+		{
+			collect_heredoc(shell, i);
+			exit (0);
+		}
+		waiting(shell);	
+		shell->child = fork();
+		if (!shell->child)
+		{
+			inp_dup(shell, i, shell->fd);
+			ft_close(shell, &shell->fd);
+			opt_dup(shell, i);
+			ft_close(shell, &shell->exec[i]->heredoc_fd);
+			unlink("/Users/tabadawi/Desktop/minishell/mini_shell/includes/.here_i_doc");
+			execution(shell, i);
+		}
+		ft_close(shell, &shell->exec[i]->heredoc_fd);
+		ft_close(shell, &shell->fd);
+		shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
+		ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+		ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+		shell->lastpid = shell->child;
+		i++;
+	}
+	ft_close(shell, &shell->fd);
+}
 
 void	minishell(t_shell *shell)
 {
+	if (!isatty(0))
+		rl_outstream = stdin;
 	while (1)
 	{
 		signalhandler();
 		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = getcwd(NULL, 0);
-		shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
+		if (isatty(0))
+			shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
+		else
+			shell->str = readline(NULL);
 		if (!shell->str)
 			break ;
 		if (strcmp(shell->str, "") == 0)
@@ -308,7 +373,6 @@ void	minishell(t_shell *shell)
 		if (parsing_hub(shell, shell->str))
 		{
 			setup_exec_struct(shell);
-			// printf_exec(shell);
 			if (!builtin_check(shell))
 				exec_loop(shell);
 		}
@@ -327,7 +391,8 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (-1);
 	initializer(&shell);
-	printf("\e[1;1H\e[2J");
+	// printf("\e[1;1H\e[2J");
+	// ^^need to let go of this
 	create_env(env, &shell);
 	minishell(&shell);
 	mass_free(&shell, shell.environ->exit);

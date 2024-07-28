@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/27 20:12:22 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/28 17:52:01 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef	struct s_counter
 typedef struct s_exec
 {
 	int				fd[2];
+	int				heredoc_fd;
 	char			**cmd;
 	char			**opt_files;
 	int				*opt_flags;
