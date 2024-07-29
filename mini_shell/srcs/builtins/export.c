@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/25 14:17:14 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/29 12:54:17 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int export(int argc, t_shell *shell, int i)
 	char    **env_copy;
     int		n;
 	t_values *mane;
-	if(argc == 1)
+	if(argc == 1 && shell->environ->env != NULL)
 	{
     	env_copy = arr(shell->environ->env, shell);
     	n = count_values(shell->environ->env);
@@ -88,3 +88,9 @@ int export(int argc, t_shell *shell, int i)
     return 0;
 }
 
+// empty environment -> export
+//export adsf
+//export @ #
+//export =
+//export = = = ======
+//export jksdf=23 @ # ej=55 @

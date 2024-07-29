@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:08:39 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/27 20:13:26 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/29 11:07:13 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ int builtin_exit(t_shell *shell, int argc, int index)
 	}
 	// we need to have something that checks if we're in a child process, 
 	// AND isatty;
-	// we need to have something that frees everything also;
-	// exit(exit_code);
 	mass_free(shell, exit_code);
 	return (0);
 }

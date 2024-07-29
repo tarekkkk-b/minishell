@@ -1,12 +1,16 @@
 # variable expansion in heredoc
-# signals need to work in all aspects
-# builtins being forked correctly
-# exit code saved correctly
-# $?
 # check inp files
 # create out files
+# permissions
+
+# builtins being forked correctly emad beleives its done! signals tomorrow soz
+
+# signals need to work in all aspects
+# exit code saved correctly
+# $?
 
 # protections
 
 # overall cleanup memory
 # overall cleanup norm
+

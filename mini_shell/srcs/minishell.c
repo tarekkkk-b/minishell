@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/28 20:57:27 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:07:35 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,7 +319,6 @@ void	waiting(t_shell *shell)
 void	exec_loop(t_shell *shell)
 {
 	int	i;
-
 	i = 0;
 	while(shell->exec[i])
 	{
@@ -330,9 +329,9 @@ void	exec_loop(t_shell *shell)
 			collect_heredoc(shell, i);
 			ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 			ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-			exit (0);
+			mass_free(shell, 0);
 		}
-		waiting(shell);	
+		waiting(shell);
 		shell->child = fork();
 		if (!shell->child)
 		{
@@ -340,9 +339,11 @@ void	exec_loop(t_shell *shell)
 			ft_close(shell, &shell->fd);
 			opt_dup(shell, i);
 			ft_close(shell, &shell->exec[i]->heredoc_fd);
-			unlink("/Users/tabadawi/Desktop/minishell/mini_shell/includes/.here_i_doc");
-			execution(shell, i);
+			unlink("/tmp/.here_i_doc");
+			if (builtin_check(shell, i, 1) != 0)
+				execution(shell, i);
 		}
+		builtin_check(shell, i, 0);
 		ft_close(shell, &shell->exec[i]->heredoc_fd);
 		ft_close(shell, &shell->fd);
 		shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
@@ -365,8 +366,6 @@ void	minishell(t_shell *shell)
 		shell->environ->cwd = getcwd(NULL, 0);
 		if (isatty(0))
 			shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
-		else
-			shell->str = readline(NULL);
 		if (!shell->str)
 			break ;
 		if (strcmp(shell->str, "") == 0)
@@ -376,8 +375,7 @@ void	minishell(t_shell *shell)
 		if (parsing_hub(shell, shell->str))
 		{
 			setup_exec_struct(shell);
-			if (!builtin_check(shell))
-				exec_loop(shell);
+			exec_loop(shell);
 		}
 		waiting(shell);
 		free_tokenization(shell);
@@ -394,8 +392,6 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (-1);
 	initializer(&shell);
-	// printf("\e[1;1H\e[2J");
-	// ^^need to let go of this
 	create_env(env, &shell);
 	minishell(&shell);
 	mass_free(&shell, shell.environ->exit);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/28 17:52:01 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/07/29 18:11:27 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ t_values	*locate_node(t_values *temp, char *target_key);
 
 //**	builtins & its utils	**//
 
-int			builtin_check(t_shell *shell);
+int			builtin_check(t_shell *shell, int index, int flag);
 int			builtin_env(t_environ *environ);
 int			builtin_exit(t_shell *shell, int argc, int index);
 int			builtin_pwd(t_shell *shell);

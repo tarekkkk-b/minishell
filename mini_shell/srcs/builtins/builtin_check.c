@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/25 14:21:59 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/29 18:14:21 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,32 +20,74 @@ static int	args_count(t_shell *shell, int index)
 	return i;	
 }
 
-int	builtin_check(t_shell *shell)
+int	mass_check(char *str)
 {
 	int i = 0;
+	static char *string[8] = {
+		"env", "pwd", "cd", "echo", "exit", "export", "unset"
+	};
+	while (str && string[i])
+	{
+		if (ft_strncmp(str, string[i], (ft_strlen(string[i]) + 1)) == 0)
+			return(1);
+		i++; 
+	}
+	return (0);
+}
+
+int	builtin_check(t_shell *shell, int index, int flag)
+{
+	int	exit_code = 0;
 	int args_c = 0;
 	if (!shell || !shell->exec)
 		return (-1);
-	while(shell->exec[i])
+	if (flag)
 	{
-		args_c = args_count(shell, i);
-		if (ft_strncmp(shell->exec[i]->cmd[0], "env", 4) == 0)
-			return ((void)builtin_env(shell->environ), 1);
-		if (ft_strncmp(shell->exec[i]->cmd[0], "pwd", 4) == 0)
-			return ((void)builtin_pwd(shell), 1);
-		if (ft_strncmp(shell->exec[i]->cmd[0], "cd", 3) == 0)
-			return ((void)builtin_cd(shell, i, args_c), 1);
-		if(ft_strncmp(shell->exec[i]->cmd[0], "echo", 5) == 0)
-			return ((void)builtin_echo(shell, i), 1);
-		if(ft_strncmp(shell->exec[i]->cmd[0], "exit", 5) == 0)
-			return ((void)builtin_exit(shell, args_c, i), 1);
-		if(ft_strncmp(shell->exec[i]->cmd[0], "export", 5) == 0)
-			return ((void)export(args_c, shell, i), 1);
-		if(ft_strncmp(shell->exec[i]->cmd[0], "unset", 6) == 0)
-			return ((void)builtin_unset(shell, args_c, i), 1);
-		i++;
+		// if a pipe occurs 
+		// if theres only one set of commands, ie no pipe, and if its not a builtin, exit, but exit doesnt seem right, wouldnt return fit?
+		if (!(shell->exec[1]) && mass_check(shell->exec[index]->cmd[0]) == 1)
+			exit (0);
+		if (!(shell->exec[1]) || mass_check(shell->exec[index]->cmd[0]) == 0)
+			return (1);
+		args_c = args_count(shell, index);
+		if (ft_strncmp(shell->exec[index]->cmd[0], "env", 4) == 0)
+			exit_code = builtin_env(shell->environ);
+		else if (ft_strncmp(shell->exec[index]->cmd[0], "pwd", 4) == 0)
+			exit_code = builtin_pwd(shell);
+		else if (ft_strncmp(shell->exec[index]->cmd[0], "cd", 3) == 0)
+			exit_code = builtin_cd(shell, index, args_c);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "echo", 5) == 0)
+			exit_code = builtin_echo(shell, index);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "exit", 5) == 0)
+			exit_code = builtin_exit(shell, args_c, index);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "export", 5) == 0)
+			export(args_c, shell, index);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "unset", 6) == 0)
+			exit_code = builtin_unset(shell, args_c, index);
+		exit(exit_code);
 	}
-	return (0);
+	else if (!flag)
+	{
+		// if the amount of commands is greater than one, and its valid? what?
+		if (shell->exec[0] && shell->exec[1])
+			return (1);
+		args_c = args_count(shell, index);
+		if (ft_strncmp(shell->exec[index]->cmd[0], "env", 4) == 0)
+			exit_code = builtin_env(shell->environ);
+		else if (ft_strncmp(shell->exec[index]->cmd[0], "pwd", 4) == 0)
+			exit_code = builtin_pwd(shell);
+		else if (ft_strncmp(shell->exec[index]->cmd[0], "cd", 3) == 0)
+			exit_code = builtin_cd(shell, index, args_c);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "echo", 5) == 0)
+			exit_code = builtin_echo(shell, index);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "exit", 5) == 0)
+			exit_code = builtin_exit(shell, args_c, index);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "export", 5) == 0)
+			export(args_c, shell, index);
+		else if(ft_strncmp(shell->exec[index]->cmd[0], "unset", 6) == 0)
+			exit_code = builtin_unset(shell, args_c, index);
+	}
+	return (1);
 }
 
 
