@@ -1,9 +1,9 @@
 # variable expansion in heredoc
-# check inp files
-# create out files
-# permissions
+# check inp files - DONE
+# create out files - DONE
+# permissions - SEMI DONE
 
-# builtins being forked correctly emad beleives its done! signals tomorrow soz
+# builtins being forked correctly - DONE
 
 # signals need to work in all aspects
 # exit code saved correctly

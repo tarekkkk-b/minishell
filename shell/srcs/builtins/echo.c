@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:51:43 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 12:54:06 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/30 11:08:36 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int builtin_echo(t_shell *shell, int index)
         flag = 1;
     while(shell->exec[index]->cmd[i])
     {
-        ft_putstr_fd(shell->exec[index]->cmd[i], 0);
+        ft_putstr_fd(shell->exec[index]->cmd[i], 1);
         if(shell->exec[index]->cmd[i + 1])
             write(1, " ", 1);
         i++;

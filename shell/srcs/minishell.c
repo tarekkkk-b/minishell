@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/29 18:07:35 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/30 12:47:19 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,7 +315,51 @@ void	waiting(t_shell *shell)
 			shell->environ->exit = WEXITSTATUS(temp);
 	}
 }
- 
+
+int	check_inp_files(t_shell *shell, int index)
+{
+	int i = 0;
+	int fd= -1;
+	while (shell->exec[index]->inp_files[i])
+	{
+		if (!shell->exec[index]->inp_flags[i])
+		{
+			fd = open(shell->exec[index]->inp_files[i], O_RDONLY);
+			if (fd == -1)
+			{
+				printf("%s: no such file or directory found.\n", shell->exec[index]->inp_files[i]);
+				return (0);
+			}
+			else
+				ft_close(shell, &fd);
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	check_opt_files(t_shell *shell, int index)
+{
+	int i = 0;
+	int fd= -1;
+	while (shell->exec[index]->opt_files[i])
+	{
+		if (!shell->exec[index]->opt_flags[i])
+			fd = open(shell->exec[index]->opt_files[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		else
+			fd = open(shell->exec[index]->opt_files[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
+		if (fd == -1)
+		{
+			printf("%s: couldn't open file.\n", shell->exec[index]->opt_files[i]);
+			return (0);
+		}
+		else
+			ft_close(shell, &fd);
+		i++;
+	}
+	return (1);
+}
+
 void	exec_loop(t_shell *shell)
 {
 	int	i;
@@ -332,24 +376,27 @@ void	exec_loop(t_shell *shell)
 			mass_free(shell, 0);
 		}
 		waiting(shell);
-		shell->child = fork();
-		if (!shell->child)
+		if (check_inp_files(shell, i) && check_opt_files(shell, i))
 		{
-			inp_dup(shell, i, shell->fd);
-			ft_close(shell, &shell->fd);
-			opt_dup(shell, i);
+			shell->child = fork();
+			if (!shell->child)
+			{
+				inp_dup(shell, i, shell->fd);
+				ft_close(shell, &shell->fd);
+				opt_dup(shell, i);
+				ft_close(shell, &shell->exec[i]->heredoc_fd);
+				unlink("/tmp/.here_i_doc");
+				if (builtin_check(shell, i, 1) != 0)
+					execution(shell, i);
+			}
+			builtin_check(shell, i, 0);
 			ft_close(shell, &shell->exec[i]->heredoc_fd);
-			unlink("/tmp/.here_i_doc");
-			if (builtin_check(shell, i, 1) != 0)
-				execution(shell, i);
+			ft_close(shell, &shell->fd);
+			shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
+			ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+			ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+			shell->lastpid = shell->child;
 		}
-		builtin_check(shell, i, 0);
-		ft_close(shell, &shell->exec[i]->heredoc_fd);
-		ft_close(shell, &shell->fd);
-		shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
-		ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-		ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-		shell->lastpid = shell->child;
 		i++;
 	}
 	ft_close(shell, &shell->fd);

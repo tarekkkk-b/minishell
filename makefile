@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
+#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/29 12:51:34 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/07/30 13:38:48 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,8 +89,8 @@ endef
 export HEADER
 
 LIBFT		=	libft/libft.a
-INC			=	mini_shell/includes
-SRCSPATH	=	mini_shell/srcs
+INC			=	shell/includes
+SRCSPATH	=	shell/srcs
 BUILT		=	$(SRCSPATH)/builtins
 EXEC		=	$(SRCSPATH)/execution
 LEX			=	$(SRCSPATH)/lex

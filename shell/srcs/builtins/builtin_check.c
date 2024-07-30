@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/29 18:14:21 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/30 11:54:53 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ int	builtin_check(t_shell *shell, int index, int flag)
 	{
 		// if a pipe occurs 
 		// if theres only one set of commands, ie no pipe, and if its not a builtin, exit, but exit doesnt seem right, wouldnt return fit?
-		if (!(shell->exec[1]) && mass_check(shell->exec[index]->cmd[0]) == 1)
+		if (!(shell->exec[1]) && (mass_check(shell->exec[index]->cmd[0]) == 1))
 			exit (0);
-		if (!(shell->exec[1]) || mass_check(shell->exec[index]->cmd[0]) == 0)
+		if (!(shell->exec[1]) || (mass_check(shell->exec[index]->cmd[0]) == 0))
 			return (1);
 		args_c = args_count(shell, index);
 		if (ft_strncmp(shell->exec[index]->cmd[0], "env", 4) == 0)
