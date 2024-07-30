@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_quotes.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:09:10 by tarekkkk          #+#    #+#             */
-/*   Updated: 2024/07/22 15:47:14 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/30 13:47:25 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int	new_var(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 	assign_node(shell, new, VARIABLE, 0);
 	new->next = (*add_after)->next;
 	reset = i;
+	//handle ? plz
 	if (suspect->value[i + 1])
 		i++;
 	copier = 0;

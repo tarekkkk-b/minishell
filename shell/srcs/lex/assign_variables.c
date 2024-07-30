@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:05:47 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/07/30 13:45:16 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	end_of_var(char *str, int start, int index, int res)
 	return (index);
 }
 
-int	assign_variable(char *str, int index, t_shell *shell)
+int	assign_variable(char *str, int i, t_shell *shell)
 {
 	t_noding	*new;
 	int			temp;
@@ -54,23 +54,24 @@ int	assign_variable(char *str, int index, t_shell *shell)
 
 	j = 0;
 	new = ft_malloc(sizeof(t_noding), shell);
-	if (!new)
-		return (-1);
-	if (str[index + 1] == ' ' || str[index + 1] == '\t'
-		|| str[index + 1] == '\0'
-		|| !valid_name(str[index + 1], index + 1, index + 1))
+	if(str[i + 1] == '?')
+	{
+		assign_node(shell, new, VARIABLE, 0);
+		new->value = ft_strdup("?");
+		return (i + 1);
+	}
+	else if (str[i + 1] == ' ' || str[i + 1] == '\t' || str[i + 1] == '\0'
+		|| !valid_name(str[i + 1], i + 1, i + 1))
 		assign_node(shell, new, ARG, 0);
 	else
 		assign_node(shell, new, VARIABLE, 0);
-	temp = index;
-	index = end_of_var(str, temp + 1, index, 2);
-	new->value = ft_malloc(sizeof(char) * (index - temp + 3), shell);
-	if (!new->value)
-		return (ft_free((void **)&new), -1);
+	temp = i;
+	i = end_of_var(str, temp + 1, i, 2);
+	new->value = ft_malloc(sizeof(char) * (i - temp + 3), shell);
 	new->value[j++] = '$';
-	while (temp++ < index)
+	while (temp++ < i)
 		new->value[j++] = str[temp];
 	new->value[j++] = '\0';
 	add_token(shell, new);
-	return (index);
+	return (i);
 }
