@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/30 11:54:53 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:26:26 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,57 +35,47 @@ int	mass_check(char *str)
 	return (0);
 }
 
+static int	which_builtin(t_shell *shell, int index, int args_c)
+{
+	int exit_code = 0;
+	if (ft_strncmp(shell->exec[index]->cmd[0], "env", 4) == 0)
+		exit_code = builtin_env(shell->environ);
+	else if (ft_strncmp(shell->exec[index]->cmd[0], "pwd", 4) == 0)
+		exit_code = builtin_pwd(shell);
+	else if (ft_strncmp(shell->exec[index]->cmd[0], "cd", 3) == 0)
+		exit_code = builtin_cd(shell, index, args_c);
+	else if(ft_strncmp(shell->exec[index]->cmd[0], "echo", 5) == 0)
+		exit_code = builtin_echo(shell, index);
+	else if(ft_strncmp(shell->exec[index]->cmd[0], "exit", 5) == 0)
+		exit_code = builtin_exit(shell, args_c, index);
+	else if(ft_strncmp(shell->exec[index]->cmd[0], "export", 5) == 0)
+		export(args_c, shell, index);
+	else if(ft_strncmp(shell->exec[index]->cmd[0], "unset", 6) == 0)
+		exit_code = builtin_unset(shell, args_c, index);
+	return (exit_code);
+}
+
 int	builtin_check(t_shell *shell, int index, int flag)
 {
 	int	exit_code = 0;
 	int args_c = 0;
 	if (!shell || !shell->exec)
 		return (-1);
+	args_c = args_count(shell, index);
 	if (flag)
 	{
-		// if a pipe occurs 
-		// if theres only one set of commands, ie no pipe, and if its not a builtin, exit, but exit doesnt seem right, wouldnt return fit?
-		if (!(shell->exec[1]) && (mass_check(shell->exec[index]->cmd[0]) == 1))
+		if (!(shell->exec[1]) && mass_check(shell->exec[index]->cmd[0]) == 1)
 			exit (0);
-		if (!(shell->exec[1]) || (mass_check(shell->exec[index]->cmd[0]) == 0))
+		if (!(shell->exec[1]) || mass_check(shell->exec[index]->cmd[0]) == 0)
 			return (1);
-		args_c = args_count(shell, index);
-		if (ft_strncmp(shell->exec[index]->cmd[0], "env", 4) == 0)
-			exit_code = builtin_env(shell->environ);
-		else if (ft_strncmp(shell->exec[index]->cmd[0], "pwd", 4) == 0)
-			exit_code = builtin_pwd(shell);
-		else if (ft_strncmp(shell->exec[index]->cmd[0], "cd", 3) == 0)
-			exit_code = builtin_cd(shell, index, args_c);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "echo", 5) == 0)
-			exit_code = builtin_echo(shell, index);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "exit", 5) == 0)
-			exit_code = builtin_exit(shell, args_c, index);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "export", 5) == 0)
-			export(args_c, shell, index);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "unset", 6) == 0)
-			exit_code = builtin_unset(shell, args_c, index);
+		exit_code = which_builtin(shell, index, args_c);
 		exit(exit_code);
 	}
 	else if (!flag)
 	{
-		// if the amount of commands is greater than one, and its valid? what?
 		if (shell->exec[0] && shell->exec[1])
 			return (1);
-		args_c = args_count(shell, index);
-		if (ft_strncmp(shell->exec[index]->cmd[0], "env", 4) == 0)
-			exit_code = builtin_env(shell->environ);
-		else if (ft_strncmp(shell->exec[index]->cmd[0], "pwd", 4) == 0)
-			exit_code = builtin_pwd(shell);
-		else if (ft_strncmp(shell->exec[index]->cmd[0], "cd", 3) == 0)
-			exit_code = builtin_cd(shell, index, args_c);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "echo", 5) == 0)
-			exit_code = builtin_echo(shell, index);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "exit", 5) == 0)
-			exit_code = builtin_exit(shell, args_c, index);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "export", 5) == 0)
-			export(args_c, shell, index);
-		else if(ft_strncmp(shell->exec[index]->cmd[0], "unset", 6) == 0)
-			exit_code = builtin_unset(shell, args_c, index);
+		exit_code = which_builtin(shell, index, args_c);
 	}
 	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/30 12:17:48 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:27:06 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ typedef	struct s_counter	t_counter;
 
 # define	READ_PIPE	0
 # define	WRITE_PIPE	1
+
+extern int g_signalnumber;
 
 //		shell struct		//
 typedef struct s_shell
@@ -167,7 +169,7 @@ t_noding	*last_node(t_noding *nodes);
 
 // int		just_test(t_readline rl);
 int			get_arrlen(char **arr);
-int			signalhandler(void);
+int			signalhandler(int i);
 int			ft_lstsizee(t_values *lst);
 int			checker(t_shell *shell);
 char		*ft_strjoin2(char *str1, char *str2, char *str3);
