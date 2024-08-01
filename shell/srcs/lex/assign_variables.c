@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/30 13:45:16 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:24:09 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	valid_name(char character, int current, int first)
 {
 	if (current == first)
 	{
+		if (character == '?')
+			return (1);
 		if ((character >= '0' && character <= '9') || (character == '$'))
 			return (2);
 		if (!(character >= 'a' && character <= 'z')
@@ -58,6 +60,7 @@ int	assign_variable(char *str, int i, t_shell *shell)
 	{
 		assign_node(shell, new, VARIABLE, 0);
 		new->value = ft_strdup("?");
+		add_token(shell, new);
 		return (i + 1);
 	}
 	else if (str[i + 1] == ' ' || str[i + 1] == '\t' || str[i + 1] == '\0'

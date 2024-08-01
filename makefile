@@ -6,14 +6,14 @@
 #    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/07/30 13:38:48 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/08/01 13:58:41 by tabadawi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		=	minishell
 CC			=	cc
 CFLAGS		=	-Wall -Werror -Wextra -g3
-CFLAGS		+=	-fsanitize=address
+# CFLAGS		+=	-fsanitize=address
 
 # the following flagsg are to be used on 42 computers
 RLFLAGS		=	-lreadline -lhistory

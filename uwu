@@ -1,1 +1,3 @@
 valgrind --show-leak-kinds=all --leak-check=full --suppressions=readline.supp ./minishell
+
+gprof -p -A -q -b minishell gmon.out

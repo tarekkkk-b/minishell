@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_variables.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 12:49:59 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 15:46:49 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/01 14:18:36 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ void	get_var(t_shell *shell, t_noding *traveler)
 
 	t = 1;
 	o = 0;
+	if (traveler->value[0] == '?')
+	{
+		traveler->type = ARG;
+		ft_free((void **)&traveler->value);
+		traveler->value = ft_itoa(shell->environ->exit);
+		return ;
+	}
+	//norm
 	str = ft_malloc(sizeof(char) * (ft_strlen(traveler->value)), shell);
 	while (traveler->value[t])
 		str[o++] = traveler->value[t++];

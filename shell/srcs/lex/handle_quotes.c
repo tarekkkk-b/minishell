@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 21:09:10 by tarekkkk          #+#    #+#             */
-/*   Updated: 2024/07/30 13:47:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:22:14 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	new_word(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 	i--;
 	while (suspect->value[++i])
 		if (suspect->value[i + 1] == '$'
-			&& (valid_name(suspect->value[i + 2], i + 2, i + 1)) && i++)
+			&& (valid_name(suspect->value[i + 2], i + 2, i + 2)) && i++)
 			break ;
 	new->value = ft_malloc(sizeof(char) * (i - copier + 1), shell);
 	j = 0;
@@ -61,19 +61,23 @@ int	new_var(t_shell *shell, t_noding *suspect, t_noding **add_after, int i)
 	int			reset;
 	int			copier;
 
+	copier = 0;
 	new = ft_malloc(sizeof(t_noding), shell);
 	assign_node(shell, new, VARIABLE, 0);
 	new->next = (*add_after)->next;
 	reset = i;
-	//handle ? plz
 	if (suspect->value[i + 1])
 		i++;
-	copier = 0;
-	i = end_of_var(suspect->value, i, reset, 2);
-	new->value = ft_malloc(sizeof(char) * (i - reset + 2), shell);
-	while (reset <= i)
-		new->value[copier++] = suspect->value[reset++];
-	new->value[copier] = '\0';
+	if (suspect->value[i] == '?')
+		new->value = ft_strdup("?");
+	else
+	{
+		i = end_of_var(suspect->value, i, reset, 2);
+		new->value = ft_malloc(sizeof(char) * (i - reset + 2), shell);
+		while (reset <= i)
+			new->value[copier++] = suspect->value[reset++];
+		new->value[copier] = '\0';
+	}
 	(*add_after)->next = new;
 	(*add_after) = (*add_after)->next;
 	return (i);

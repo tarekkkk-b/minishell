@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/01 11:20:25 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/01 14:22:43 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -280,6 +280,41 @@ int	ft_strcmp(char *str1, char *str2)
 	return (0);
 }
 
+// void	 collect_heredoc(t_shell *shell, int index)
+// {
+// 	int		i;
+// 	char	*str;
+
+// 	i = -1;
+// 	if (!shell->exec[index]->inp_files || !shell->exec[index]->inp_files[0])
+// 		return ;
+// 	while (shell->exec[index]->inp_files[++i])
+// 	{
+// 		if (shell->exec[index]->inp_flags[i])
+// 		{
+// 			signalhandler(2);
+// 			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
+// 			while (1)
+// 			{
+// 				str = readline("> ");
+// 				if(g_signalnumber == SIGINT)
+// 				{
+// 					ft_close(shell, &shell->exec[index]->heredoc_fd);
+// 					exit(1);
+// 				}
+// 				if(!str || (ft_strcmp(str, shell->exec[index]->inp_files[i]) == 0))
+// 					break;
+// 				str = ft_strjoin(str, "\n", 1);
+// 				ft_putstr_fd(str, shell->exec[index]->heredoc_fd);
+// 				ft_free((void **)&str);
+// 			}
+// 			ft_close(shell, &shell->exec[index]->heredoc_fd);
+// 		}
+// 	}
+// }
+
+// THIS IS THE ONE TO BE FIXED ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 void	collect_heredoc(t_shell *shell, int index)
 {
 	int		i;
@@ -292,52 +327,19 @@ void	collect_heredoc(t_shell *shell, int index)
 	{
 		if (shell->exec[index]->inp_flags[i])
 		{
-			signalhandler(2);
 			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
-			while (1)
+			str = readline("> ");
+			while (str && (ft_strcmp(str, shell->exec[index]->inp_files[i]) != 0))
 			{
-				str = readline("> ");
-				if(g_signalnumber == SIGINT)
-				{
-					ft_close(shell, &shell->exec[index]->heredoc_fd);
-					exit(1);
-				}
-				if(!str || (ft_strcmp(str, shell->exec[index]->inp_files[i]) == 0))
-					break;
 				str = ft_strjoin(str, "\n", 1);
 				ft_putstr_fd(str, shell->exec[index]->heredoc_fd);
 				ft_free((void **)&str);
+				str = readline("> ");
 			}
 			ft_close(shell, &shell->exec[index]->heredoc_fd);
 		}
 	}
 }
-
-// void	collect_heredoc(t_shell *shell, int index)
-// {
-// 	int		i;
-// 	char	*str;
-
-// 	i = -1;
-// 	if (!shell->exec[index]->inp_files || !shell->exec[index]->inp_files[0])
-// 		return ;
-// 	while (shell->exec[index]->inp_files[++i])
-// 	{
-// 		if (shell->exec[index]->inp_flags[i])
-// 		{
-// 			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
-// 			str = readline("> ");
-// 			while (str && (ft_strcmp(str, shell->exec[index]->inp_files[i]) != 0))
-// 			{
-// 				str = ft_strjoin(str, "\n", 1);
-// 				ft_putstr_fd(str, shell->exec[index]->heredoc_fd);
-// 				ft_free((void **)&str);
-// 				str = readline("> ");
-// 			}
-// 			ft_close(shell, &shell->exec[index]->heredoc_fd);
-// 		}
-// 	}
-// }
 
 void	waiting(t_shell *shell)
 {
@@ -400,7 +402,6 @@ void exec_loop(t_shell *shell)
 {
     int i = 0;
     int temp_fd = -1;
-	int j = 0;
     
     while (shell->exec[i])
     {
@@ -417,58 +418,49 @@ void exec_loop(t_shell *shell)
 				mass_free(shell, 0);
 			}
 		}
-        shell->child = fork();
-        if (shell->child == 0)
-        {
-            if (i == 0)
-            {
-                if (shell->exec[i + 1])
-                    dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-            }
-            else if (shell->exec[i + 1]) // any command thats not the firs
-            {
-                dup2(temp_fd, STDIN_FILENO);
-                dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-            }
-            else // this one is fro last command
-            {
-                dup2(temp_fd, STDIN_FILENO);
-            }
-			j = 0;
-            while (j <= i) //ckose all fds
-            {
-                close(shell->exec[j]->fd[READ_PIPE]);
-                close(shell->exec[j]->fd[WRITE_PIPE]);
-				j++;
-            }
-			if(builtin_check(shell, i, 1) != 0)
-            	execution(shell, i);
-            exit(shell->environ->exit);
-        }
-        else if (shell->child > 0)
-        {
-            if (i > 0)
-                close(temp_fd);
-            if (shell->exec[i + 1])
-            {
-                close(shell->exec[i]->fd[WRITE_PIPE]);
-                temp_fd = shell->exec[i]->fd[READ_PIPE];
-            }
-			else
-			{
-				close(shell->exec[i]->fd[READ_PIPE]);
-				close(shell->exec[i]->fd[WRITE_PIPE]);
+		if (check_inp_files(shell, i) && check_opt_files(shell, i))
+		{			
+        	shell->child = fork();
+        	if (shell->child == 0)
+        	{
+        	    if (i == 0)
+        	    {
+        	        if (shell->exec[i + 1])
+        	            dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
+        	    }
+        	    else if (shell->exec[i + 1]) // any command thats not the firs
+        	    {
+        	        dup2(temp_fd, STDIN_FILENO);
+        	        dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
+        	    }
+        	    else // this one is fro last command
+        	    {
+        	        dup2(temp_fd, STDIN_FILENO);
+        	    }
+				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+				if(builtin_check(shell, i, 1) != 0)
+        	    	execution(shell, i);
+        	    exit(shell->environ->exit);
+        	}
+        	else if (shell->child > 0)
+        	{ 
+        	    if (i > 0)
+        	        close(temp_fd);
+        	    if (shell->exec[i + 1])
+        	    {
+        	        close(shell->exec[i]->fd[WRITE_PIPE]);
+        	        temp_fd = shell->exec[i]->fd[READ_PIPE];
+        	    }
+				else
+				{
+					close(shell->exec[i]->fd[READ_PIPE]);
+					close(shell->exec[i]->fd[WRITE_PIPE]);
+				}
+				builtin_check(shell, i, 0);
 			}
-			builtin_check(shell, i, 0);
-			i++;
 		}
-	}
-	// wit for all child processes to finish
-	j = 0;
-	while(j < i)
-	{
-		wait(NULL);
-		j++;
+		i++;
 	}
 }
 

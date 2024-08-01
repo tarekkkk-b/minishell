@@ -7,7 +7,7 @@
 
 # signals need to work in all aspects
 # exit code saved correctly
-# $?
+# $? - DONE
 
 # protections
 
