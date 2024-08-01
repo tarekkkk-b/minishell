@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/25 01:18:48 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/01 11:16:18 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/01 19:44:31 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	g_signalnumber;
 void	handle_sigint(int sig)
 {
 	(void)sig;
+	// printf("uwuwuuwuwuwuwuw");
+	g_signalnumber = SIGINT;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);

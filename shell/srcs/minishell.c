@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/01 14:22:43 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/01 19:56:19 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ int	ft_strcmp(char *str1, char *str2)
 
 // 	i = -1;
 // 	if (!shell->exec[index]->inp_files || !shell->exec[index]->inp_files[0])
-// 		return ;
+// 		exit(1);
 // 	while (shell->exec[index]->inp_files[++i])
 // 	{
 // 		if (shell->exec[index]->inp_flags[i])
@@ -311,6 +311,7 @@ int	ft_strcmp(char *str1, char *str2)
 // 			ft_close(shell, &shell->exec[index]->heredoc_fd);
 // 		}
 // 	}
+// 	exit(0);
 // }
 
 // THIS IS THE ONE TO BE FIXED ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -322,7 +323,7 @@ void	collect_heredoc(t_shell *shell, int index)
 
 	i = -1;
 	if (!shell->exec[index]->inp_files || !shell->exec[index]->inp_files[0])
-		return ;
+		exit(1);
 	while (shell->exec[index]->inp_files[++i])
 	{
 		if (shell->exec[index]->inp_flags[i])
@@ -338,7 +339,10 @@ void	collect_heredoc(t_shell *shell, int index)
 			}
 			ft_close(shell, &shell->exec[index]->heredoc_fd);
 		}
+		if(str == NULL)
+			exit(1);
 	}
+	exit(0);
 }
 
 void	waiting(t_shell *shell)
@@ -352,6 +356,7 @@ void	waiting(t_shell *shell)
 		if (id == shell->lastpid)
 			shell->environ->exit = WEXITSTATUS(temp);
 	}
+	signalhandler(1);
 }
 
 int	check_inp_files(t_shell *shell, int index)
@@ -398,31 +403,55 @@ int	check_opt_files(t_shell *shell, int index)
 	return (1);
 }
 
+void	do_nothing(int sig)
+{
+	g_signalnumber = sig;
+	write(1, "\n", 1);
+	close(STDIN_FILENO);
+	// exit(0);
+}
+
 void exec_loop(t_shell *shell)
 {
     int i = 0;
     int temp_fd = -1;
+	pid_t	id = 0;
+	int 	temp;
     
     while (shell->exec[i])
     {
         if (shell->exec[i + 1])
             pipe(shell->exec[i]->fd);
 		if(shell->exec[i]->inp_flags[0] == 1)
-		{
+		{		
+			signal(SIGINT, SIG_IGN);		
+			signal(SIGQUIT, SIG_IGN);		
 			shell->child = fork();
 			if (!shell->child)
 			{
+				signal(SIGINT, do_nothing);
 				collect_heredoc(shell, i);
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				mass_free(shell, 0);
 			}
+			while(id != -1)
+			{
+				id = wait(&temp);
+				if (id == shell->lastpid)
+					if (WEXITSTATUS(temp) == 1)
+						return;
+			}
 		}
 		if (check_inp_files(shell, i) && check_opt_files(shell, i))
-		{			
+		{
+			signal(SIGINT, SIG_IGN);		
+			signal(SIGQUIT, SIG_IGN);		
         	shell->child = fork();
         	if (shell->child == 0)
         	{
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
         	    if (i == 0)
         	    {
         	        if (shell->exec[i + 1])
@@ -439,12 +468,13 @@ void exec_loop(t_shell *shell)
         	    }
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+				unlink("/tmp/.here_i_doc");
 				if(builtin_check(shell, i, 1) != 0)
         	    	execution(shell, i);
         	    exit(shell->environ->exit);
         	}
         	else if (shell->child > 0)
-        	{ 
+        	{
         	    if (i > 0)
         	        close(temp_fd);
         	    if (shell->exec[i + 1])
@@ -515,8 +545,11 @@ void	minishell(t_shell *shell)
 		signalhandler(1);
 		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = getcwd(NULL, 0);
-		if (isatty(0))
+		if (g_signalnumber != SIGINT)
 			shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
+		else
+			shell->str = readline(NULL);
+		g_signalnumber = -1;
 		if (!shell->str)
 			break ;
 		if (strcmp(shell->str, "") == 0)
