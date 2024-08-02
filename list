@@ -6,6 +6,7 @@
 # builtins being forked correctly - DONE
 
 # signals need to work in all aspects
+# exit code 1 when ctrl c
 # exit code saved correctly
 # $? - DONE
 
@@ -13,4 +14,3 @@
 
 # overall cleanup memory
 # overall cleanup norm
-

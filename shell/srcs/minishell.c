@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/01 19:56:19 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/02 14:53:31 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,8 @@ void	setup_exec_struct(t_shell *shell)
 		shell->exec[i]->cmd[command] = NULL;
 		shell->exec[i]->opt_files[opt_file] = NULL;
 		shell->exec[i]->inp_files[inp_file] = NULL;
+		shell->exec[i]->opt_flags[opt_file] = -1;
+		shell->exec[i]->inp_flags[inp_file] = -1;
 		i++;
 		if (traveler)
 			traveler = traveler->next;
@@ -192,15 +194,33 @@ void	execution(t_shell *shell, int index)
 	
 	shell->environ->environment = arr(shell->environ->env, shell);
 	shell->environ->path = set_up_path(shell);
-	if (!access(shell->exec[index]->cmd[0], X_OK | F_OK))
-		execve(shell->exec[index]->cmd[0], shell->exec[index]->cmd, shell->environ->environment);
+	if (!access(shell->exec[index]->cmd[0], F_OK))
+	{
+		 if (access(shell->exec[index]->cmd[0], X_OK) == -1)
+		{
+			ft_putstr_fd(shell->exec[index]->cmd[0], 1);
+			ft_putstr_fd(": permission denied\n", 1);
+			mass_free(shell, 126);
+		}
+		else
+			execve(shell->exec[index]->cmd[0], shell->exec[index]->cmd, shell->environ->environment);
+	}
 	if (shell->environ->path)
 	{
 		while (shell->environ->path[i] && shell->exec[index]->cmd[0])
 		{
 			shell->exec[index]->cmdpath = ft_strjoin2(shell->environ->path[i], "/", shell->exec[index]->cmd[0]); 
-			if (!access(shell->exec[index]->cmdpath, X_OK | F_OK))
-				execve(shell->exec[index]->cmdpath, shell->exec[index]->cmd, shell->environ->environment);
+			if (!access(shell->exec[index]->cmdpath, F_OK))
+			{
+				if (access(shell->exec[index]->cmdpath, X_OK) == -1)
+				{
+					ft_putstr_fd(shell->exec[index]->cmd[0], 1);
+					ft_putstr_fd(": permission denied\n", 1);
+					mass_free(shell, 126);
+				}
+				else
+					execve(shell->exec[index]->cmdpath, shell->exec[index]->cmd, shell->environ->environment);
+			}
 			ft_free((void **)&shell->exec[index]->cmdpath);
 			i++;
 		}
@@ -210,9 +230,7 @@ void	execution(t_shell *shell, int index)
 			ft_putstr_fd(": command not found\n", 1);
 		}
 		mass_free(shell, 127);
-		exit(127);
 	}
-	exit(127);
 }
 
 void	ft_close(t_shell *shell, int *fd)
@@ -422,7 +440,7 @@ void exec_loop(t_shell *shell)
     {
         if (shell->exec[i + 1])
             pipe(shell->exec[i]->fd);
-		if(shell->exec[i]->inp_flags[0] == 1)
+		if(shell->exec[i]->inp_flags && shell->exec[i]->inp_flags[0] == 1)
 		{		
 			signal(SIGINT, SIG_IGN);		
 			signal(SIGQUIT, SIG_IGN);		
@@ -468,6 +486,7 @@ void exec_loop(t_shell *shell)
         	    }
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+				ft_close(shell, &temp_fd);
 				unlink("/tmp/.here_i_doc");
 				if(builtin_check(shell, i, 1) != 0)
         	    	execution(shell, i);
@@ -476,16 +495,17 @@ void exec_loop(t_shell *shell)
         	else if (shell->child > 0)
         	{
         	    if (i > 0)
-        	        close(temp_fd);
+        	        ft_close(shell, &temp_fd);
         	    if (shell->exec[i + 1])
         	    {
-        	        close(shell->exec[i]->fd[WRITE_PIPE]);
+        	        ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
         	        temp_fd = shell->exec[i]->fd[READ_PIPE];
-        	    }
+				}
 				else
 				{
-					close(shell->exec[i]->fd[READ_PIPE]);
-					close(shell->exec[i]->fd[WRITE_PIPE]);
+					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+					ft_close(shell, &temp_fd);					
 				}
 				builtin_check(shell, i, 0);
 			}
@@ -526,7 +546,7 @@ void exec_loop(t_shell *shell)
 // 			builtin_check(shell, i, 0);
 // 			ft_close(shell, &shell->exec[i]->heredoc_fd);
 // 			ft_close(shell, &shell->fd);
-// 			shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
+// 			shell->fd = shell->exec[i]->fd[READ_PIPE];
 // 			ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 // 			ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 // 			shell->lastpid = shell->child;
