@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/02 14:53:31 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/03 02:28:31 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -264,20 +264,17 @@ void	inp_dup(t_shell *shell, int index, int temp_fd)
 void	opt_dup(t_shell *shell, int index)
 {
 	int	fd;
+	int flag;
 
+	flag = shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1];
 	fd = -1;
-	if (shell->exec[index]->opt_files && shell->exec[index]->opt_files[0])
-	{
-		if (shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1])
-			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_APPEND, 0644);
-		else if (!shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1])
-			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (flag == 0)
+		fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_TRUNC | O_RDWR, 0644);
+	else if (flag == 1)
+		fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_APPEND | O_RDWR, 0644);
+	if (fd != -1)
 		dup2(fd, STDOUT_FILENO);
-		ft_close(shell, &fd);
-	}
-	else if (shell->exec[index + 1])
-		dup2(shell->exec[index]->fd[WRITE_PIPE], STDOUT_FILENO);
-	ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
+	ft_close(shell, &fd);
 }
 
 int	ft_strcmp(char *str1, char *str2)
@@ -347,9 +344,16 @@ void	collect_heredoc(t_shell *shell, int index)
 		if (shell->exec[index]->inp_flags[i])
 		{
 			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
+			if (shell->exec[index]->heredoc_fd == -1)
+            {
+                perror("open");
+                exit(1);
+            }
 			str = readline("> ");
-			while (str && (ft_strcmp(str, shell->exec[index]->inp_files[i]) != 0))
+			while(1)
 			{
+				if (!str || (ft_strcmp(str, shell->exec[index]->inp_files[i]) == 0))
+					break ;
 				str = ft_strjoin(str, "\n", 1);
 				ft_putstr_fd(str, shell->exec[index]->heredoc_fd);
 				ft_free((void **)&str);
@@ -484,6 +488,8 @@ void exec_loop(t_shell *shell)
         	    {
         	        dup2(temp_fd, STDIN_FILENO);
         	    }
+				inp_dup(shell, i, temp_fd);
+				opt_dup(shell, i);
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				ft_close(shell, &temp_fd);
