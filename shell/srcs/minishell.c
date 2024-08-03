@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/03 02:28:31 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/03 21:29:55 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,9 +269,9 @@ void	opt_dup(t_shell *shell, int index)
 	flag = shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1];
 	fd = -1;
 	if (flag == 0)
-		fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_TRUNC | O_RDWR, 0644);
+		fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
 	else if (flag == 1)
-		fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_APPEND | O_RDWR, 0644);
+		fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (fd != -1)
 		dup2(fd, STDOUT_FILENO);
 	ft_close(shell, &fd);
