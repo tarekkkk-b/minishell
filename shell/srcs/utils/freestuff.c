@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/02 15:03:14 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:50:31 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,29 @@ void	free_env(t_shell *shell)
 	ft_free((void **)&shell->environ);
 }
 
+void	free_exec(t_shell *shell)
+{
+	int	i;
+
+	i = 0;
+	while (shell->exec[i])
+	{
+		ft_free((void **)&shell->exec[i]->cmdpath);	
+		freetwodarray(shell->exec[i]->cmd);
+		freetwodarray(shell->exec[i]->inp_files);
+		freetwodarray(shell->exec[i]->opt_files);
+		ft_free((void **)&shell->exec[i]->inp_flags);
+		ft_free((void **)&shell->exec[i]->opt_flags);
+		ft_free((void **)&shell->exec[i]);
+		ft_free((void **)&shell->counter[i]);
+		i++;	
+	}
+	ft_free((void **)shell->exec);
+	ft_free((void **)shell->counter);
+}
+
 void	mass_free(t_shell *shell, int exit_code)
 {
-	int i = 0;
 	if (shell->environ)
 		if (shell->environ->env)
 			free_env(shell);
@@ -50,20 +70,7 @@ void	mass_free(t_shell *shell, int exit_code)
 		if (shell->parser->noding)
 			free_tokenization(shell);
 	if (shell->exec)
-	{
-		while (shell->exec[i])
-		{
-			ft_free ((void **)shell->exec[i]->cmdpath);	
-			freetwodarray(shell->exec[i]->cmd);
-			freetwodarray(shell->exec[i]->inp_files);
-			freetwodarray(shell->exec[i]->opt_files);
-			ft_free((void **)&shell->exec[i]->inp_flags);
-			ft_free((void **)&shell->exec[i]->opt_flags);
-			ft_free((void **)&shell->exec[i]);
-			i++;
-		}
-		free(shell->exec);
-	}
+		free_exec(shell);
 	ft_close(shell, &shell->fd);
 	exit(exit_code);
 }

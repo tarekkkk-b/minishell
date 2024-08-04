@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/01 11:27:06 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/04 14:50:19 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,5 +218,23 @@ void		sort_it_out(char **arr, int n, int i, int j);
 void		printArray(char **arr, int n, t_shell *shell);
 int			check_invalid(char *str);
 void	ft_close(t_shell *shell, int *fd);
+
+void	free_exec(t_shell *shell);
+void	setup_exec_struct(t_shell *shell);
+void	count_items(t_shell *shell, t_noding *traveler, t_counter *counter);
+char	**set_up_path(t_shell *shell);
+void exec_loop(t_shell *shell);
+void	execution(t_shell *shell, int index);
+
+
+
+void	inp_dup(t_shell *shell, int index, int temp_fd);
+void	ft_close(t_shell *shell, int *fd);
+void	opt_dup(t_shell *shell, int index);
+void	collect_heredoc(t_shell *shell, int index);
+int	check_inp_files(t_shell *shell, int index);
+int	check_opt_files(t_shell *shell, int index);
+void	do_nothing(int sig);
+
 
 #endif
