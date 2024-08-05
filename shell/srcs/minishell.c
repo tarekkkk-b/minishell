@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:52:44 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:41:01 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,22 @@ void	waiting(t_shell *shell)
 	{
 		id = wait(&temp);
 		if (id == shell->lastpid)
-			shell->environ->exit = WEXITSTATUS(temp);
+			if(shell->environ->exit == 0){
+				shell->environ->exit = WEXITSTATUS(temp);
+				if (WTERMSIG(temp))
+				{
+					if (WTERMSIG(temp) == SIGINT)
+						shell->environ->exit = 130;
+					else if (WTERMSIG(temp) == SIGQUIT)
+						shell->environ->exit = 131;
+					else if(WTERMSIG(temp) == SIGSEGV)
+					{
+						shell->environ->exit = 139;
+						write(2, "Segmentation Fault: 11\n", 23);
+					}
+				}
+
+			}
 	}
 	signalhandler(1);
 }
@@ -57,6 +72,8 @@ void	minishell(t_shell *shell)
 			shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
 		else
 			shell->str = readline(NULL);
+		if(g_signalnumber == SIGINT)
+			shell->environ->exit = 1;
 		g_signalnumber = -1;
 		if (!shell->str)
 			break ;

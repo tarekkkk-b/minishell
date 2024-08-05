@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:50:58 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:52:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 08:55:02 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,7 @@ void	collect_heredoc(t_shell *shell, int index)
 		{
 			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
 			if (shell->exec[index]->heredoc_fd == -1)
-            {
-                perror("open");
                 exit(1);
-            }
 			str = readline("> ");
 			while(1)
 			{
@@ -125,6 +122,7 @@ int	check_opt_files(t_shell *shell, int index)
 		if (fd == -1)
 		{
 			printf("%s: couldn't open file.\n", shell->exec[index]->opt_files[i]);
+			shell->environ->exit = 1;
 			return (0);
 		}
 		else
@@ -145,7 +143,8 @@ int	check_inp_files(t_shell *shell, int index)
 			fd = open(shell->exec[index]->inp_files[i], O_RDONLY);
 			if (fd == -1)
 			{
-				printf("%s: no such file or directory found.\n", shell->exec[index]->inp_files[i]);
+				printf("%s: No such file or directory\n", shell->exec[index]->inp_files[i]);
+				shell->environ->exit = 1;
 				return (0);
 			}
 			else

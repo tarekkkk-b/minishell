@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:47:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 12:51:02 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ void	execution(t_shell *shell, int index)
 		 if (access(shell->exec[index]->cmd[0], X_OK) == -1)
 		{
 			ft_putstr_fd(shell->exec[index]->cmd[0], 1);
-			ft_putstr_fd(": permission denied\n", 1);
+			ft_putstr_fd(": Permission denied\n", 1);
+			shell->environ->exit = 126;
 			mass_free(shell, 126);
 		}
 		else
@@ -127,7 +128,8 @@ void	execution(t_shell *shell, int index)
 				if (access(shell->exec[index]->cmdpath, X_OK) == -1)
 				{
 					ft_putstr_fd(shell->exec[index]->cmd[0], 1);
-					ft_putstr_fd(": permission denied\n", 1);
+					ft_putstr_fd(": Permission denied\n", 1);
+					shell->environ->exit = 126;
 					mass_free(shell, 126);
 				}
 				else

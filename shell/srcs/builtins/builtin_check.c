@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/01 11:26:26 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/05 08:39:44 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	builtin_check(t_shell *shell, int index, int flag)
 		if (!(shell->exec[1]) || mass_check(shell->exec[index]->cmd[0]) == 0)
 			return (1);
 		exit_code = which_builtin(shell, index, args_c);
+		shell->environ->exit = exit_code;
 		exit(exit_code);
 	}
 	else if (!flag)
@@ -76,6 +77,8 @@ int	builtin_check(t_shell *shell, int index, int flag)
 		if (shell->exec[0] && shell->exec[1])
 			return (1);
 		exit_code = which_builtin(shell, index, args_c);
+		shell->environ->exit = exit_code;
+		return(exit_code);
 	}
 	return (1);
 }
