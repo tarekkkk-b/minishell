@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 15:18:24 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:50:06 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void exec_loop(t_shell *shell)
 {
     int i = 0;
     int temp_fd = -1;
-	// pid_t	id = 0;
+	pid_t	id = 0;
 	// int 	temp;
     
     while (shell->exec[i])
@@ -96,23 +96,8 @@ void exec_loop(t_shell *shell)
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				// mass_free(shell, 0);
 			}
-			waiting(shell);
-			// while(id != -1)
-			// {
-			// 	id = wait(&temp);
-			// 	if (id == shell->lastpid)
-			// 	{
-			// 		if (WEXITSTATUS(temp) == 1)
-			// 		{
-			// 			shell->environ->exit = 1;
-			// 			return;
-			// 		}
-					
-			// 	}
-			// }
-			// <<a cat | <<b cat
-			// << a << b cat
-			// << a | << b 
+			if(waiting_heredoc(shell, id) == 1)
+				return ;
 		}
 		if (check_inp_files(shell, i) && check_opt_files(shell, i))
 		{
@@ -171,8 +156,11 @@ void exec_loop(t_shell *shell)
 					}
 					opt_file_dup(shell->exec[i]);
 				}
-				if(builtin_check(shell, i, 1) != 0)
-        	    	execution(shell, i);
+				if(shell->exec[i]->cmd[0])
+				{
+					if(builtin_check(shell, i, 1) != 0)
+        	    		execution(shell, i);
+				}
         	    mass_free(shell, shell->environ->exit);
 				unlink("/tmp/.here_i_doc");
         	}

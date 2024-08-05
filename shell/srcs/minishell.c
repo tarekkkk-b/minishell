@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 14:14:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:43:16 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,36 +20,6 @@ void	initializer(t_shell *shell)
 	shell->counter = NULL;
 	shell->fd = -1;
 	shell->lastpid = -1;
-}
-
-void	waiting(t_shell *shell)
-{
-	pid_t	id = 0;
-	int 	temp;
-
-	while(id != -1)
-	{
-		id = wait(&temp);
-		if (id == shell->lastpid)
-			if(shell->environ->exit == 0)
-			{
-				shell->environ->exit = WEXITSTATUS(temp);
-				if (WTERMSIG(temp))
-				{
-					if (WTERMSIG(temp) == SIGINT)
-						shell->environ->exit = 130;
-					else if (WTERMSIG(temp) == SIGQUIT)
-						shell->environ->exit = 131;
-					else if(WTERMSIG(temp) == SIGSEGV)
-					{
-						shell->environ->exit = 139;
-						write(2, "Segmentation Fault: 11\n", 23);
-					}
-				}
-
-			}
-	}
-	signalhandler(1);
 }
 
 void	do_nothing(int sig)

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+         #
+#    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/08/04 14:53:14 by tabadawi         ###   ########.fr        #
+#    Updated: 2024/08/05 16:40:58 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,6 +107,7 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(UTILS)/ft_strjoin2.c \
 				$(UTILS)/freestuff.c \
 				$(UTILS)/export_utils.c \
+				$(UTILS)/waiting.c \
 				$(LEX)/assign_quotes.c \
 				$(LEX)/assign_redirection.c \
 				$(LEX)/assign_variables.c \
