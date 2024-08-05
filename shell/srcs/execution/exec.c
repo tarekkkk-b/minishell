@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 21:12:16 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 22:08:12 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ void exec_loop(t_shell *shell)
 	//if signal sent we have fd leaks
     while (shell->exec[i])
     {
-        if (shell->exec[i + 1])
-            pipe(shell->exec[i]->fd);
+        pipe(shell->exec[i]->fd);
 		if(check_heredoc(shell->exec[i]))
 		{
 			signal(SIGINT, SIG_IGN);		
@@ -92,15 +91,14 @@ void exec_loop(t_shell *shell)
 			shell->child = fork();
 			if (!shell->child)
 			{
-				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				printf("heredoc child %d\n", getpid());
 				printf("read:- %d\n", shell->exec[i]->fd[READ_PIPE]);
 				printf("write:- %d\n", shell->exec[i]->fd[WRITE_PIPE]);
+				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				signal(SIGINT, do_nothing);
 				collect_heredoc(shell, i);
 				ft_close(shell, &shell->exec[i]->heredoc_fd);
-				// mass_free(shell, 0);
 			}
 			if(waiting_heredoc(shell, id) == 1)
 				return ;

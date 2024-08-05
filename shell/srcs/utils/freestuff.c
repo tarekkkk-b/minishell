@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/05 21:33:09 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 22:04:15 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ void	free_exec(t_shell *shell)
 	i = 0;
 	while (shell->exec[i])
 	{
+		ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+		ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 		ft_free((void **)&shell->exec[i]->cmdpath);	
 		freetwodarray(shell->exec[i]->cmd);
 		ft_free((void **)&shell->exec[i]->cmd);

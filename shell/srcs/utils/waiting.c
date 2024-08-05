@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 16:39:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/05 21:10:54 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:42:26 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,9 @@ void	waiting(t_shell *shell)
 				if (WTERMSIG(temp))
 				{
 					if (WTERMSIG(temp) == SIGINT)
-					{
 						shell->environ->exit = 130;
-					}
 					else if (WTERMSIG(temp) == SIGQUIT)
-					{
 						shell->environ->exit = 131;
-					}
 					else if(WTERMSIG(temp) == SIGSEGV)
 					{
 						shell->environ->exit = 139;
@@ -49,7 +45,6 @@ void	waiting(t_shell *shell)
 
 int	waiting_heredoc(t_shell *shell, pid_t id)
 {
-	// pid_t 	id = 0;
 	int 	temp;
 
 	while(id != -1)
@@ -68,13 +63,9 @@ int	waiting_heredoc(t_shell *shell, pid_t id)
 				if (WTERMSIG(temp))
 				{
 					if (WTERMSIG(temp) == SIGINT)
-					{
 						shell->environ->exit = 130;
-					}
 					else if (WTERMSIG(temp) == SIGQUIT)
-					{
 						shell->environ->exit = 131;
-					}
 				}
 			}
 		}
