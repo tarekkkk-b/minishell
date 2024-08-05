@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:50:19 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:59:33 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,6 +235,9 @@ void	collect_heredoc(t_shell *shell, int index);
 int	check_inp_files(t_shell *shell, int index);
 int	check_opt_files(t_shell *shell, int index);
 void	do_nothing(int sig);
+
+
+void	waiting(t_shell *shell);
 
 
 #endif

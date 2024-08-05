@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 10:41:01 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/05 14:14:25 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	waiting(t_shell *shell)
 	{
 		id = wait(&temp);
 		if (id == shell->lastpid)
-			if(shell->environ->exit == 0){
+			if(shell->environ->exit == 0)
+			{
 				shell->environ->exit = WEXITSTATUS(temp);
 				if (WTERMSIG(temp))
 				{

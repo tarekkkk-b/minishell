@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:50:58 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 08:55:02 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/05 14:24:24 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,8 @@ void	collect_heredoc(t_shell *shell, int index)
 			str = readline("> ");
 			while(1)
 			{
+				if(g_signalnumber == SIGINT)
+					exit(1);
 				if (!str || (ft_strcmp(str, shell->exec[index]->inp_files[i]) == 0))
 					break ;
 				str = ft_strjoin(str, "\n", 1);
@@ -103,8 +105,8 @@ void	collect_heredoc(t_shell *shell, int index)
 			}
 			ft_close(shell, &shell->exec[index]->heredoc_fd);
 		}
-		if(str == NULL)
-			exit(1);
+		// if(str == NULL)
+		// 	exit(1);
 	}
 	exit(0);
 }
