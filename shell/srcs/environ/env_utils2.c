@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/22 09:27:26 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/22 15:55:11 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/05 21:33:45 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ void	create_env(char **env, t_shell *shell)
 	i = -1;
 	shell->environ = ft_malloc(sizeof(t_environ), shell);
 	shell->environ->path = NULL;
+	shell->environ->environment = NULL;
 	shell->environ->env = NULL;
 	shell->environ->owd = getcwd(NULL, 0);
 	shell->environ->cwd = ft_strdup(shell->environ->owd);

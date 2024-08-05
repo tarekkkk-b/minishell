@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 16:50:06 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/05 21:12:16 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ int	inp_file_dup(t_exec	*exec)
 	int	flag;
 
 	fd = -1;
+	
 	if (exec->inp_files && exec->inp_files[0])
 	{
 		flag = exec->inp_flags[get_arrlen(exec->inp_files) - 1];
@@ -79,6 +80,7 @@ void exec_loop(t_shell *shell)
 	pid_t	id = 0;
 	// int 	temp;
     
+	//if signal sent we have fd leaks
     while (shell->exec[i])
     {
         if (shell->exec[i + 1])
@@ -90,10 +92,14 @@ void exec_loop(t_shell *shell)
 			shell->child = fork();
 			if (!shell->child)
 			{
-				signal(SIGINT, do_nothing);
-				collect_heredoc(shell, i);
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+				printf("heredoc child %d\n", getpid());
+				printf("read:- %d\n", shell->exec[i]->fd[READ_PIPE]);
+				printf("write:- %d\n", shell->exec[i]->fd[WRITE_PIPE]);
+				signal(SIGINT, do_nothing);
+				collect_heredoc(shell, i);
+				ft_close(shell, &shell->exec[i]->heredoc_fd);
 				// mass_free(shell, 0);
 			}
 			if(waiting_heredoc(shell, id) == 1)
@@ -106,25 +112,9 @@ void exec_loop(t_shell *shell)
         	shell->child = fork();
         	if (shell->child == 0)
         	{
+				printf("exec child %d\n", getpid());
 				signal(SIGINT, SIG_DFL);
 				signal(SIGQUIT, SIG_DFL);
-        	    // if (i == 0)
-        	    // {
-        	    //     if (shell->exec[i + 1])
-        	    //         dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-        	    // }
-        	    // else if (shell->exec[i + 1]) // any command thats not the firs
-        	    // {
-        	    //     dup2(temp_fd, STDIN_FILENO);
-        	    //     dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-        	    // }
-        	    // else // this one is fro last command
-        	    //     dup2(temp_fd, STDIN_FILENO);
-				// ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-				// ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-				// ft_close(shell, &temp_fd);
-				// inp_dup(shell, i, temp_fd);
-				// opt_dup(shell, i);
 				if (i == 0)
 				{
 					inp_file_dup(shell->exec[i]);
@@ -132,7 +122,11 @@ void exec_loop(t_shell *shell)
 					{
 						dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
 						dup2(temp_fd, shell->exec[i]->fd[READ_PIPE]);
+						ft_close(shell, &temp_fd);
 					}
+					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+					ft_close(shell, &shell->exec[i]->heredoc_fd);
 				}
 				else if (shell->exec[i + 1])
 				{
@@ -146,6 +140,8 @@ void exec_loop(t_shell *shell)
 						dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
 						dup2(temp_fd, shell->exec[i]->fd[READ_PIPE]);
 					}
+					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				}
 				else
 				{
@@ -155,6 +151,9 @@ void exec_loop(t_shell *shell)
 						ft_close(shell, &temp_fd);
 					}
 					opt_file_dup(shell->exec[i]);
+					ft_close(shell, &temp_fd);
+					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				}
 				if(shell->exec[i]->cmd[0])
 				{

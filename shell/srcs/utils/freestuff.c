@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/04 13:50:31 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:33:09 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@ void	free_env(t_shell *shell)
 	}
 	ft_free((void **)&shell->environ->cwd);
 	ft_free((void **)&shell->environ->owd);
+	freetwodarray(shell->environ->path);
+	ft_free((void *)&shell->environ->path);
+	freetwodarray(shell->environ->environment);
+	ft_free((void **)&shell->environ->environment);
 	ft_free((void **)&shell->environ);
 }
 
@@ -49,16 +53,19 @@ void	free_exec(t_shell *shell)
 	{
 		ft_free((void **)&shell->exec[i]->cmdpath);	
 		freetwodarray(shell->exec[i]->cmd);
+		ft_free((void **)&shell->exec[i]->cmd);
 		freetwodarray(shell->exec[i]->inp_files);
+		ft_free((void **)&shell->exec[i]->inp_files);
 		freetwodarray(shell->exec[i]->opt_files);
+		ft_free((void **)&shell->exec[i]->opt_files);
 		ft_free((void **)&shell->exec[i]->inp_flags);
 		ft_free((void **)&shell->exec[i]->opt_flags);
 		ft_free((void **)&shell->exec[i]);
 		ft_free((void **)&shell->counter[i]);
 		i++;	
 	}
-	ft_free((void **)shell->exec);
-	ft_free((void **)shell->counter);
+	ft_free((void *)&shell->exec);
+	ft_free((void *)&shell->counter);
 }
 
 void	mass_free(t_shell *shell, int exit_code)

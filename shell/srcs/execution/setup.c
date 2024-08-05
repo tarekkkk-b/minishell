@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:00:45 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/04 14:43:10 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/05 21:32:06 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,6 @@ char	**set_up_path(t_shell *shell)
 	if (!locate)
 		return (NULL);
 	path = ft_split(locate->value, ':');
-	path[0] = ft_strtrim(path[0], "PATH=");
+	path[0] = ft_strtrim(path[0], "PATH=", 1);
 	return (path);
 }
