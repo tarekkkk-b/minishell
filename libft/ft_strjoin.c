@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/14 20:30:05 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 13:41:48 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/06 13:57:16 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char	*ft_strjoin(const char *s1, const char *s2, int flag)
 	while (s2[j] != '\0')
 		new[i++] = s2[j++];
 	new[i++] = '\0';
-	if (flag)
+	if (flag && s1)
 		free((char *)s1);
 	return (new);
 }

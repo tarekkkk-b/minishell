@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 16:39:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/05 21:42:26 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:05:23 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	waiting(t_shell *shell)
 	pid_t	id = 0;
 	int 	temp;
 
+	temp = 0;
 	while(id != -1)
 	{
 		id = wait(&temp);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/05 08:39:44 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/06 13:35:49 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static int	which_builtin(t_shell *shell, int index, int args_c)
 
 int	builtin_check(t_shell *shell, int index, int flag)
 {
-	int	exit_code = 0;
 	int args_c = 0;
 	if (!shell || !shell->exec)
 		return (-1);
@@ -65,20 +64,18 @@ int	builtin_check(t_shell *shell, int index, int flag)
 	if (flag)
 	{
 		if (!(shell->exec[1]) && mass_check(shell->exec[index]->cmd[0]) == 1)
-			exit (0);
+			mass_free(shell, 0);
 		if (!(shell->exec[1]) || mass_check(shell->exec[index]->cmd[0]) == 0)
 			return (1);
-		exit_code = which_builtin(shell, index, args_c);
-		shell->environ->exit = exit_code;
-		exit(exit_code);
+		shell->environ->exit = which_builtin(shell, index, args_c);
+		mass_free(shell, shell->environ->exit);
 	}
 	else if (!flag)
 	{
 		if (shell->exec[0] && shell->exec[1])
 			return (1);
-		exit_code = which_builtin(shell, index, args_c);
-		shell->environ->exit = exit_code;
-		return(exit_code);
+		shell->environ->exit = which_builtin(shell, index, args_c);
+		return (shell->environ->exit);
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 17:55:19 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/21 14:24:45 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:06:33 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	add_token(t_shell *shell, t_noding *new)
 	if (shell->parser->noding)
 	{
 		temp = last_node(shell->parser->noding);
+		printf("%s\n", temp->value);
 		temp->next = new;
 	}
 	else

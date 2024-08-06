@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:50:58 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 14:24:24 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/06 18:01:14 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,25 @@ void	collect_heredoc(t_shell *shell, int index)
 
 	i = -1;
 	if (!shell->exec[index]->inp_files || !shell->exec[index]->inp_files[0])
-		exit(1);
+		mass_free(shell, 1);
 	while (shell->exec[index]->inp_files[++i])
 	{
 		if (shell->exec[index]->inp_flags[i])
 		{
 			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
 			if (shell->exec[index]->heredoc_fd == -1)
-                exit(1);
+                mass_free(shell, 1);
 			str = readline("> ");
 			while(1)
 			{
 				if(g_signalnumber == SIGINT)
-					exit(1);
+				{
+					printf("%s\n", shell->exec[index]->inp_files[i]);
+					ft_close(shell, &shell->exec[index]->heredoc_fd);
+					ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
+					ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
+					mass_free(shell, 1);
+				}
 				if (!str || (ft_strcmp(str, shell->exec[index]->inp_files[i]) == 0))
 					break ;
 				str = ft_strjoin(str, "\n", 1);
@@ -105,10 +111,13 @@ void	collect_heredoc(t_shell *shell, int index)
 			}
 			ft_close(shell, &shell->exec[index]->heredoc_fd);
 		}
-		// if(str == NULL)
-		// 	exit(1);
+		if(!str)
+		{
+			ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
+			ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
+			mass_free(shell, 0);
+		}
 	}
-	exit(0);
 }
 
 int	check_opt_files(t_shell *shell, int index)

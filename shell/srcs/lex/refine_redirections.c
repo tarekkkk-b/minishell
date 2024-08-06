@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   refine_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 15:48:07 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/06 18:12:50 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,15 @@ void	new_delim(t_shell *shell, t_noding *traveler, t_noding *pre, char *str)
 {
 	t_noding	*new;
 
+	printf("traveller %s\n", traveler->value);
 	new = ft_malloc(sizeof(t_noding), shell);
-	if (!new)
-		return ;
 	assign_node(shell, new, DELIMITER, 0);
 	if (traveler)
 		new->next = traveler->next;
-	else
-		new->next = NULL;
 	pre->next = new;
 	new->value = ft_strdup(str);
+	ft_free((void **)&traveler->value);
+	ft_free((void **)traveler);
 	ft_free((void **)&str);
 }
 

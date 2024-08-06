@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assign_redirection.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:24 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 15:45:28 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/06 17:48:34 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

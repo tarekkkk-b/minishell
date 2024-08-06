@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assignation.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:15:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/07/22 16:02:44 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/06 18:06:56 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
