@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/08 20:13:25 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/08 20:55:34 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,7 @@ void exec_loop(t_shell *shell)
 		{
 			if (shell->exec[i + 1])
 			{
+				shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 			}
@@ -223,6 +224,7 @@ void	execution(t_shell *shell, int index)
 		}
 		ft_putstr_fd(shell->exec[index]->cmd[0], 1);
 		ft_putstr_fd(": command not found\n", 1);
+		ft_close(shell, &shell->fd);
 		mass_free(shell, 127);
 	}
 }
