@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/06 17:02:02 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/08 20:13:25 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,21 @@ int	check_heredoc(t_exec *exec)
 	return (0);
 }
 
+void	mass_close(t_shell *shell)
+{
+	int	i;
+
+	i = 2;
+	while(++i < 1025)
+		ft_close(shell, &i);
+}
+
 int	inp_file_dup(t_exec	*exec)
 {
 	int	fd;
 	int	flag;
 
 	fd = -1;
-	
 	if (exec->inp_files && exec->inp_files[0])
 	{
 		flag = exec->inp_flags[get_arrlen(exec->inp_files) - 1];
@@ -76,11 +84,9 @@ int	opt_file_dup(t_exec	*exec)
 void exec_loop(t_shell *shell)
 {
     int i = 0;
-    int temp_fd = -1;
+	shell->fd = -1;
 	pid_t	id = 0;
-	// int 	temp;
-    
-	//if signal sent we have fd leaks
+
     while (shell->exec[i])
     {
 		if (shell->exec[i + 1])
@@ -92,15 +98,12 @@ void exec_loop(t_shell *shell)
 			shell->child = fork();
 			if (!shell->child)
 			{
-				printf("heredoc child: %d\n", getpid());
 				signal(SIGINT, do_nothing);
 				collect_heredoc(shell, i);
-				printf("read: %d\n", shell->exec[i]->heredoc_fd);
-				printf("write: %d\n", shell->exec[i]->fd[WRITE_PIPE]);
-				printf("heredoc: %d\n", shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->heredoc_fd);
 				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+				ft_close(shell, &shell->fd);
 				mass_free(shell, 0);
 			}
 			if(waiting_heredoc(shell, id) == 1)
@@ -113,7 +116,6 @@ void exec_loop(t_shell *shell)
         	shell->child = fork();
         	if (shell->child == 0)
         	{
-				printf("exec child %d\n", getpid());
 				signal(SIGINT, SIG_DFL);
 				signal(SIGQUIT, SIG_DFL);
 				if (i == 0)
@@ -122,24 +124,26 @@ void exec_loop(t_shell *shell)
 					if (!opt_file_dup(shell->exec[i]))
 					{
 						dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-						dup2(temp_fd, shell->exec[i]->fd[READ_PIPE]);
-						ft_close(shell, &temp_fd);
+						if (shell->exec[1])
+							dup2(shell->fd, shell->exec[i]->fd[READ_PIPE]);
+						ft_close(shell, &shell->fd);
 					}
 					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 					ft_close(shell, &shell->exec[i]->heredoc_fd);
+					ft_close(shell, &shell->fd);
 				}
 				else if (shell->exec[i + 1])
 				{
 					if (!inp_file_dup(shell->exec[i]))
 					{
-						dup2(temp_fd, STDIN_FILENO);
-						ft_close(shell, &temp_fd);
+						dup2(shell->fd, STDIN_FILENO);
+						ft_close(shell, &shell->fd);
 					}
 					if (!opt_file_dup(shell->exec[i]))
 					{
 						dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-						dup2(temp_fd, shell->exec[i]->fd[READ_PIPE]);
+						dup2(shell->fd, shell->exec[i]->fd[READ_PIPE]);
 					}
 					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
@@ -148,11 +152,11 @@ void exec_loop(t_shell *shell)
 				{
 					if (!inp_file_dup(shell->exec[i]))
 					{
-						dup2(temp_fd, STDIN_FILENO);
-						ft_close(shell, &temp_fd);
+						dup2(shell->fd, STDIN_FILENO);
+						ft_close(shell, &shell->fd);
 					}
 					opt_file_dup(shell->exec[i]);
-					ft_close(shell, &temp_fd);
+					ft_close(shell, &shell->fd);
 					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				}
@@ -163,67 +167,59 @@ void exec_loop(t_shell *shell)
 				}
         	    mass_free(shell, shell->environ->exit);
 				unlink("/tmp/.here_i_doc");
-        	}
-        	else if (shell->child > 0)
-        	{
-        	    if (i > 0)
-        	        ft_close(shell, &temp_fd);
-        	    if (shell->exec[i + 1])
-        	    {
-        	        ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-        	        temp_fd = shell->exec[i]->fd[READ_PIPE];
-				}
-				else
-				{
-					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-					ft_close(shell, &temp_fd);					
-				}
-				builtin_check(shell, i, 0);
+			}
+			builtin_check(shell, i, 0);
+			ft_close(shell, &shell->fd);
+			shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
+			ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+			ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+			ft_close(shell, &shell->exec[i]->heredoc_fd);
+		}
+		else
+		{
+			if (shell->exec[i + 1])
+			{
+				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
+				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 			}
 		}
 		i++;
 	}
+	ft_close(shell, &shell->fd);
 }
 
-
-void	execution(t_shell *shell, int index)
+void	exec(t_shell *shell, int index, char *cmd)
 {
-	int i = 0;
-	
-	shell->environ->environment = arr(shell->environ->env, shell);
-	shell->environ->path = set_up_path(shell);
-	if (!access(shell->exec[index]->cmd[0], F_OK))
+	if (!access(cmd, F_OK))
 	{
-		 if (access(shell->exec[index]->cmd[0], X_OK) == -1)
+		 if (access(cmd, X_OK) == -1)
 		{
-			ft_putstr_fd(shell->exec[index]->cmd[0], 1);
+			ft_putstr_fd(cmd, 1);
 			ft_putstr_fd(": Permission denied\n", 1);
 			shell->environ->exit = 126;
 			mass_free(shell, 126);
 		}
 		else
-			execve(shell->exec[index]->cmd[0], shell->exec[index]->cmd, shell->environ->environment);
+			execve(cmd, shell->exec[index]->cmd, shell->environ->environment);
 	}
+}
+
+void	execution(t_shell *shell, int index)
+{
+	int	i;
+	
+	i = -1;
+	shell->environ->environment = arr(shell->environ->env, shell);
+	shell->environ->path = set_up_path(shell);
+	exec(shell, index, shell->exec[index]->cmd[0]);
 	if (shell->environ->path)
 	{
-		while (shell->environ->path[i] && shell->exec[index]->cmd[0])
+		while (shell->environ->path[++i] && shell->exec[index]->cmd[0])
 		{
-			shell->exec[index]->cmdpath = ft_strjoin2(shell->environ->path[i], "/", shell->exec[index]->cmd[0]); 
-			if (!access(shell->exec[index]->cmdpath, F_OK))
-			{
-				if (access(shell->exec[index]->cmdpath, X_OK) == -1)
-				{
-					ft_putstr_fd(shell->exec[index]->cmd[0], 1);
-					ft_putstr_fd(": Permission denied\n", 1);
-					shell->environ->exit = 126;
-					mass_free(shell, 126);
-				}
-				else
-					execve(shell->exec[index]->cmdpath, shell->exec[index]->cmd, shell->environ->environment);
-			}
+			shell->exec[index]->cmdpath = ft_strjoin2(shell->environ->path[i], \
+			"/", shell->exec[index]->cmd[0]); 
+			exec(shell, index, shell->exec[index]->cmdpath);
 			ft_free((void **)&shell->exec[index]->cmdpath);
-			i++;
 		}
 		ft_putstr_fd(shell->exec[index]->cmd[0], 1);
 		ft_putstr_fd(": command not found\n", 1);

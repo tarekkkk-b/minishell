@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/05 16:41:41 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/08 19:41:52 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,6 +239,9 @@ void	do_nothing(int sig);
 
 void	waiting(t_shell *shell);
 int		waiting_heredoc(t_shell *shell, pid_t id);
+int	opt_file_dup(t_exec	*exec);
+int	inp_file_dup(t_exec	*exec);
 
+void	mass_close(t_shell *shell);
 
 #endif

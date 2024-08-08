@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:57:27 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/06 18:12:50 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/08 17:35:14 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,19 +62,15 @@ char	*full_string(t_noding *traveler)
 	return (str);
 }
 
-void	new_delim(t_shell *shell, t_noding *traveler, t_noding *pre, char *str)
+void	new_delim(t_shell *shell, t_noding *after, t_noding *first, char *str)
 {
 	t_noding	*new;
 
-	printf("traveller %s\n", traveler->value);
 	new = ft_malloc(sizeof(t_noding), shell);
 	assign_node(shell, new, DELIMITER, 0);
-	if (traveler)
-		new->next = traveler->next;
-	pre->next = new;
+	new->next = after;
+	first->next = new;
 	new->value = ft_strdup(str);
-	ft_free((void **)&traveler->value);
-	ft_free((void **)traveler);
 	ft_free((void **)&str);
 }
 
@@ -89,14 +85,12 @@ void	get_delimeter(t_shell *shell)
 	{
 		if (traveler->type == HERE_DOC)
 		{
-			temp = traveler;
 			if (traveler->next && traveler->next->type == SPACES)
 				traveler = traveler->next;
+			temp = traveler;
 			traveler = traveler->next;
 			str = full_string(traveler);
-			if (str && temp->next && temp->next->type == SPACES)
-				new_delim(shell, traveler, temp->next, str);
-			else if (str && !(temp->next && temp->next->type == SPACES))
+			if (str)
 				new_delim(shell, traveler, temp, str);
 			else
 				temp->type = INVALID;

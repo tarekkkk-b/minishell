@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 22:48:01 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/23 11:49:16 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/08 10:53:23 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,16 @@ int	checker(t_shell *shell)
 	temp = shell->parser->noding;
 	while (temp)
 	{
-		// printf("%s		:		%s	<<<pop? == %d>>>\n", temp->value,
-			// types[temp->type], temp->pop_out);
 		if (temp->type == INVALID)
 		{
+			shell->environ->exit = 258;
 			return ((void)printf("Syntax error at:	'%s'\n", temp->value), 0);
 		}
 		temp = temp->next;
 	}
-	// printf("\n\n<<PIPING AARIJ COUNT: %d>>\n\n", shell->parser->pipe_count);
 	return (1);
 }
 
-// major fweeing function in place of return null, 
-// that takes an exit code
 void	*ft_malloc(size_t size, t_shell *shell)
 {
 	void	*ptr;
@@ -75,10 +71,3 @@ void	ft_free(void **ptr)
 	free(*ptr);
 	*ptr = NULL;
 }
-
-// fake int main
-// {
-// 	int* a = (int*)ft_malloc(sizeof(int) * 10);
-//	a = {0};
-// 	ft_free((void**)&a);
-// }

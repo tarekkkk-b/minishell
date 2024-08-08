@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/06 13:35:49 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/08 18:45:37 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,38 @@ static int	which_builtin(t_shell *shell, int index, int args_c)
 
 int	builtin_check(t_shell *shell, int index, int flag)
 {
+	int temp_in;
+	int temp_out;
+
 	int args_c = 0;
 	if (!shell || !shell->exec)
 		return (-1);
 	args_c = args_count(shell, index);
 	if (flag)
 	{
-		if (!(shell->exec[1]) && mass_check(shell->exec[index]->cmd[0]) == 1)
+		if (!(shell->exec[1]) && mass_check(shell->exec[index]->cmd[0]))
 			mass_free(shell, 0);
-		if (!(shell->exec[1]) || mass_check(shell->exec[index]->cmd[0]) == 0)
+		if (!(shell->exec[1]) || !mass_check(shell->exec[index]->cmd[0]))
 			return (1);
 		shell->environ->exit = which_builtin(shell, index, args_c);
 		mass_free(shell, shell->environ->exit);
 	}
 	else if (!flag)
 	{
+		if (!mass_check(shell->exec[index]->cmd[0]))
+			return (1);
 		if (shell->exec[0] && shell->exec[1])
 			return (1);
+		temp_in = dup(STDIN_FILENO);	
+		temp_out = dup(STDOUT_FILENO);	
+		inp_file_dup(shell->exec[index]);
+		opt_file_dup(shell->exec[index]);
 		shell->environ->exit = which_builtin(shell, index, args_c);
+		dup2(temp_in, 0);
+		dup2(temp_out, 1);
+		ft_close(shell, &temp_in);
+		ft_close(shell, &temp_out);
+		
 		return (shell->environ->exit);
 	}
 	return (1);
