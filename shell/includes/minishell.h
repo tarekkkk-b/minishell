@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/08 19:41:52 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/09 17:44:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@
 typedef struct s_environ	t_environ;
 typedef struct s_exec		t_exec;
 typedef struct s_parser		t_parser;
-typedef	struct s_counter	t_counter;
+typedef struct s_counter	t_counter;
 
-# define	READ_PIPE	0
-# define	WRITE_PIPE	1
+# define READ_PIPE 0
+# define WRITE_PIPE 1
 
-extern int g_signalnumber;
+extern int					g_signalnumber;
 
 //		shell struct		//
 typedef struct s_shell
@@ -113,13 +113,12 @@ typedef struct s_parser
 
 //		exec struct		//
 
-typedef	struct s_counter
+typedef struct s_counter
 {
 	int		commands;
 	int		inp_files;
 	int		opt_files;
 }	t_counter;
-
 
 typedef struct s_exec
 {
@@ -149,7 +148,8 @@ int			operater_tokens(t_noding *node);
 int			delimeter_char(char character);
 int			invalid_chars(char c);
 void		assignation(t_shell *shell, char *str);
-void		assign_node(t_shell *shell, t_noding *new, t_tokens type, int popout);
+void		assign_node(t_shell *shell, t_noding *new, t_tokens type, \
+int popout);
 void		assign_pipe(t_shell *shell);
 void		assign_invalid(t_shell *shell, char *str, int index);
 void		add_token(t_shell *shell, t_noding *new);
@@ -164,7 +164,6 @@ t_noding	*prev_node(t_shell *shell, t_noding *target);
 t_noding	*last_node(t_noding *nodes);
 t_noding	*prev_node(t_shell *shell, t_noding *target);
 t_noding	*last_node(t_noding *nodes);
-
 //			others		//
 
 // int		just_test(t_readline rl);
@@ -207,41 +206,32 @@ int			builtin_cd(t_shell *shell, int i, int args);
 int			builtin_unset(t_shell *shell, int argc, int i);
 int			update_pwd(t_shell *shell, char *directory);
 int			change_nodeee(t_values *node, char *new);
+int			is_num(char *str);
+int			export(int argc, t_shell *shell, int i);
+int			count_values(t_values *env);
+int			check_invalid(char *str);
+int			check_inp_files(t_shell *shell, int index);
+int			check_opt_files(t_shell *shell, int index);
+int			waiting_heredoc(t_shell *shell, pid_t id);
+int			opt_file_dup(t_exec	*exec);
+int			inp_file_dup(t_exec	*exec);
 char		*get_directory(int args_count, t_shell *shell, int i);
 char		*find_node_aarij(t_values *temp, char *target_key);
-int			is_num(char *str);
-
-
-int 		export(int argc, t_shell *shell, int i);
-int			count_values(t_values *env);
 void		sort_it_out(char **arr, int n, int i, int j);
 void		printArray(char **arr, int n, t_shell *shell);
-int			check_invalid(char *str);
-void	ft_close(t_shell *shell, int *fd);
-
-void	free_exec(t_shell *shell);
-void	setup_exec_struct(t_shell *shell);
-void	count_items(t_shell *shell, t_noding *traveler, t_counter *counter);
-char	**set_up_path(t_shell *shell);
-void exec_loop(t_shell *shell);
-void	execution(t_shell *shell, int index);
-
-
-
-void	inp_dup(t_shell *shell, int index, int temp_fd);
-void	ft_close(t_shell *shell, int *fd);
-void	opt_dup(t_shell *shell, int index);
-void	collect_heredoc(t_shell *shell, int index);
-int	check_inp_files(t_shell *shell, int index);
-int	check_opt_files(t_shell *shell, int index);
-void	do_nothing(int sig);
-
-
-void	waiting(t_shell *shell);
-int		waiting_heredoc(t_shell *shell, pid_t id);
-int	opt_file_dup(t_exec	*exec);
-int	inp_file_dup(t_exec	*exec);
-
-void	mass_close(t_shell *shell);
+void		ft_close(t_shell *shell, int *fd);
+void		free_exec(t_shell *shell);
+void		setup_exec_struct(t_shell *shell);
+void		count_items(t_shell *shell, t_noding *traveler, t_counter *counter);
+char		**set_up_path(t_shell *shell);
+void		exec_loop(t_shell *shell);
+void		execution(t_shell *shell, int index);
+void		inp_dup(t_shell *shell, int index, int temp_fd);
+void		ft_close(t_shell *shell, int *fd);
+void		opt_dup(t_shell *shell, int index);
+void		collect_heredoc(t_shell *shell, int index);
+void		do_nothing(int sig);
+void		waiting(t_shell *shell);
+void		mass_close(t_shell *shell);
 
 #endif
