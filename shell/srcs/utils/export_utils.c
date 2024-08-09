@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 17:56:19 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/09 16:55:11 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/09 22:28:18 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,9 @@ void	printarray(char **arr, int n, t_shell *shell)
 	key = NULL;
 	if (n == 0)
 		return ;
-	splitKeyValue(*arr, &key, &value, shell);
+	splitkeyvalue(*arr, &key, &value, shell);
 	printf("declare -x %s=\"%s\"\n", key, value);
 	free(key);
 	free(value);
-	printArray(arr + 1, n - 1, shell);
+	printarray(arr + 1, n - 1, shell);
 }

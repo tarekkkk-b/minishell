@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/09 17:44:41 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/09 22:50:46 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,13 @@ typedef struct s_exec
 	t_shell			*shell;
 }	t_exec;
 
+typedef struct s_export
+{
+	char		*key;
+	char		*equal;
+	char		*value;
+}	t_export;
+
 //			parsing			//
 
 int			parsing_hub(t_shell *shell, char *str);
@@ -201,7 +208,7 @@ int			builtin_check(t_shell *shell, int index, int flag);
 int			builtin_env(t_environ *environ);
 int			builtin_exit(t_shell *shell, int argc, int index);
 int			builtin_pwd(t_shell *shell);
-int			builtin_echo(t_shell *shell, int index);
+int			builtin_echo(t_shell *shell, int index, int i);
 int			builtin_cd(t_shell *shell, int i, int args);
 int			builtin_unset(t_shell *shell, int argc, int i);
 int			update_pwd(t_shell *shell, char *directory);
@@ -218,7 +225,7 @@ int			inp_file_dup(t_exec	*exec);
 char		*get_directory(int args_count, t_shell *shell, int i);
 char		*find_node_aarij(t_values *temp, char *target_key);
 void		sort_it_out(char **arr, int n, int i, int j);
-void		printArray(char **arr, int n, t_shell *shell);
+void		printarray(char **arr, int n, t_shell *shell);
 void		ft_close(t_shell *shell, int *fd);
 void		free_exec(t_shell *shell);
 void		setup_exec_struct(t_shell *shell);

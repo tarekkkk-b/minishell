@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_check.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/08 18:45:37 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/09 22:39:11 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	which_builtin(t_shell *shell, int index, int args_c)
 	else if (ft_strncmp(shell->exec[index]->cmd[0], "cd", 3) == 0)
 		exit_code = builtin_cd(shell, index, args_c);
 	else if(ft_strncmp(shell->exec[index]->cmd[0], "echo", 5) == 0)
-		exit_code = builtin_echo(shell, index);
+		exit_code = builtin_echo(shell, index, 1);
 	else if(ft_strncmp(shell->exec[index]->cmd[0], "exit", 5) == 0)
 		exit_code = builtin_exit(shell, args_c, index);
 	else if(ft_strncmp(shell->exec[index]->cmd[0], "export", 5) == 0)
