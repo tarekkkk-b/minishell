@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/15 15:54:50 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/01 14:24:09 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/09 16:55:41 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,13 @@ int	end_of_var(char *str, int start, int index, int res)
 	return (index);
 }
 
+void	add_question(t_shell *shell, t_noding *new)
+{
+	assign_node(shell, new, VARIABLE, 0);
+	new->value = ft_strdup("?");
+	add_token(shell, new);
+}
+
 int	assign_variable(char *str, int i, t_shell *shell)
 {
 	t_noding	*new;
@@ -56,13 +63,8 @@ int	assign_variable(char *str, int i, t_shell *shell)
 
 	j = 0;
 	new = ft_malloc(sizeof(t_noding), shell);
-	if(str[i + 1] == '?')
-	{
-		assign_node(shell, new, VARIABLE, 0);
-		new->value = ft_strdup("?");
-		add_token(shell, new);
-		return (i + 1);
-	}
+	if (str[i + 1] == '?')
+		return (add_question(shell, new), i + 1);
 	else if (str[i + 1] == ' ' || str[i + 1] == '\t' || str[i + 1] == '\0'
 		|| !valid_name(str[i + 1], i + 1, i + 1))
 		assign_node(shell, new, ARG, 0);

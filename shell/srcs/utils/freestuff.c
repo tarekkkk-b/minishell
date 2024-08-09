@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/06 17:47:02 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/09 14:10:31 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	freetwodarray(char **str)
 {
-	int i = -1;
+	int	i;
+
+	i = -1;
 	if (!str)
 		return ;
 	while (str[++i])
@@ -51,7 +53,7 @@ void	free_exec(t_shell *shell)
 	i = 0;
 	while (shell->exec[i])
 	{
-		ft_free((void **)&shell->exec[i]->cmdpath);	
+		ft_free((void **)&shell->exec[i]->cmdpath);
 		freetwodarray(shell->exec[i]->cmd);
 		ft_free((void **)&shell->exec[i]->cmd);
 		freetwodarray(shell->exec[i]->inp_files);
@@ -62,7 +64,7 @@ void	free_exec(t_shell *shell)
 		ft_free((void **)&shell->exec[i]->opt_flags);
 		ft_free((void **)&shell->exec[i]);
 		ft_free((void **)&shell->counter[i]);
-		i++;	
+		i++;
 	}
 	ft_free((void *)&shell->exec);
 	ft_free((void *)&shell->counter);
