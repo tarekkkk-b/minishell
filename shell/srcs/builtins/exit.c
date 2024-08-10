@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:08:39 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 15:12:32 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 23:03:00 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,11 @@ int	builtin_exit(t_shell *shell, int argc, int index)
 		exit_code = ft_atoi(shell->exec[index]->cmd[1]);
 	else if (argc > 2)
 	{
-		printf("exit\n");
-		printf("exit: too many arguments\n");
+		write(1, "exit\n", 5);
+		write(1, "exit: too many arguments\n", 25);
 		return (1);
 	}
-	// we need to have something that checks if we're in a child process, 
-	// AND isatty;
+	write(1, "exit\n", 5);
 	mass_free(shell, exit_code);
 	return (exit_code);
 }

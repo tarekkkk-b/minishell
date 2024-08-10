@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/09 17:30:14 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 22:55:40 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	the_heart(t_shell *shell)
 
 void	minishell(t_shell *shell)
 {
-//USE FT_STRCMP
+
 	if (!isatty(0))
 		rl_outstream = stdin;
 	while (1)
@@ -58,7 +58,7 @@ void	minishell(t_shell *shell)
 		g_signalnumber = -1;
 		if (!shell->str)
 			break ;
-		if (strcmp(shell->str, "") == 0)
+		if (ft_strcmp(shell->str, "") == 0)
 			continue ;
 		if (shell->str[0] != '\0')
 			add_history(shell->str);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 15:08:05 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 22:59:16 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,17 @@ int	builtin_cd(t_shell *shell, int i, int args)
 
 	directory = get_directory(args, shell, i);
 	if (directory == NULL)
-		printf("nun");
+		return (1);
 	if (chdir(directory) == -1)
 	{
-		printf("cd: no such file or directory: %s\n", directory);
+		printf("cd: %s: No such file or directory\n", directory);
 		return (1);
 	}
 	if (shell->exec[i]->cmd[i + 1] && \
-	strncmp(shell->exec[i]->cmd[i + 1], "-", 2) == 0)
+	ft_strncmp(shell->exec[i]->cmd[i + 1], "-", 2) == 0)
 		printf("%s\n", directory);
 	if (update_pwd(shell, getcwd(NULL, 0)) == 1)
-	{
-		printf("doesnt work\n");
 		return (1);
-	}
 	return (0);
 }
 
@@ -44,24 +41,17 @@ char	*get_directory(int args_count, t_shell *shell, int i)
 	{
 		dir = find_node_aarij(shell->environ->env, "HOME");
 		if (dir == NULL)
-			printf("HOME not set\n");
-			// printf("exit code will be done 
-			// i figure out how exit works");
+			printf("cd: HOME not set\n");
 	}
 	else if (shell->exec[i]->cmd[1] && \
-	strncmp(shell->exec[i]->cmd[1], "-", 2) == 0)
+	ft_strncmp(shell->exec[i]->cmd[1], "-", 2) == 0)
 	{
-		//add ft_
 		dir = find_node_aarij(shell->environ->env, "OLDPWD");
 		if (dir == NULL)
-			printf("OLDPWD not set");
-			// printf("exit code will be done once
-			//i figure out how exit works");
+			printf("cd: OLDPWD not set\n");
 	}
 	else
 		dir = shell->exec[i]->cmd[1];
-//	// note to self
-//	// uncomment this up portion once tarek finishes putting stuff in lists
 	return (dir);
 }
 

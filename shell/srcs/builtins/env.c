@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:32:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/22 09:37:51 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/10 21:44:23 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	builtin_env(t_environ *environ)
 
 	if (environ == NULL)
 	{
-		printf("Wat\n");
+		printf("env : environ not set\n");
 		return (1);
 	}
 	current = environ->env;

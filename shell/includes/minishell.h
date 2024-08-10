@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 20:52:48 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 22:57:54 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,12 @@ typedef struct s_export
 	char		*value;
 }	t_export;
 
+typedef struct s_indices
+{
+	int			i;
+	int			j;
+}	t_indices;
+
 //			parsing			//
 
 int			parsing_hub(t_shell *shell, char *str);
@@ -241,5 +247,7 @@ void		do_nothing(int sig);
 void		waiting(t_shell *shell);
 void		mass_close(t_shell *shell);
 void		closer(t_shell *shell, t_exec *exec, int f1, int f2);
+char		*ft_strncpy(char *dest, const char *src, int n);
+int			ft_strcmpaarij(char *s1, char *s2);
 
 #endif

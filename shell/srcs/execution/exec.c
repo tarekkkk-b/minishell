@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 20:51:30 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 22:51:59 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	last_cmd(t_shell *shell, t_exec *exec)
 	closer(shell, exec, 0, 1);
 }
 
-void	heredoc(t_shell *shell, t_exec *exec)
+int	heredoc(t_shell *shell, t_exec *exec, pid_t id, int i)
 {
 	if (check_heredoc(exec))
 	{
@@ -145,8 +145,9 @@ void	heredoc(t_shell *shell, t_exec *exec)
 			mass_free(shell, 0);
 		}
 		if (waiting_heredoc(shell, id) == 1)
-			return ;
+			return (1);
 	}
+	return (0);
 }
 
 void	process(t_shell *shell, int i)
@@ -190,7 +191,8 @@ void	exec_loop(t_shell *shell)
 	{
 		if (shell->exec[i + 1])
 			pipe(shell->exec[i]->fd);
-		heredoc(shell, shell->exec[i]);
+		if (heredoc(shell, shell->exec[i], id, i))
+			return ;
 		if (check_inp_files(shell, i) && check_opt_files(shell, i))
 			process(shell, i);
 		else
