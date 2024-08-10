@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:00:45 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 17:13:02 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 18:01:07 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,57 @@ void	alloc_struct(t_shell *shell, t_exec **exec, int i)
 	(*exec)->fd[0] = -1;
 	(*exec)->fd[1] = -1;
 	(*exec)->heredoc_fd = -1;
-	(*exec)->cmdpath = NULL;		
-	(*exec)->cmd = ft_malloc((sizeof(char *) * (shell->counter[i]->commands + 1)), shell);
-	(*exec)->inp_files = ft_malloc((sizeof(char *) * (shell->counter[i]->inp_files + 1)), shell);
-	(*exec)->inp_flags = ft_malloc((sizeof(int) * (shell->counter[i]->inp_files + 1)), shell);
-	(*exec)->opt_files = ft_malloc((sizeof(char *) * (shell->counter[i]->opt_files + 1)), shell);
-	(*exec)->opt_flags = ft_malloc((sizeof(int) * (shell->counter[i]->opt_files + 1)), shell);
+	(*exec)->cmdpath = NULL;
+	(*exec)->cmd = ft_malloc((sizeof(char *) * \
+	(shell->counter[i]->commands + 1)), shell);
+	(*exec)->inp_files = ft_malloc((sizeof(char *) * \
+	(shell->counter[i]->inp_files + 1)), shell);
+	(*exec)->inp_flags = ft_malloc((sizeof(int) * \
+	(shell->counter[i]->inp_files + 1)), shell);
+	(*exec)->opt_files = ft_malloc((sizeof(char *) * \
+	(shell->counter[i]->opt_files + 1)), shell);
+	(*exec)->opt_flags = ft_malloc((sizeof(int) * \
+	(shell->counter[i]->opt_files + 1)), shell);
+}
+
+void	set(char **str, int *i, int	*arr, t_noding *trav)
+{
+	if (!arr)
+		str[(*i)] = ft_strdup(trav->value);
+	else
+		str[(*i)] = ft_strdup(trav->next->value);
+	if (arr && (trav->type == OPT_REDIR || trav->type == OPT_REDIR))
+		arr[(*i)] = 0;
+	else if (arr && (trav->type == APPEND || trav->type == HERE_DOC))
+		arr[(*i)] = 1;
+	(*i)++;
+}
+
+t_noding	*set_loop(t_exec **exec, t_noding *traveler)
+{
+	int	command;
+	int	opt_file;
+	int	inp_file;
+
+	command = 0;
+	opt_file = 0;
+	inp_file = 0;
+	while (traveler && traveler->type != PIPES)
+	{
+		if (traveler->type == ARG)
+			set((*exec)->cmd, &command, NULL, traveler);
+		if (traveler->type == OPT_REDIR || traveler->type == APPEND)
+			set((*exec)->opt_files, &opt_file, (*exec)->opt_flags, traveler);
+		if (traveler->type == INP_REDIR || traveler->type == HERE_DOC)
+			set((*exec)->inp_files, &inp_file, (*exec)->inp_flags, traveler);
+		traveler = traveler->next;
+	}
+	(*exec)->cmd[command] = NULL;
+	(*exec)->opt_files[opt_file] = NULL;
+	(*exec)->inp_files[inp_file] = NULL;
+	(*exec)->opt_flags[opt_file] = -1;
+	(*exec)->inp_flags[inp_file] = -1;
+	return (traveler);
 }
 
 void	setup_exec_struct(t_shell *shell)
@@ -48,66 +93,21 @@ void	setup_exec_struct(t_shell *shell)
 	t_noding	*traveler;
 	t_noding	*traveler2;
 	int			i;
-	int			command;
-	int			opt_file;
-	int			inp_file;
 
 	i = 0;
-	shell->counter = ft_malloc((sizeof(t_counter *) * (shell->parser->pipe_count + 2)), shell);
-	shell->exec = ft_malloc((sizeof(t_exec *) * (shell->parser->pipe_count + 2)), shell);
+	shell->counter = ft_malloc((sizeof(t_counter *) * \
+	(shell->parser->pipe_count + 2)), shell);
+	shell->exec = ft_malloc((sizeof(t_exec *) * \
+	(shell->parser->pipe_count + 2)), shell);
 	traveler = shell->parser->noding;
 	while (traveler)
 	{
-		command = 0;
-		opt_file = 0;
-		inp_file = 0;
 		traveler2 = traveler;
 		shell->counter[i] = ft_malloc(sizeof(t_counter), shell);
 		count_items(shell, traveler2, shell->counter[i]);
 		shell->exec[i] = ft_malloc(sizeof(t_exec), shell);
 		alloc_struct(shell, &shell->exec[i], i);
-		while (traveler && traveler->type != PIPES)
-		{
-			if (traveler->type == ARG)
-			{
-				shell->exec[i]->cmd[command] = ft_strdup(traveler->value);
-				command++;
-			}
-			if (traveler->type == OPT_REDIR)
-			{
-				shell->exec[i]->opt_files[opt_file] = \
-				ft_strdup(traveler->next->value);
-				shell->exec[i]->opt_flags[opt_file] = 0;
-				opt_file++;
-			}
-			if (traveler->type == APPEND)
-			{
-				shell->exec[i]->opt_files[opt_file] = \
-				ft_strdup(traveler->next->value);
-				shell->exec[i]->opt_flags[opt_file] = 1;
-				opt_file++;
-			}
-			if (traveler->type == INP_REDIR)
-			{
-				shell->exec[i]->inp_files[inp_file] = \
-				ft_strdup(traveler->next->value);
-				shell->exec[i]->inp_flags[inp_file] = 0;
-				inp_file++;
-			}
-			if (traveler->type == HERE_DOC)
-			{
-				shell->exec[i]->inp_files[inp_file] = \
-				ft_strdup(traveler->next->value);
-				shell->exec[i]->inp_flags[inp_file] = 1;
-				inp_file++;
-			}
-			traveler = traveler->next;
-		}
-		shell->exec[i]->cmd[command] = NULL;
-		shell->exec[i]->opt_files[opt_file] = NULL;
-		shell->exec[i]->inp_files[inp_file] = NULL;
-		shell->exec[i]->opt_flags[opt_file] = -1;
-		shell->exec[i]->inp_flags[inp_file] = -1;
+		traveler = set_loop(&shell->exec[i], traveler);
 		i++;
 		if (traveler)
 			traveler = traveler->next;
