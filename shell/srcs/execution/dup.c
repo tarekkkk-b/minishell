@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:50:58 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/08 20:16:05 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 16:05:59 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,18 @@ int	ft_strcmp(char *str1, char *str2)
 void	inp_dup(t_shell *shell, int index, int temp_fd)
 {
 	int	fd;
+	int	flag;
+	int	len;
 
 	fd = -1;
 	if (shell->exec[index]->inp_files && shell->exec[index]->inp_files[0])
 	{
-		if (shell->exec[index]->inp_flags[get_arrlen(shell->exec[index]->inp_files) - 1] == 1)
+		len = get_arrlen(shell->exec[index]->inp_files) - 1;
+		flag = shell->exec[index]->inp_flags[len];
+		if (flag)
 			fd = open("/tmp/.here_i_doc", O_RDONLY);
-		else if (shell->exec[index]->inp_flags[get_arrlen(shell->exec[index]->inp_files) - 1] == 0)
-			fd = open(shell->exec[index]->inp_files[get_arrlen(shell->exec[index]->inp_files) - 1], O_RDONLY);
+		else if (!flag)
+			fd = open(shell->exec[index]->inp_files[len], O_RDONLY);
 		dup2(fd, STDIN_FILENO);
 		ft_close(shell, &fd);
 	}
@@ -60,16 +64,20 @@ void	inp_dup(t_shell *shell, int index, int temp_fd)
 void	opt_dup(t_shell *shell, int index)
 {
 	int	fd;
-	int flag;
+	int	flag;
+	int	len;
 
 	fd = -1;
 	if (shell->exec[index]->opt_files && shell->exec[index]->opt_files[0])
 	{
-		flag = shell->exec[index]->opt_flags[get_arrlen(shell->exec[index]->opt_files) - 1];
+		len = get_arrlen(shell->exec[index]->opt_files) - 1;
+		flag = shell->exec[index]->opt_flags[len];
 		if (flag)
-			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
+			fd = open(shell->exec[index]->opt_files [len], O_CREAT \
+			| O_APPEND | O_WRONLY, 0644);
 		else if (!flag)
-			fd = open(shell->exec[index]->opt_files[get_arrlen(shell->exec[index]->opt_files) - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			fd = open(shell->exec[index]->opt_files[len], O_CREAT \
+			| O_TRUNC | O_WRONLY, 0644);
 	}
 	if (fd != -1)
 		dup2(fd, STDOUT_FILENO);
@@ -88,23 +96,22 @@ void	collect_heredoc(t_shell *shell, int index)
 	{
 		if (shell->exec[index]->inp_flags[i])
 		{
-			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT | O_TRUNC | O_WRONLY, 0620);
+			shell->exec[index]->heredoc_fd = open("/tmp/.here_i_doc", O_CREAT \
+			| O_TRUNC | O_WRONLY, 0620);
 			if (shell->exec[index]->heredoc_fd == -1)
-                mass_free(shell, 1);
+				mass_free(shell, 1);
 			str = readline("> ");
-			while(1)
+			while (1)
 			{
-				if(g_signalnumber == SIGINT)
+				if (g_signalnumber == SIGINT)
 				{
-					// printf("%s\n", shell->exec[index]->inp_files[i]);
 					ft_close(shell, &shell->fd);
 					ft_close(shell, &shell->exec[index]->heredoc_fd);
 					ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
 					ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
-					// mass_close(shell);
 					mass_free(shell, 1);
 				}
-				if (!str || (ft_strcmp(str, shell->exec[index]->inp_files[i]) == 0))
+				if (!str || (!ft_strcmp(str, shell->exec[index]->inp_files[i])))
 					break ;
 				str = ft_strjoin(str, "\n", 1);
 				ft_putstr_fd(str, shell->exec[index]->heredoc_fd);
@@ -113,11 +120,10 @@ void	collect_heredoc(t_shell *shell, int index)
 			}
 			ft_close(shell, &shell->exec[index]->heredoc_fd);
 		}
-		if(!str)
+		if (!str)
 		{
 			ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
 			ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
-			// mass_close(shell);
 			mass_free(shell, 0);
 		}
 	}
@@ -125,17 +131,23 @@ void	collect_heredoc(t_shell *shell, int index)
 
 int	check_opt_files(t_shell *shell, int index)
 {
-	int i = 0;
-	int fd= -1;
+	int	i;
+	int	fd;
+
+	fd = -1;
+	i = 0;
 	while (shell->exec[index]->opt_files[i])
 	{
 		if (!shell->exec[index]->opt_flags[i])
-			fd = open(shell->exec[index]->opt_files[i], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			fd = open(shell->exec[index]->opt_files[i], O_CREAT | \
+			O_WRONLY | O_TRUNC, 0644);
 		else
-			fd = open(shell->exec[index]->opt_files[i], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			fd = open(shell->exec[index]->opt_files[i], O_CREAT | \
+			O_WRONLY | O_APPEND, 0644);
 		if (fd == -1)
 		{
-			printf("%s: couldn't open file.\n", shell->exec[index]->opt_files[i]);
+			printf("%s: couldn't open file.\n", \
+			shell->exec[index]->opt_files[i]);
 			shell->environ->exit = 1;
 			return (0);
 		}
@@ -148,8 +160,11 @@ int	check_opt_files(t_shell *shell, int index)
 
 int	check_inp_files(t_shell *shell, int index)
 {
-	int i = 0;
-	int fd= -1;
+	int	i;
+	int	fd;
+
+	fd = -1;
+	i = 0;
 	while (shell->exec[index]->inp_files[i])
 	{
 		if (!shell->exec[index]->inp_flags[i])
@@ -157,7 +172,8 @@ int	check_inp_files(t_shell *shell, int index)
 			fd = open(shell->exec[index]->inp_files[i], O_RDONLY);
 			if (fd == -1)
 			{
-				printf("%s: No such file or directory\n", shell->exec[index]->inp_files[i]);
+				printf("%s: No such file or directory\n", \
+				shell->exec[index]->inp_files[i]);
 				shell->environ->exit = 1;
 				return (0);
 			}

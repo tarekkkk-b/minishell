@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/23 13:24:46 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 00:07:52 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/10 15:15:58 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,13 +45,13 @@ void	splitkeyequalsvalue(const char *str, t_export *export, t_shell *shell)
 
 static void	free_export(t_export *export)
 {
-	if(export)
+	if (export)
 	{
-		if(export->key)
+		if (export->key)
 			ft_free((void **)&export->key);
-		if(export->value)
+		if (export->value)
 			ft_free((void **)&export->value);
-		if(export->equal)
+		if (export->equal)
 			ft_free((void **)&export->equal);
 		// if(export)
 		// 	ft_free((void **)&export);
@@ -68,13 +68,12 @@ static void	init_export(t_export *export)
 int	export(int argc, t_shell *shell, int i)
 {
 	t_values	*mane;
-	t_export	*export;
+	t_export	export;
 	char		**env_copy;
 	int			n;
 	int			j;
 
-	export = ft_malloc((sizeof(t_export)), shell);
-	init_export(export);
+	init_export(&export);
 	if (argc == 1 && shell->environ->env != NULL)
 	{
 		env_copy = arr(shell->environ->env, shell);
@@ -85,32 +84,28 @@ int	export(int argc, t_shell *shell, int i)
 	j = 1;
 	while (argc > 1 && shell->exec[i]->cmd[j])
 	{
-		splitkeyequalsvalue(shell->exec[i]->cmd[j], export, shell);
-		if (export->equal == NULL){
-			free_export(export);
-			export = NULL;
-			return (1);
-		}
-		if (check_invalid(export->key) == 1)
+		splitkeyequalsvalue(shell->exec[i]->cmd[j], &export, shell);
+		if (export.equal == NULL)
+			return (free_export(&export), 1);
+		if (check_invalid(export.key) == 1)
 		{
-			printf("%s Not a valid identifier\n", export->key);
-			free_export(export);
+			printf("%s Not a valid identifier\n", export.key);
+			free_export(&export);
 			return (1);
 		}
 		else
 		{
-			mane = locate_node(shell->environ->env, export->key);
+			mane = locate_node(shell->environ->env, export.key);
 			if (mane != NULL)
-				change_node(mane, export->value);
+				change_node(mane, export.value);
 			else
-				custom_node(shell, export->key, export->value);
-			free_export(export);
-			export = ft_malloc(sizeof(t_export), shell);
-			init_export(export);
+				custom_node(shell, export.key, export.value);
+			free_export(&export);
+			init_export(&export);
 		}
 		j++;
 	}
-	free_export(export);
+	free_export(&export);
 	return (0);
 }
 

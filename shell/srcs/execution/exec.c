@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/08 20:55:34 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:56:19 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	mass_close(t_shell *shell)
 	int	i;
 
 	i = 2;
-	while(++i < 1025)
+	while (++i < 1025)
 		ft_close(shell, &i);
 }
 
@@ -59,7 +59,7 @@ int	inp_file_dup(t_exec	*exec)
 int	opt_file_dup(t_exec	*exec)
 {
 	int	fd;
-	int flag;
+	int	flag;
 
 	fd = -1;
 	if (exec->opt_files && exec->opt_files[0])
@@ -81,20 +81,22 @@ int	opt_file_dup(t_exec	*exec)
 	return (0);
 }
 
-void exec_loop(t_shell *shell)
+void	exec_loop(t_shell *shell)
 {
-    int i = 0;
-	shell->fd = -1;
-	pid_t	id = 0;
+	int		i;
+	pid_t	id;
 
-    while (shell->exec[i])
-    {
+	id = 0;
+	i = 0;
+	shell->fd = -1;
+	while (shell->exec[i])
+	{
 		if (shell->exec[i + 1])
-	        pipe(shell->exec[i]->fd);
-		if(check_heredoc(shell->exec[i]))
+			pipe(shell->exec[i]->fd);
+		if (check_heredoc(shell->exec[i]))
 		{
-			signal(SIGINT, SIG_IGN);		
-			signal(SIGQUIT, SIG_IGN);		
+			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
 			shell->child = fork();
 			if (!shell->child)
 			{
@@ -106,16 +108,16 @@ void exec_loop(t_shell *shell)
 				ft_close(shell, &shell->fd);
 				mass_free(shell, 0);
 			}
-			if(waiting_heredoc(shell, id) == 1)
+			if (waiting_heredoc(shell, id) == 1)
 				return ;
 		}
 		if (check_inp_files(shell, i) && check_opt_files(shell, i))
 		{
-			signal(SIGINT, SIG_IGN);		
-			signal(SIGQUIT, SIG_IGN);		
-        	shell->child = fork();
-        	if (shell->child == 0)
-        	{
+			signal(SIGINT, SIG_IGN);
+			signal(SIGQUIT, SIG_IGN);
+			shell->child = fork();
+			if (shell->child == 0)
+			{
 				signal(SIGINT, SIG_DFL);
 				signal(SIGQUIT, SIG_DFL);
 				if (i == 0)
@@ -160,12 +162,12 @@ void exec_loop(t_shell *shell)
 					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
 					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
 				}
-				if(shell->exec[i]->cmd[0])
+				if (shell->exec[i]->cmd[0])
 				{
-					if(builtin_check(shell, i, 1) != 0)
-        	    		execution(shell, i);
+					if (builtin_check(shell, i, 1) != 0)
+						execution(shell, i);
 				}
-        	    mass_free(shell, shell->environ->exit);
+				mass_free(shell, shell->environ->exit);
 				unlink("/tmp/.here_i_doc");
 			}
 			builtin_check(shell, i, 0);
@@ -193,7 +195,7 @@ void	exec(t_shell *shell, int index, char *cmd)
 {
 	if (!access(cmd, F_OK))
 	{
-		 if (access(cmd, X_OK) == -1)
+		if (access(cmd, X_OK) == -1)
 		{
 			ft_putstr_fd(cmd, 1);
 			ft_putstr_fd(": Permission denied\n", 1);
@@ -208,7 +210,7 @@ void	exec(t_shell *shell, int index, char *cmd)
 void	execution(t_shell *shell, int index)
 {
 	int	i;
-	
+
 	i = -1;
 	shell->environ->environment = arr(shell->environ->env, shell);
 	shell->environ->path = set_up_path(shell);
@@ -218,7 +220,7 @@ void	execution(t_shell *shell, int index)
 		while (shell->environ->path[++i] && shell->exec[index]->cmd[0])
 		{
 			shell->exec[index]->cmdpath = ft_strjoin2(shell->environ->path[i], \
-			"/", shell->exec[index]->cmd[0]); 
+			"/", shell->exec[index]->cmd[0]);
 			exec(shell, index, shell->exec[index]->cmdpath);
 			ft_free((void **)&shell->exec[index]->cmdpath);
 		}

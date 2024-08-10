@@ -6,18 +6,12 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/07/25 16:53:57 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:08:05 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// so what needs to be passed here is argument count and arguments
-// as soon as the linked list for arguments is done, 
-// need to parse arguments here, so 
-// i was thinking, for args, im assuming everything you classify as args will just be parsed like
-// echo hello | echo hi
-// so thats like 4 args, so we can split args on the basis of operators innit?
 int	builtin_cd(t_shell *shell, int i, int args)
 {
 	char	*directory;
@@ -30,8 +24,9 @@ int	builtin_cd(t_shell *shell, int i, int args)
 		printf("cd: no such file or directory: %s\n", directory);
 		return (1);
 	}
-	if(shell->exec[i]->cmd[i + 1] && strncmp(shell->exec[i]->cmd[i + 1], "-", 2) == 0)
-	    printf("%s\n", directory);
+	if (shell->exec[i]->cmd[i + 1] && \
+	strncmp(shell->exec[i]->cmd[i + 1], "-", 2) == 0)
+		printf("%s\n", directory);
 	if (update_pwd(shell, getcwd(NULL, 0)) == 1)
 	{
 		printf("doesnt work\n");
@@ -50,17 +45,21 @@ char	*get_directory(int args_count, t_shell *shell, int i)
 		dir = find_node_aarij(shell->environ->env, "HOME");
 		if (dir == NULL)
 			printf("HOME not set\n");
-			// printf("exit code will be done once i figure out how exit works");
+			// printf("exit code will be done 
+			// i figure out how exit works");
 	}
-	else if(shell->exec[i]->cmd[1] && strncmp(shell->exec[i]->cmd[1], "-", 2) == 0)
+	else if (shell->exec[i]->cmd[1] && \
+	strncmp(shell->exec[i]->cmd[1], "-", 2) == 0)
 	{
-	    dir = find_node_aarij(shell->environ->env, "OLDPWD");
-	    if(dir == NULL)
-	        printf("OLDPWD not set");
-	        // printf("exit code will be done once i figure out how exit works");
+		//add ft_
+		dir = find_node_aarij(shell->environ->env, "OLDPWD");
+		if (dir == NULL)
+			printf("OLDPWD not set");
+			// printf("exit code will be done once
+			//i figure out how exit works");
 	}
 	else
-	    dir = shell->exec[i]->cmd[1];
+		dir = shell->exec[i]->cmd[1];
 //	// note to self
 //	// uncomment this up portion once tarek finishes putting stuff in lists
 	return (dir);
@@ -93,7 +92,7 @@ int	update_pwd(t_shell *shell, char *directory)
 	if (temp)
 	{
 		if (temp2)
-		{	
+		{
 			if (change_nodeee(temp2, temp->value) == 1)
 			{
 				printf("Not work \n");
