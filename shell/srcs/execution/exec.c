@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 15:56:19 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:51:30 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,103 @@ int	opt_file_dup(t_exec	*exec)
 	return (0);
 }
 
+void	closer(t_shell *shell, t_exec *exec, int f1, int f2)
+{
+	ft_close(shell, &exec->fd[WRITE_PIPE]);
+	ft_close(shell, &exec->fd[READ_PIPE]);
+	if (f1)
+		ft_close(shell, &exec->heredoc_fd);
+	if (f2)
+		ft_close(shell, &shell->fd);
+}
+
+void	first_cmd(t_shell *shell, t_exec *exec)
+{
+	inp_file_dup(exec);
+	if (!opt_file_dup(exec))
+	{
+		dup2(exec->fd[WRITE_PIPE], STDOUT_FILENO);
+		if (shell->exec[1])
+			dup2(shell->fd, exec->fd[READ_PIPE]);
+		ft_close(shell, &shell->fd);
+	}
+	closer(shell, exec, 1, 1);
+}
+
+void	middle_cmd(t_shell *shell, t_exec *exec)
+{
+	if (!inp_file_dup(exec))
+	{
+		dup2(shell->fd, STDIN_FILENO);
+		ft_close(shell, &shell->fd);
+	}
+	if (!opt_file_dup(exec))
+	{
+		dup2(exec->fd[WRITE_PIPE], STDOUT_FILENO);
+		dup2(shell->fd, exec->fd[READ_PIPE]);
+	}
+	closer(shell, exec, 0, 0);
+}
+
+void	last_cmd(t_shell *shell, t_exec *exec)
+{
+	if (!inp_file_dup(exec))
+	{
+		dup2(shell->fd, STDIN_FILENO);
+		ft_close(shell, &shell->fd);
+	}
+	opt_file_dup(exec);
+	closer(shell, exec, 0, 1);
+}
+
+void	heredoc(t_shell *shell, t_exec *exec)
+{
+	if (check_heredoc(exec))
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+		shell->child = fork();
+		if (!shell->child)
+		{
+			signal(SIGINT, do_nothing);
+			collect_heredoc(shell, i);
+			closer(shell, exec, 1, 1);
+			mass_free(shell, 0);
+		}
+		if (waiting_heredoc(shell, id) == 1)
+			return ;
+	}
+}
+
+void	process(t_shell *shell, int i)
+{
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+	shell->child = fork();
+	if (shell->child == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		if (i == 0)
+			first_cmd(shell, shell->exec[i]);
+		else if (shell->exec[i + 1])
+			middle_cmd(shell, shell->exec[i]);
+		else
+			last_cmd(shell, shell->exec[i]);
+		if (shell->exec[i]->cmd[0])
+		{
+			if (builtin_check(shell, i, 1) != 0)
+				execution(shell, i);
+		}
+		mass_free(shell, shell->environ->exit);
+		unlink("/tmp/.here_i_doc");
+	}
+	builtin_check(shell, i, 0);
+	ft_close(shell, &shell->fd);
+	shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
+	closer(shell, shell->exec[i], 1, 0);
+}
+
 void	exec_loop(t_shell *shell)
 {
 	int		i;
@@ -93,97 +190,15 @@ void	exec_loop(t_shell *shell)
 	{
 		if (shell->exec[i + 1])
 			pipe(shell->exec[i]->fd);
-		if (check_heredoc(shell->exec[i]))
-		{
-			signal(SIGINT, SIG_IGN);
-			signal(SIGQUIT, SIG_IGN);
-			shell->child = fork();
-			if (!shell->child)
-			{
-				signal(SIGINT, do_nothing);
-				collect_heredoc(shell, i);
-				ft_close(shell, &shell->exec[i]->heredoc_fd);
-				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-				ft_close(shell, &shell->fd);
-				mass_free(shell, 0);
-			}
-			if (waiting_heredoc(shell, id) == 1)
-				return ;
-		}
+		heredoc(shell, shell->exec[i]);
 		if (check_inp_files(shell, i) && check_opt_files(shell, i))
-		{
-			signal(SIGINT, SIG_IGN);
-			signal(SIGQUIT, SIG_IGN);
-			shell->child = fork();
-			if (shell->child == 0)
-			{
-				signal(SIGINT, SIG_DFL);
-				signal(SIGQUIT, SIG_DFL);
-				if (i == 0)
-				{
-					inp_file_dup(shell->exec[i]);
-					if (!opt_file_dup(shell->exec[i]))
-					{
-						dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-						if (shell->exec[1])
-							dup2(shell->fd, shell->exec[i]->fd[READ_PIPE]);
-						ft_close(shell, &shell->fd);
-					}
-					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-					ft_close(shell, &shell->exec[i]->heredoc_fd);
-					ft_close(shell, &shell->fd);
-				}
-				else if (shell->exec[i + 1])
-				{
-					if (!inp_file_dup(shell->exec[i]))
-					{
-						dup2(shell->fd, STDIN_FILENO);
-						ft_close(shell, &shell->fd);
-					}
-					if (!opt_file_dup(shell->exec[i]))
-					{
-						dup2(shell->exec[i]->fd[WRITE_PIPE], STDOUT_FILENO);
-						dup2(shell->fd, shell->exec[i]->fd[READ_PIPE]);
-					}
-					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-				}
-				else
-				{
-					if (!inp_file_dup(shell->exec[i]))
-					{
-						dup2(shell->fd, STDIN_FILENO);
-						ft_close(shell, &shell->fd);
-					}
-					opt_file_dup(shell->exec[i]);
-					ft_close(shell, &shell->fd);
-					ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-					ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-				}
-				if (shell->exec[i]->cmd[0])
-				{
-					if (builtin_check(shell, i, 1) != 0)
-						execution(shell, i);
-				}
-				mass_free(shell, shell->environ->exit);
-				unlink("/tmp/.here_i_doc");
-			}
-			builtin_check(shell, i, 0);
-			ft_close(shell, &shell->fd);
-			shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
-			ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
-			ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-			ft_close(shell, &shell->exec[i]->heredoc_fd);
-		}
+			process(shell, i);
 		else
 		{
 			if (shell->exec[i + 1])
 			{
 				shell->fd = dup(shell->exec[i]->fd[READ_PIPE]);
-				ft_close(shell, &shell->exec[i]->fd[WRITE_PIPE]);
-				ft_close(shell, &shell->exec[i]->fd[READ_PIPE]);
+				closer(shell, shell->exec[i], 0, 0);
 			}
 		}
 		i++;

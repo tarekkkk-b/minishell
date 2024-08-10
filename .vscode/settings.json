@@ -1,7 +1,9 @@
 {
 	"files.associations": {
 		"minishell.h": "c",
-		"chrono": "c"
+		"chrono": "c",
+		"__locale": "c",
+		"locale": "c"
 	},
 	"C_Cpp.errorSquiggles": "disabled"
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
+/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/09 22:50:46 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/10 20:52:48 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,5 +240,6 @@ void		collect_heredoc(t_shell *shell, int index);
 void		do_nothing(int sig);
 void		waiting(t_shell *shell);
 void		mass_close(t_shell *shell);
+void		closer(t_shell *shell, t_exec *exec, int f1, int f2);
 
 #endif

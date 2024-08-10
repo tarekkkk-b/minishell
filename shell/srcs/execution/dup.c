@@ -6,7 +6,7 @@
 /*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:50:58 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 16:05:59 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/10 20:53:30 by tabadawi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,7 @@ void	collect_heredoc(t_shell *shell, int index)
 			{
 				if (g_signalnumber == SIGINT)
 				{
-					ft_close(shell, &shell->fd);
-					ft_close(shell, &shell->exec[index]->heredoc_fd);
-					ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
-					ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
+					closer(shell, shell->exec[index], 1, 1);
 					mass_free(shell, 1);
 				}
 				if (!str || (!ft_strcmp(str, shell->exec[index]->inp_files[i])))
@@ -122,8 +119,7 @@ void	collect_heredoc(t_shell *shell, int index)
 		}
 		if (!str)
 		{
-			ft_close(shell, &shell->exec[index]->fd[WRITE_PIPE]);
-			ft_close(shell, &shell->exec[index]->fd[READ_PIPE]);
+			closer(shell, shell->exec[index], 0, 0);
 			mass_free(shell, 0);
 		}
 	}
