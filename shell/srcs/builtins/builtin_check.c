@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 12:57:20 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 21:38:57 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 11:58:03 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,21 @@ static int	which_builtin(t_shell *shell, int index, int args_c)
 	return (exit_code);
 }
 
+void	builtin_check_parent(t_shell *shell, int index, int args_c)
+{
+	shell->temp_in = dup(STDIN_FILENO);
+	shell->temp_out = dup(STDOUT_FILENO);
+	inp_file_dup(shell->exec[index]);
+	opt_file_dup(shell->exec[index]);
+	shell->environ->exit = which_builtin(shell, index, args_c);
+	dup2(shell->temp_in, 0);
+	dup2(shell->temp_out, 1);
+	ft_close(shell, &shell->temp_out);
+	ft_close(shell, &shell->temp_in);
+}
+
 int	builtin_check(t_shell *shell, int index, int flag)
 {
-	int	temp_in;
-	int	temp_out;
 	int	args_c;
 
 	args_c = 0;
@@ -86,15 +97,7 @@ int	builtin_check(t_shell *shell, int index, int flag)
 			return (1);
 		if (shell->exec[0] && shell->exec[1])
 			return (1);
-		temp_in = dup(STDIN_FILENO);
-		temp_out = dup(STDOUT_FILENO);
-		inp_file_dup(shell->exec[index]);
-		opt_file_dup(shell->exec[index]);
-		shell->environ->exit = which_builtin(shell, index, args_c);
-		dup2(temp_in, 0);
-		dup2(temp_out, 1);
-		ft_close(shell, &temp_in);
-		ft_close(shell, &temp_out);
+		builtin_check_parent(shell, index, args_c);
 		return (shell->environ->exit);
 	}
 	return (1);

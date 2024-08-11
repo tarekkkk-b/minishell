@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freestuff.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/21 21:43:51 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/09 14:10:31 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/11 11:53:50 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ void	mass_free(t_shell *shell, int exit_code)
 	if (shell->exec)
 		free_exec(shell);
 	ft_close(shell, &shell->fd);
+	ft_close(shell, &shell->temp_in);
+	ft_close(shell, &shell->temp_out);
 	exit(exit_code);
 }
 

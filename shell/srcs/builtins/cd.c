@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:51:23 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 22:59:16 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 12:49:39 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	builtin_cd(t_shell *shell, int i, int args)
 {
 	char	*directory;
+	char	*tempcwd;
 
 	directory = get_directory(args, shell, i);
 	if (directory == NULL)
@@ -27,9 +28,15 @@ int	builtin_cd(t_shell *shell, int i, int args)
 	if (shell->exec[i]->cmd[i + 1] && \
 	ft_strncmp(shell->exec[i]->cmd[i + 1], "-", 2) == 0)
 		printf("%s\n", directory);
-	if (update_pwd(shell, getcwd(NULL, 0)) == 1)
-		return (1);
-	return (0);
+	tempcwd = getcwd(NULL, 0);
+	if (!tempcwd)
+	{
+		printf("No such file or directory\n");
+		return (0);
+	}
+	if (update_pwd(shell, tempcwd) == 1)
+		return (ft_free((void **)&tempcwd), 1);
+	return (free(tempcwd), 0);
 }
 
 char	*get_directory(int args_count, t_shell *shell, int i)
@@ -82,19 +89,10 @@ int	update_pwd(t_shell *shell, char *directory)
 	if (temp)
 	{
 		if (temp2)
-		{
 			if (change_nodeee(temp2, temp->value) == 1)
-			{
-				printf("Not work \n");
-				return (1);
-			}
-		}
+				return (ft_free((void **)&directory), 1);
 		if (change_nodeee(temp, directory) == 1)
-		{
-			printf("error\n");
-			free(directory);
-			return (1);
-		}
+			return (ft_free((void **)&directory), 1);
 	}
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   setup.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tabadawi <tabadawi@student.42abudhabi.a    +#+  +:+       +#+        */
+/*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 12:00:45 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 18:01:07 by tabadawi         ###   ########.fr       */
+/*   Updated: 2024/08/11 12:55:29 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,17 +114,4 @@ void	setup_exec_struct(t_shell *shell)
 	}
 	shell->exec[i] = NULL;
 	shell->counter[i] = NULL;
-}
-
-char	**set_up_path(t_shell *shell)
-{
-	t_values	*locate;
-	char		**path;
-
-	locate = locate_node(shell->environ->env, "PATH");
-	if (!locate)
-		return (NULL);
-	path = ft_split(locate->value, ':');
-	path[0] = ft_strtrim(path[0], "PATH=", 1);
-	return (path);
 }

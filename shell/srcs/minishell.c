@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:14:30 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 22:55:40 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 11:49:44 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	initializer(t_shell *shell)
 	shell->parser = NULL;
 	shell->counter = NULL;
 	shell->fd = -1;
+	shell->temp_in = -1;
+	shell->temp_out = -1;
 	shell->lastpid = -1;
 }
 
@@ -41,7 +43,6 @@ void	the_heart(t_shell *shell)
 
 void	minishell(t_shell *shell)
 {
-
 	if (!isatty(0))
 		rl_outstream = stdin;
 	while (1)
@@ -58,7 +59,7 @@ void	minishell(t_shell *shell)
 		g_signalnumber = -1;
 		if (!shell->str)
 			break ;
-		if (ft_strcmp(shell->str, "") == 0)
+		if (ft_strcmpaarij(shell->str, "") == 0)
 			continue ;
 		if (shell->str[0] != '\0')
 			add_history(shell->str);

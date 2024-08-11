@@ -6,13 +6,11 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/07 13:08:39 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 23:03:00 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 11:54:33 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// like cd, this should take in argc argv, will add it once lsit is ready
 
 int	builtin_exit(t_shell *shell, int argc, int index)
 {

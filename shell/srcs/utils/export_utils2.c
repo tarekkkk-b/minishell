@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/10 22:39:12 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 22:57:46 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 09:08:47 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_strcmpaarij(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0')
@@ -24,10 +24,9 @@ int	ft_strcmpaarij(char *s1, char *s2)
 
 char	*ft_strncpy(char *dest, const char *src, int n)
 {
-	int i;
+	int	i;
 
 	i = 0;
-
 	while (src[i] && i <= n)
 	{
 		dest[i] = src[i];

@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:15:11 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 22:57:54 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 13:04:43 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ extern int					g_signalnumber;
 typedef struct s_shell
 {
 	int			fd;
+	int			temp_in;
+	int			temp_out;
 	pid_t		child;
 	pid_t		lastpid;
 	char		*str;
@@ -249,5 +251,13 @@ void		mass_close(t_shell *shell);
 void		closer(t_shell *shell, t_exec *exec, int f1, int f2);
 char		*ft_strncpy(char *dest, const char *src, int n);
 int			ft_strcmpaarij(char *s1, char *s2);
+int			mass_check(char *str);
+void		dupingcall(t_shell *shell, int i);
+int			heredoc(t_shell *shell, t_exec *exec, pid_t id, int i);
+int			check_heredoc(t_exec *exec);
+void		first_cmd(t_shell *shell, t_exec *exec);
+void		middle_cmd(t_shell *shell, t_exec *exec);
+void		last_cmd(t_shell *shell, t_exec *exec);
+int			ft_strcmp(char *str1, char *str2);
 
 #endif

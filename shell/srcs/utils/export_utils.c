@@ -6,7 +6,7 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/24 17:56:19 by ahaarij           #+#    #+#             */
-/*   Updated: 2024/08/10 22:57:57 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 09:05:24 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void	splitkeyvalue(const char *str, char **key, char **value, t_shell *shell)
 		key_len = equal_sign - str;
 		*key = ft_malloc(key_len + 1, shell);
 		ft_strncpy(*key, str, key_len);
-		// ADD THIS TO AARIJ
 		(*key)[key_len] = '\0';
 		*value = ft_strdup(equal_sign + 1);
 	}

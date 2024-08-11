@@ -6,80 +6,11 @@
 /*   By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:45:53 by tabadawi          #+#    #+#             */
-/*   Updated: 2024/08/10 22:51:59 by ahaarij          ###   ########.fr       */
+/*   Updated: 2024/08/11 12:58:59 by ahaarij          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	check_heredoc(t_exec *exec)
-{
-	int	i;
-
-	i = -1;
-	while (exec->inp_files[++i])
-		if (exec->inp_flags[i])
-			return (1);
-	return (0);
-}
-
-void	mass_close(t_shell *shell)
-{
-	int	i;
-
-	i = 2;
-	while (++i < 1025)
-		ft_close(shell, &i);
-}
-
-int	inp_file_dup(t_exec	*exec)
-{
-	int	fd;
-	int	flag;
-
-	fd = -1;
-	if (exec->inp_files && exec->inp_files[0])
-	{
-		flag = exec->inp_flags[get_arrlen(exec->inp_files) - 1];
-		if (flag)
-			fd = open("/tmp/.here_i_doc", O_RDONLY);
-		else if (!flag)
-			fd = open(exec->inp_files[get_arrlen(exec->inp_files) - 1], \
-			O_RDONLY);
-		if (fd != -1)
-		{
-			dup2(fd, STDIN_FILENO);
-			ft_close(exec->shell, &fd);
-			return (1);
-		}
-	}
-	return (0);
-}
-
-int	opt_file_dup(t_exec	*exec)
-{
-	int	fd;
-	int	flag;
-
-	fd = -1;
-	if (exec->opt_files && exec->opt_files[0])
-	{
-		flag = exec->opt_flags[get_arrlen(exec->opt_files) - 1];
-		if (flag)
-			fd = open(exec->opt_files[get_arrlen(exec->opt_files) - 1], \
-			O_CREAT | O_APPEND | O_WRONLY, 0644);
-		else if (!flag)
-			fd = open(exec->opt_files[get_arrlen(exec->opt_files) - 1], \
-			O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	}
-	if (fd != -1)
-	{
-		dup2(fd, STDOUT_FILENO);
-		ft_close(exec->shell, &fd);
-		return (1);
-	}
-	return (0);
-}
 
 void	closer(t_shell *shell, t_exec *exec, int f1, int f2)
 {
@@ -91,65 +22,6 @@ void	closer(t_shell *shell, t_exec *exec, int f1, int f2)
 		ft_close(shell, &shell->fd);
 }
 
-void	first_cmd(t_shell *shell, t_exec *exec)
-{
-	inp_file_dup(exec);
-	if (!opt_file_dup(exec))
-	{
-		dup2(exec->fd[WRITE_PIPE], STDOUT_FILENO);
-		if (shell->exec[1])
-			dup2(shell->fd, exec->fd[READ_PIPE]);
-		ft_close(shell, &shell->fd);
-	}
-	closer(shell, exec, 1, 1);
-}
-
-void	middle_cmd(t_shell *shell, t_exec *exec)
-{
-	if (!inp_file_dup(exec))
-	{
-		dup2(shell->fd, STDIN_FILENO);
-		ft_close(shell, &shell->fd);
-	}
-	if (!opt_file_dup(exec))
-	{
-		dup2(exec->fd[WRITE_PIPE], STDOUT_FILENO);
-		dup2(shell->fd, exec->fd[READ_PIPE]);
-	}
-	closer(shell, exec, 0, 0);
-}
-
-void	last_cmd(t_shell *shell, t_exec *exec)
-{
-	if (!inp_file_dup(exec))
-	{
-		dup2(shell->fd, STDIN_FILENO);
-		ft_close(shell, &shell->fd);
-	}
-	opt_file_dup(exec);
-	closer(shell, exec, 0, 1);
-}
-
-int	heredoc(t_shell *shell, t_exec *exec, pid_t id, int i)
-{
-	if (check_heredoc(exec))
-	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
-		shell->child = fork();
-		if (!shell->child)
-		{
-			signal(SIGINT, do_nothing);
-			collect_heredoc(shell, i);
-			closer(shell, exec, 1, 1);
-			mass_free(shell, 0);
-		}
-		if (waiting_heredoc(shell, id) == 1)
-			return (1);
-	}
-	return (0);
-}
-
 void	process(t_shell *shell, int i)
 {
 	signal(SIGINT, SIG_IGN);
@@ -159,12 +31,8 @@ void	process(t_shell *shell, int i)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (i == 0)
-			first_cmd(shell, shell->exec[i]);
-		else if (shell->exec[i + 1])
-			middle_cmd(shell, shell->exec[i]);
-		else
-			last_cmd(shell, shell->exec[i]);
+		if (!(mass_check(shell->exec[0]->cmd[0]) && !shell->exec[1]))
+			dupingcall(shell, i);
 		if (shell->exec[i]->cmd[0])
 		{
 			if (builtin_check(shell, i, 1) != 0)

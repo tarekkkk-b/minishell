@@ -3,7 +3,8 @@
 		"minishell.h": "c",
 		"chrono": "c",
 		"__locale": "c",
-		"locale": "c"
+		"locale": "c",
+		"sstream": "c"
 	},
 	"C_Cpp.errorSquiggles": "disabled"
 }

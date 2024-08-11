@@ -6,7 +6,7 @@
 #    By: ahaarij <ahaarij@student.42abudhabi.ae>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/10 11:17:34 by tabadawi          #+#    #+#              #
-#    Updated: 2024/08/10 22:39:33 by ahaarij          ###   ########.fr        #
+#    Updated: 2024/08/11 13:05:04 by ahaarij          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,15 +16,15 @@ CFLAGS		=	-Wall -Werror -Wextra -g3
 # CFLAGS		+=	-fsanitize=address
 
 # the following flagsg are to be used on 42 computers
-# RLFLAGS		=	-lreadline -lhistory
-# RLDIR		=	-L/opt/vagrant/embedded/lib
-# RLINC		=	-I/opt/vagrant/embedded/include/readline/readline.h
+RLFLAGS		=	-lreadline -lhistory
+RLDIR		=	-L/opt/vagrant/embedded/lib
+RLINC		=	-I/opt/vagrant/embedded/include/readline/readline.h
 
 
 # and the following flags are to be used on personal computers
-RLDIR += -L/usr/local/opt/readline/lib
-RLINC += -I/usr/local/opt/readline/include
-RLFLAGS = -lreadline -lhistory
+# RLDIR += -L/usr/local/opt/readline/lib
+# RLINC += -I/usr/local/opt/readline/include
+# RLFLAGS = -lreadline -lhistory
 
 
 GREY		= $'\x1b[30m
@@ -104,11 +104,12 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(ENV)/env_utils2.c \
 				$(ENV)/popout.c \
 				$(ENV)/lst_size.c \
+				$(ENV)/set_path.c \
 				$(UTILS)/ft_strjoin2.c \
 				$(UTILS)/freestuff.c \
 				$(UTILS)/export_utils.c \
 				$(UTILS)/export_utils2.c \
-				$(UTILS)/waiting.c \
+				$(UTILS)/ft_strcmp.c \
 				$(LEX)/assign_quotes.c \
 				$(LEX)/assign_redirection.c \
 				$(LEX)/assign_variables.c \
@@ -121,7 +122,9 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(LEX)/node_utils.c \
 				$(LEX)/refine_redirections.c \
 				$(LEX)/temp_file.c \
-				$(SIG)/exit.c $(BUILT)/env.c \
+				$(SIG)/waiting.c \
+				$(SIG)/exit.c \
+				$(BUILT)/env.c \
 				$(BUILT)/exit.c \
 				$(BUILT)/builtin_check.c \
 				$(BUILT)/pwd.c \
@@ -131,7 +134,10 @@ SRCS		=	$(SRCSPATH)/minishell.c \
 				$(BUILT)/unset.c \
 				$(EXEC)/setup.c \
 				$(EXEC)/exec.c \
+				$(EXEC)/exec_pt2.c \
 				$(EXEC)/dup.c \
+				$(EXEC)/dup_pt2.c \
+				$(EXEC)/heredoc.c
 
 OBJS		=	$(SRCS:.c=.o)
 
