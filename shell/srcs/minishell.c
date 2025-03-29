@@ -51,7 +51,7 @@ void	minishell(t_shell *shell)
 		ft_free((void **)&shell->environ->cwd);
 		shell->environ->cwd = getcwd(NULL, 0);
 		if (g_signalnumber != SIGINT)
-			shell->str = readline("𝓯𝓻𝓮𝓪𝓴𝔂𝓼𝓱𝓮𝓵𝓵 > ");
+			shell->str = readline("tash > ");
 		else
 			shell->str = readline(NULL);
 		if (g_signalnumber == SIGINT)
